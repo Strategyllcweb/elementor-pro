@@ -12,6 +12,6 @@
     "type": "wordpress-plugin",
     "require": {
       "php": ">=5.4",
-      "composer/installers": "v1.9.0"
+      "Strategyllcweb/elementor-pro": "3.2.0"
     }
   }
