@@ -42,7 +42,7 @@ class Paypal_Button extends Payment_Button {
 	}
 
 	public function get_keywords() {
-		return [ 'paypal', 'payments', 'sell' ];
+		return [ 'paypal', 'payment', 'sell', 'donate' ];
 	}
 
 	public function get_categories() {

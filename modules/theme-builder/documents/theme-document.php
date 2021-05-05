@@ -238,6 +238,34 @@ abstract class Theme_Document extends Library_Document {
 
 	}
 
+	public function get_export_data() {
+		$data = parent::get_export_data();
+
+		/** @var Module $theme_builder */
+		$theme_builder = Plugin::instance()->modules_manager->get_modules( 'theme-builder' );
+
+		$conditions = $theme_builder->get_conditions_manager()->get_document_conditions( $this );
+
+		foreach ( $conditions as $condition ) {
+			if ( 'general' === $condition['name'] ) {
+				$data['conditions'][] = $condition;
+
+				break;
+			}
+		}
+
+		return $data;
+	}
+
+	public function import( array $data ) {
+		parent::import( $data );
+
+		/** @var Module $theme_builder */
+		$theme_builder = Plugin::instance()->modules_manager->get_modules( 'theme-builder' );
+
+		$theme_builder->get_conditions_manager()->save_conditions( $this->get_main_id(), $data['conditions'] );
+	}
+
 	protected function register_controls() {
 		parent::register_controls();
 

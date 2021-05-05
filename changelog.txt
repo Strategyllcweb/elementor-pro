@@ -1,5 +1,16 @@
 # Elementor Pro - by Elementor.com
 
+#### 3.2.2 - 2021-05-05
+* Tweak: Added support for Expert tier templates in Templates Library
+* Tweak: Updated compatibility tag to support Elementor v3.2.x 
+* Tweak: Added compatibility for future Library improvements
+* Fix: Toolset image dynamic field is not working with Gallery widget
+
+#### 3.2.1 - 2021-03-21
+* Tweak: Added strings context in PayPal button and Price Table widgets
+* Tweak: Added support for future Import / Export Kit feature
+* Fix: Submissions with over than 191 characters weren't indexed properly
+
 #### 3.2.0 - 2021-03-14
 * New: PayPal Button widget - Collect PayPal payments directly from your site
 * Experiment: Submissions - Save all of your form submissions in one place ([#1686](https://github.com/elementor/elementor/issues/1686))
