@@ -6,6 +6,7 @@ use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Embed;
 use Elementor\Group_Control_Text_Shadow;
 use Elementor\Group_Control_Typography;
+use Elementor\Icons_Manager;
 use Elementor\Repeater;
 use Elementor\Utils;
 use ElementorPro\Plugin;
@@ -315,18 +316,25 @@ class Media_Carousel extends Base {
 		<div <?php echo $this->get_render_attribute_string( $element_key . '-image' ); ?>>
 			<?php if ( 'video' === $slide['type'] && $settings['video_play_icon'] ) : ?>
 				<div class="elementor-custom-embed-play">
-					<i class="eicon-play" aria-hidden="true"></i>
+					<?php
+						Icons_Manager::render_icon( [
+							'library' => 'eicons',
+							'value' => 'eicon-play',
+						], [ 'aria-hidden' => 'true' ] );
+					?>
 					<span class="elementor-screen-only"><?php _e( 'Play', 'elementor-pro' ); ?></span>
 				</div>
 			<?php endif; ?>
 		</div>
 		<?php if ( $settings['overlay'] ) : ?>
 			<div <?php echo $this->get_render_attribute_string( 'image-overlay' ); ?>>
-				<?php if ( 'text' === $settings['overlay'] ) : ?>
-					<?php echo $this->get_image_caption( $slide ); ?>
-				<?php else : ?>
-					<i class="fa fa-<?php echo $settings['icon']; ?>"></i>
-				<?php endif; ?>
+				<?php
+				if ( 'text' === $settings['overlay'] ) {
+					echo wp_kses_post( $this->get_image_caption( $slide ) );
+				} else {
+					$this->render_overlay_icon( $settings['icon'] );
+				}
+				?>
 			</div>
 			<?php
 		endif;
@@ -400,6 +408,7 @@ class Media_Carousel extends Base {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-custom-embed-play i' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementor-custom-embed-play svg' => 'fill: {{VALUE}}',
 				],
 			]
 		);
@@ -560,7 +569,7 @@ class Media_Carousel extends Base {
 				'label' => __( 'Text Color', 'elementor-pro' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .elementor-carousel-image-overlay' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementor-carousel-image-overlay' => '--e-carousel-image-overlay-color: {{VALUE}};',
 				],
 			]
 		);
@@ -585,7 +594,7 @@ class Media_Carousel extends Base {
 				'label' => __( 'Icon Size', 'elementor-pro' ),
 				'type' => Controls_Manager::SLIDER,
 				'selectors' => [
-					'{{WRAPPER}} .elementor-carousel-image-overlay i' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .elementor-carousel-image-overlay' => '--e-carousel-image-overlay-icon-size: {{SIZE}}{{UNIT}};',
 				],
 				'condition' => [
 					'overlay' => 'icon',
@@ -759,5 +768,16 @@ class Media_Carousel extends Base {
 
 	public function get_group_name() {
 		return 'carousel';
+	}
+
+	private function render_overlay_icon( $icon_name ) {
+		$icon_value = 'fas fa-' . $icon_name;
+
+		$icon = [
+			'library' => 'fa-solid',
+			'value' => $icon_value,
+		];
+
+		Icons_Manager::render_icon( $icon );
 	}
 }

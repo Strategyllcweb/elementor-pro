@@ -124,7 +124,7 @@ abstract class Theme_Document extends Library_Document {
 	}
 
 	public static function get_create_url() {
-		$base_create_url = Utils::get_create_new_post_url( Source_Local::CPT );
+		$base_create_url = Plugin::elementor()->documents->get_create_new_post_url( Source_Local::CPT );
 
 		return add_query_arg( [ 'template_type' => static::get_site_editor_type_bc() ], $base_create_url );
 	}
@@ -249,7 +249,7 @@ abstract class Theme_Document extends Library_Document {
 		$conditions = $theme_builder->get_conditions_manager()->get_document_conditions( $this );
 
 		foreach ( $conditions as $condition ) {
-			if ( 'include' === $condition['type'] && ! $condition['sub_name'] && ! $condition['sub_id'] ) {
+			if ( 'include' === $condition['type'] && ! $condition['sub_id'] ) {
 				$summary['conditions'][] = $condition;
 
 				break;

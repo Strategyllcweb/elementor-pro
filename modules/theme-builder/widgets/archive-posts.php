@@ -38,6 +38,10 @@ class Archive_Posts extends Posts_Base {
 		return [ 'posts', 'cpt', 'archive', 'loop', 'query', 'cards', 'custom post type' ];
 	}
 
+	public function get_inline_css_depends() {
+		return [ 'posts' ];
+	}
+
 	protected function register_skins() {
 		$this->add_skin( new Skins\Posts_Archive_Skin_Classic( $this ) );
 		$this->add_skin( new Skins\Posts_Archive_Skin_Cards( $this ) );
@@ -120,6 +124,21 @@ class Archive_Posts extends Posts_Base {
 		$this->end_controls_section();
 	}
 
+	protected function get_pagination_type_options() {
+		$options = parent::get_pagination_type_options();
+
+		// Removing the load-more functionality for the post-archive.
+		$remove_options = [
+			self::LOAD_MORE_ON_CLICK,
+			self::LOAD_MORE_INFINITE_SCROLL,
+		];
+
+		foreach ( $remove_options as $option ) {
+			unset( $options[ $option ] );
+		}
+
+		return $options;
+	}
 
 	public function query_posts() {
 		global $wp_query;
@@ -138,7 +157,7 @@ class Archive_Posts extends Posts_Base {
 		$query_vars = apply_filters( 'elementor/theme/posts_archive/query_posts/query_vars', $query_vars );
 
 		if ( $query_vars !== $wp_query->query_vars ) {
-			$this->query = new \WP_Query( $query_vars );
+			$this->query = new \WP_Query( $query_vars ); // SQL_CALC_FOUND_ROWS is used.
 		} else {
 			$this->query = $wp_query;
 		}

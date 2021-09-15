@@ -299,7 +299,24 @@ class Nav_Menu extends Base_Widget {
 			]
 		);
 
-		$breakpoints = Responsive::get_breakpoints();
+		$breakpoints = Plugin::elementor()->breakpoints->get_active_breakpoints();
+		$dropdown_options = [];
+		$excluded_breakpoints = [
+			'laptop',
+			'widescreen',
+		];
+
+		foreach ( $breakpoints as $breakpoint_key => $breakpoint_instance ) {
+			// Do not include laptop and widscreen in the options since this feature is for mobile devices.
+			if ( in_array( $breakpoint_key, $excluded_breakpoints, true ) ) {
+				continue;
+			}
+
+			/* translators: %1$s: Breakpoint Label, %2$d: Breakpoint value. */
+			$dropdown_options[ $breakpoint_key ] = sprintf( esc_html__( '%1$s (< %2$dpx)', 'elementor-pro' ), $breakpoint_instance->get_label(), $breakpoint_instance->get_value() );
+		}
+
+		$dropdown_options['none'] = esc_html__( 'None', 'elementor-pro' );
 
 		$this->add_control(
 			'dropdown',
@@ -307,13 +324,7 @@ class Nav_Menu extends Base_Widget {
 				'label' => __( 'Breakpoint', 'elementor-pro' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'tablet',
-				'options' => [
-					/* translators: %d: Breakpoint number. */
-					'mobile' => sprintf( __( 'Mobile (< %dpx)', 'elementor-pro' ), $breakpoints['md'] ),
-					/* translators: %d: Breakpoint number. */
-					'tablet' => sprintf( __( 'Tablet (< %dpx)', 'elementor-pro' ), $breakpoints['lg'] ),
-					'none' => __( 'None', 'elementor-pro' ),
-				],
+				'options' => $dropdown_options,
 				'prefix_class' => 'elementor-nav-menu--dropdown-',
 				'condition' => [
 					'layout!' => 'dropdown',
@@ -451,7 +462,7 @@ class Nav_Menu extends Base_Widget {
 				],
 				'default' => '',
 				'selectors' => [
-					'{{WRAPPER}} .elementor-nav-menu--main .elementor-item' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .elementor-nav-menu--main .elementor-item' => 'color: {{VALUE}}; fill: {{VALUE}};',
 				],
 			]
 		);
@@ -477,7 +488,7 @@ class Nav_Menu extends Base_Widget {
 					'{{WRAPPER}} .elementor-nav-menu--main .elementor-item:hover,
 					{{WRAPPER}} .elementor-nav-menu--main .elementor-item.elementor-item-active,
 					{{WRAPPER}} .elementor-nav-menu--main .elementor-item.highlighted,
-					{{WRAPPER}} .elementor-nav-menu--main .elementor-item:focus' => 'color: {{VALUE}}',
+					{{WRAPPER}} .elementor-nav-menu--main .elementor-item:focus' => 'color: {{VALUE}}; fill: {{VALUE}};',
 				],
 				'condition' => [
 					'pointer!' => 'background',
@@ -961,6 +972,7 @@ class Nav_Menu extends Base_Widget {
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} div.elementor-menu-toggle' => 'color: {{VALUE}}', // Harder selector to override text color control
+					'{{WRAPPER}} div.elementor-menu-toggle svg' => 'fill: {{VALUE}}',
 				],
 			]
 		);
@@ -1067,6 +1079,22 @@ class Nav_Menu extends Base_Widget {
 			$frontend_settings['submenu_icon']['value'] = str_replace( 'fa ', 'fas ', $frontend_settings['submenu_icon']['value'] );
 		}
 
+		// Determine the submenu icon markup.
+		if ( Plugin::elementor()->experiments->is_feature_active( 'e_font_icon_svg' ) ) {
+			$icon_classes = [];
+
+			if ( false !== strpos( $frontend_settings['submenu_icon']['value'], 'chevron-down' ) ) {
+				$icon_classes['class'] = 'fa-svg-chevron-down';
+			}
+
+			$icon_content = Icons_Manager::render_font_icon( $frontend_settings['submenu_icon'], $icon_classes );
+		} else {
+			$icon_content = sprintf( '<i class="%s"></i>', $frontend_settings['submenu_icon']['value'] );
+		}
+
+		// Passing the entire icon markup to the frontend settings because it can be either <i> or <svg> tag.
+		$frontend_settings['submenu_icon']['value'] = $icon_content;
+
 		return $frontend_settings;
 	}
 
@@ -1162,7 +1190,16 @@ class Nav_Menu extends Base_Widget {
 		endif;
 		?>
 		<div <?php echo $this->get_render_attribute_string( 'menu-toggle' ); ?>>
-			<i class="eicon-menu-bar" aria-hidden="true" role="presentation"></i>
+			<?php Icons_Manager::render_icon(
+				[
+					'library' => 'eicons',
+					'value' => 'eicon-menu-bar',
+				],
+				[
+					'aria-hidden' => 'true',
+					'role' => 'presentation',
+				]
+			); ?>
 			<span class="elementor-screen-only"><?php _e( 'Menu', 'elementor-pro' ); ?></span>
 		</div>
 			<nav class="elementor-nav-menu--dropdown elementor-nav-menu__container" role="navigation" aria-hidden="true"><?php echo $dropdown_menu_html; ?></nav>

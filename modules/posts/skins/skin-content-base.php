@@ -202,6 +202,8 @@ trait Skin_Content_Base {
 
 	public function render_post_content( $with_wrapper = false ) {
 		static $did_posts = [];
+		static $level = 0;
+
 		$post = get_post();
 
 		if ( post_password_required( $post->ID ) ) {
@@ -214,6 +216,7 @@ trait Skin_Content_Base {
 			return;
 		}
 
+		$level++;
 		$did_posts[ $post->ID ] = true;
 		// End avoid recursion
 
@@ -236,6 +239,8 @@ trait Skin_Content_Base {
 					$post = get_post( $preview_id );
 
 					if ( ! $post ) {
+						$level--;
+
 						return;
 					}
 				}
@@ -247,9 +252,9 @@ trait Skin_Content_Base {
 			// Print manually (and don't use `the_content()`) because it's within another `the_content` filter, and the Elementor filter has been removed to avoid recursion.
 			$content = Plugin::elementor()->frontend->get_builder_content( $post->ID, true );
 
-			if ( empty( $content ) ) {
-				Plugin::elementor()->frontend->remove_content_filter();
+			Plugin::elementor()->frontend->remove_content_filter();
 
+			if ( empty( $content ) ) {
 				// Split to pages.
 				setup_postdata( $post );
 
@@ -267,9 +272,13 @@ trait Skin_Content_Base {
 
 				Plugin::elementor()->frontend->add_content_filter();
 
+				$level--;
+
 				return;
 			} else {
+				Plugin::elementor()->frontend->remove_content_filters();
 				$content = apply_filters( 'the_content', $content );
+				Plugin::elementor()->frontend->restore_content_filters();
 			}
 		} // End if().
 
@@ -280,6 +289,12 @@ trait Skin_Content_Base {
 			echo '<div class="elementor-post__content">' . balanceTags( $content, true ) . '</div>';  // XSS ok.
 		} else {
 			echo $content; // XSS ok.
+		}
+
+		$level--;
+
+		if ( 0 === $level ) {
+			$did_posts = [];
 		}
 	}
 

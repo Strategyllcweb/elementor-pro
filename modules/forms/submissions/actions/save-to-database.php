@@ -1,8 +1,12 @@
 <?php
 namespace ElementorPro\Modules\Forms\Submissions\Actions;
 
+use Elementor\Controls_Manager;
 use Elementor\Core\Utils\Collection;
+use ElementorPro\Plugin;
+use ElementorPro\Modules\Forms\Widgets\Form;
 use ElementorPro\Modules\Forms\Classes\Action_Base;
+use ElementorPro\Modules\Forms\Submissions\Component;
 use ElementorPro\Modules\Forms\Submissions\Database\Query;
 use ElementorPro\Modules\Forms\Submissions\Database\Repositories\Form_Snapshot_Repository;
 
@@ -24,7 +28,32 @@ class Save_To_Database extends Action_Base {
 	}
 
 	public function register_settings_section( $widget ) {
-		// This action does not have extra settings.
+		$widget->start_controls_section(
+			'section_submissions',
+			[
+				'label' => __( 'Collect Submissions', 'elementor-pro' ),
+				'condition' => [
+					'submit_actions' => $this->get_name(),
+				],
+			]
+		);
+
+		$widget->add_control(
+			'submissions_action_message',
+			[
+				'type' => Controls_Manager::RAW_HTML,
+				'raw' => sprintf(
+					__(
+						'Collected Submissions will be saved to Elementor > <a href="%s" target="_blank" rel="noreferrer">Submissions</a>',
+						'elementor-pro'
+					),
+					self_admin_url( 'admin.php?page=' . Component::PAGE_ID )
+				),
+				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+			]
+		);
+
+		$widget->end_controls_section();
 	}
 
 	public function on_export( $element ) {
@@ -70,13 +99,22 @@ class Save_To_Database extends Action_Base {
 			] ),
 		], $record->get_field( null ) );
 
+		/** @var Form $form_instance */
+		$form_instance = Plugin::elementor()->elements_manager->create_element_instance( $ajax_handler->get_current_form() );
+		$fields = $record->get_form_settings( 'form_fields' );
+
 		// When created new submission, it should also update or create
 		// a form snapshot to save to new state of the form in case the form changed or will
 		// be deleted later.
 		Form_Snapshot_Repository::instance()
 			->create_or_update( $post_id, $element_id, [
 				'name' => $form_name,
-				'fields' => array_map( function ( $field ) {
+				'fields' => array_map( function ( $field, $index ) use ( $form_instance ) {
+					// Apply filters to demonstrate the same behavior as the render behavior. (adding select fields dynamically, etc.)
+					// Ref: modules/forms/widgets/form.php:2116
+					$field = apply_filters( 'elementor_pro/forms/render/item', $field, $index, $form_instance );
+					$field = apply_filters( "elementor_pro/forms/render/item/{$field['field_type']}", $field, $index, $form_instance );
+
 					$mapped_field = [
 						'id' => $field['custom_id'],
 						'type' => $field['field_type'],
@@ -92,7 +130,7 @@ class Save_To_Database extends Action_Base {
 					}
 
 					return $mapped_field;
-				}, $record->get_form_settings( 'form_fields' ) ),
+				}, $fields, array_keys( $fields ) ),
 			] );
 	}
 
