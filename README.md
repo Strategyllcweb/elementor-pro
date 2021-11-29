@@ -1,7 +1,7 @@
 # Elementor Pro
 
 ```bash
-$ composer require yangm97/elementor-pro
+$ composer require strategyllcweb/elementor-pro
 ```
 
 This is just a mirror from the zip you would normally download from elementor.com, meaning that you still need a valid license to activate this plugin. No copyright infringement done.
