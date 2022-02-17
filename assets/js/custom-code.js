@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.5.1 - 10-11-2021 */
+/*! elementor-pro - v3.6.2 - 14-02-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -1774,7 +1774,9 @@ var ConditionsConfig = /*#__PURE__*/function () {
         return _promise.default.resolve(ConditionsConfig.instance);
       }
 
-      return $e.data.get(_commands.ConditionsConfig.signature).then(function (response) {
+      return $e.data.get(_commands.ConditionsConfig.signature, {}, {
+        refresh: true
+      }).then(function (response) {
         ConditionsConfig.instance = new ConditionsConfig(response.data);
         return ConditionsConfig.instance;
       });

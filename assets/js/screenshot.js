@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.5.1 - 10-11-2021 */
+/*! elementor-pro - v3.6.2 - 14-02-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -5236,7 +5236,7 @@ var Screenshot = /*#__PURE__*/function (_elementorModules$Vie) {
     key: "getDefaultElements",
     value: function getDefaultElements() {
       var $elementor = jQuery(ElementorScreenshotConfig.selector);
-      var $sections = $elementor.find(' .elementor-section-wrap > .elementor-section');
+      var $sections = $elementor.find('.elementor-section-wrap > .elementor-section, .elementor > .elementor-section');
       return {
         $elementor: $elementor,
         $sections: $sections,

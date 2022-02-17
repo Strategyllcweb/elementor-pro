@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.5.1 - 10-11-2021 */
+/*! elementor-pro - v3.6.2 - 14-02-2022 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["preloaded-elements-handlers"],{
 
 /***/ "../assets/dev/js/frontend/preloaded-elements-handlers.js":
@@ -5271,7 +5271,7 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
 
     if (this.isInfinteScroll) {
       this.handleInfiniteScroll();
-    } else if (this.elements.loadMoreSpinnerWrapper) {
+    } else if (this.elements.loadMoreSpinnerWrapper && this.elements.loadMoreButton) {
       // Instead of creating 2 spinners for on-click and infinity-scroll, one spinner will be used so it should be appended to the button in on-click mode.
       this.elements.loadMoreButton.insertAdjacentElement('beforeEnd', this.elements.loadMoreSpinnerWrapper);
     } // Set the post id and element id for the ajax request.
@@ -5280,11 +5280,13 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
     this.elementId = this.getID();
     this.postId = elementorFrontendConfig.post.id; // Set the current page and last page for handling the load more post and when no more posts to show.
 
-    this.currentPage = parseInt(this.elements.loadMoreAnchor.getAttribute('data-page'));
-    this.maxPage = parseInt(this.elements.loadMoreAnchor.getAttribute('data-max-page'));
+    if (this.elements.loadMoreAnchor) {
+      this.currentPage = parseInt(this.elements.loadMoreAnchor.getAttribute('data-page'));
+      this.maxPage = parseInt(this.elements.loadMoreAnchor.getAttribute('data-max-page'));
 
-    if (this.currentPage === this.maxPage) {
-      this.handleUiWhenNoPosts();
+      if (this.currentPage === this.maxPage || !this.currentPage) {
+        this.handleUiWhenNoPosts();
+      }
     }
   } // Handle load more functionality for infinity-scroll type.
 
@@ -5329,7 +5331,7 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
       this.elements.loadMoreSpinner.classList.remove(this.classes.loadMoreSpin);
     }
 
-    if (this.isInfinteScroll && this.elements.loadMoreSpinnerWrapper) {
+    if (this.isInfinteScroll && this.elements.loadMoreSpinnerWrapper && this.elements.loadMoreAnchor) {
       // Since the spinner has to be shown after the new content (posts), it should be appended after the anchor element.
       this.elements.loadMoreAnchor.insertAdjacentElement('afterend', this.elements.loadMoreSpinnerWrapper);
     }
@@ -5342,8 +5344,9 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
   }
 
   handleSuccessFetch(result) {
-    this.handleUiAfterLoading();
-    const posts = result.querySelectorAll('.elementor-posts-container > article');
+    this.handleUiAfterLoading(); // Grabbing only the new articles from the response without the existing once (prevent posts duplication).
+
+    const posts = result.querySelectorAll(`[data-id="${this.elementId}"] .elementor-posts-container > article`);
     const nextPageUrl = result.querySelector('.e-load-more-anchor').getAttribute('data-next-page'); // Converting HTMLCollection to an Array and iterate it.
 
     const postsHTML = [...posts].reduce((accumulator, post) => {
@@ -6344,9 +6347,10 @@ exports.default = _default;
 /*!*************************************************************************************!*\
   !*** ../modules/table-of-contents/assets/js/frontend/handlers/table-of-contents.js ***!
   \*************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
 Object.defineProperty(exports, "__esModule", ({
@@ -6652,11 +6656,7 @@ class TOCHandler extends elementorModules.frontend.handlers.Base {
   }
 
   handleNoHeadingsFound() {
-    let noHeadingsText = elementorProFrontend.config.i18n.toc_no_headings_found;
-
-    if (elementorFrontend.isEditMode()) {
-      noHeadingsText = elementorPro.translate('toc_no_headings_found');
-    }
+    let noHeadingsText = __('No headings were found on this page.', 'elementor-pro');
 
     return this.elements.$tocBody.html(noHeadingsText);
   }
@@ -7064,19 +7064,39 @@ exports.default = void 0;
 
 var _menuCart = _interopRequireDefault(__webpack_require__(/*! ./handlers/menu-cart */ "../modules/woocommerce/assets/js/frontend/handlers/menu-cart.js"));
 
+var _purchaseSummary = _interopRequireDefault(__webpack_require__(/*! ./handlers/purchase-summary */ "../modules/woocommerce/assets/js/frontend/handlers/purchase-summary.js"));
+
 var _checkoutPage = _interopRequireDefault(__webpack_require__(/*! ./handlers/checkout-page */ "../modules/woocommerce/assets/js/frontend/handlers/checkout-page.js"));
 
 var _cart = _interopRequireDefault(__webpack_require__(/*! ./handlers/cart */ "../modules/woocommerce/assets/js/frontend/handlers/cart.js"));
 
 var _myAccount = _interopRequireDefault(__webpack_require__(/*! ./handlers/my-account */ "../modules/woocommerce/assets/js/frontend/handlers/my-account.js"));
 
+var _notices = _interopRequireDefault(__webpack_require__(/*! ./handlers/notices */ "../modules/woocommerce/assets/js/frontend/handlers/notices.js"));
+
 class _default extends elementorModules.Module {
   constructor() {
     super();
     elementorFrontend.elementsHandler.attachHandler('woocommerce-menu-cart', _menuCart.default);
+    elementorFrontend.elementsHandler.attachHandler('woocommerce-purchase-summary', _purchaseSummary.default);
     elementorFrontend.elementsHandler.attachHandler('woocommerce-checkout-page', _checkoutPage.default);
     elementorFrontend.elementsHandler.attachHandler('woocommerce-cart', _cart.default);
     elementorFrontend.elementsHandler.attachHandler('woocommerce-my-account', _myAccount.default);
+    elementorFrontend.elementsHandler.attachHandler('woocommerce-notices', _notices.default);
+    /**
+     * `wc-cart` script is enqueued in the Editor by the widget `get_script_depends()`. As a result WooCommerce
+     * triggers its cart related event callbacks. One of the callbacks requires `.woocommerce-cart-form` to be in
+     * the page and reloads the Preview if it's not there. To get around this we add our own empty
+     * `.woocommerce-cart-form` to the page to stop the page reloading.
+     */
+
+    if (elementorFrontend.isEditMode()) {
+      elementorFrontend.on('components:init', () => {
+        if (!elementorFrontend.elements.$body.find('.elementor-widget-woocommerce-cart').length) {
+          elementorFrontend.elements.$body.append('<div class="woocommerce-cart-form">');
+        }
+      });
+    }
   }
 
 }
@@ -7195,6 +7215,25 @@ class Base extends elementorModules.frontend.handlers.Base {
           height: maxHeight + 'px'
         });
       }
+    }
+  }
+  /**
+   * WooCommerce prints the Purchase Note separated from the product name by a border and padding.
+   * In Elementor's Order Summary design, the product name and purchase note are displayed un-separated.
+   * To achieve this design, it is necessary to access the Product Name line before the Purchase Note line to adjust
+   * its padding. Since this cannot be achieved in CSS, it is done in this method.
+   *
+   * @param {Object} $element
+   *
+   * @return {void}
+   */
+
+
+  removePaddingBetweenPurchaseNote($element) {
+    if ($element) {
+      $element.each((index, element) => {
+        jQuery(element).prev().children('td').addClass('product-purchase-note-is-below');
+      });
     }
   }
 
@@ -7544,6 +7583,7 @@ class Checkout extends _base.default {
           location.reload();
         } else {
           this.elements.$checkoutForm.before(code.message);
+          elementorFrontend.elements.$body.trigger('checkout_error', [code.message]);
         }
       }
 
@@ -7613,7 +7653,8 @@ class _default extends elementorModules.frontend.handlers.Base {
         toggle: '.elementor-menu-cart__toggle',
         toggleButton: '#elementor-menu-cart__toggle_button',
         toggleWrapper: '.elementor-menu-cart__toggle_wrapper',
-        closeButton: '.elementor-menu-cart__close-button'
+        closeButton: '.elementor-menu-cart__close-button',
+        productList: '.elementor-menu-cart__products'
       },
       classes: {
         isShown: 'elementor-menu-cart--shown'
@@ -7676,7 +7717,7 @@ class _default extends elementorModules.frontend.handlers.Base {
   }
 
   bindEvents() {
-    const menuCart = elementorProFrontend.config.menu_cart,
+    const menuCart = elementorProFrontend.config.woocommerce.menu_cart,
           noQueryParams = -1 === menuCart.cart_page_url.indexOf('?'),
           currentUrl = noQueryParams ? window.location.origin + window.location.pathname : window.location.href,
           cartUrl = menuCart.cart_page_url,
@@ -7729,14 +7770,68 @@ class _default extends elementorModules.frontend.handlers.Base {
       this.hideCart();
     });
     elementorFrontend.elements.$document.on('keyup', event => {
-      var ESC_KEY = 27;
+      const ESC_KEY = 27;
 
       if (ESC_KEY === event.keyCode) {
         this.hideCart();
       }
     }); // Option to open cart on add to cart.
 
-    elementorFrontend.elements.$body.on('added_to_cart', () => this.automaticallyOpenCart());
+    elementorFrontend.elements.$body.on('added_to_cart', () => this.automaticallyOpenCart()); // Govern the height of the mini-cart dropdown.
+
+    elementorFrontend.addListenerOnce(this.getUniqueHandlerID() + '_window_resize_dropdown', 'resize', () => this.governDropdownHeight());
+    elementorFrontend.elements.$body.on('wc_fragments_loaded wc_fragments_refreshed', () => this.governDropdownHeight());
+  }
+
+  unbindEvents() {
+    elementorFrontend.removeListeners(this.getUniqueHandlerID() + '_window_resize_dropdown', 'resize');
+  }
+
+  onInit() {
+    super.onInit();
+    /**
+     * When the page is reloaded after an item is added to cart, and the user activated the
+     * "Automatically Open Cart" option, the cart should open to show the updated contents.
+     */
+
+    if (elementorProFrontend.config.woocommerce.productAddedToCart) {
+      this.automaticallyOpenCart();
+    } // Govern the height of the mini-cart dropdown.
+
+
+    this.governDropdownHeight();
+  }
+
+  governDropdownHeight() {
+    const settings = this.getElementSettings(),
+          selectors = this.getSettings('selectors'); // Only do this for mini-cart.
+
+    if ('mini-cart' !== settings.cart_type) {
+      return;
+    } // Elements need to be re-instantiated every time as WooCommerce reloads the toggle button
+    // and cart contents in our widget when the cart changes e.g. adding products to the cart.
+
+
+    const $productList = this.$element.find(selectors.productList),
+          $toggle = this.$element.find(selectors.toggle); // Make sure required elements exist.
+
+    if (!$productList.length || !$toggle.length) {
+      return;
+    } // Remove max-height of productList so we can take new measurements.
+
+
+    this.$element.find(selectors.productList).css('max-height', ''); // Calculate what the height of the productList should be based on elements above, below and it's vertical position.
+
+    const windowHeight = document.documentElement.clientHeight,
+          toggleHeight = $toggle.height() + parseInt(this.elements.$main.css('margin-top')),
+          toggleTopPosition = $toggle[0].getBoundingClientRect().top,
+          productListHeight = $productList.height(),
+          dropdownWithoutViewportHeight = this.elements.$main.prop('scrollHeight') - productListHeight,
+          extraBottomSpacing = 30,
+          maxViewportHeight = windowHeight - toggleTopPosition - toggleHeight - dropdownWithoutViewportHeight - extraBottomSpacing,
+          optimalViewportHeight = Math.max(120, maxViewportHeight); // Apply max-height to the productList.
+
+    $productList.css('max-height', optimalViewportHeight);
   }
 
 }
@@ -7867,21 +7962,6 @@ class MyAccountHandler extends _base.default {
       this.equalizeElementHeight(this.elements.$authForms); // equalize login/reg boxes height
     }
   }
-  /**
-   * WooCommerce prints the Purchase Note separated from the product name by a border and padding.
-   * In Elementor's Order Summary design, the product name and purchase note are displayed un-separated.
-   * To achieve this design, it is necessary to access the Product Name line before the Purchase Note line to adjust
-   * its padding. Since this cannot be achieved in CSS, it is done in this method.
-   */
-
-
-  removePaddingBetweenPurchaseNote() {
-    if (this.elements.$purchasenote) {
-      this.elements.$purchasenote.each((index, element) => {
-        jQuery(element).prev().children('td').addClass('product-purchase-note-is-below');
-      });
-    }
-  }
 
   onElementChange(propertyName) {
     // When the 'General Text' Typography or 'Section' Padding is changed, the height of the boxes need to update as well.
@@ -7890,7 +7970,7 @@ class MyAccountHandler extends _base.default {
     }
 
     if (0 === propertyName.indexOf('forms_rows_gap')) {
-      this.removePaddingBetweenPurchaseNote();
+      this.removePaddingBetweenPurchaseNote(this.elements.$purchasenote);
     }
   }
 
@@ -7920,12 +8000,182 @@ class MyAccountHandler extends _base.default {
 
     this.applyButtonsHoverAnimation();
     this.equalizeElementHeights();
-    this.removePaddingBetweenPurchaseNote();
+    this.removePaddingBetweenPurchaseNote(this.elements.$purchasenote);
   }
 
 }
 
 exports.default = MyAccountHandler;
+
+/***/ }),
+
+/***/ "../modules/woocommerce/assets/js/frontend/handlers/notices.js":
+/*!*********************************************************************!*\
+  !*** ../modules/woocommerce/assets/js/frontend/handlers/notices.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.default = void 0;
+
+class _default extends elementorModules.frontend.handlers.Base {
+  getDefaultSettings() {
+    return {
+      selectors: {
+        woocommerceNotices: '.woocommerce-NoticeGroup, :not(.woocommerce-NoticeGroup) .woocommerce-error, :not(.woocommerce-NoticeGroup) .woocommerce-message, :not(.woocommerce-NoticeGroup) .woocommerce-info',
+        noticesWrapper: '.e-woocommerce-notices-wrapper'
+      }
+    };
+  }
+
+  getDefaultElements() {
+    const selectors = this.getSettings('selectors');
+    return {
+      $documentScrollToElements: elementorFrontend.elements.$document.find('html, body'),
+      $woocommerceCheckoutForm: elementorFrontend.elements.$body.find('.form.checkout'),
+      $noticesWrapper: this.$element.find(selectors.noticesWrapper)
+    };
+  }
+
+  moveNotices(scrollToNotices = false) {
+    const selectors = this.getSettings('selectors');
+    let $notices = elementorFrontend.elements.$body.find(selectors.woocommerceNotices);
+
+    if (elementorFrontend.isEditMode() || elementorFrontend.isWPPreviewMode()) {
+      $notices = $notices.filter(':not(.e-notices-demo-notice)');
+    }
+
+    if (scrollToNotices) {
+      this.elements.$documentScrollToElements.stop();
+    }
+
+    this.elements.$noticesWrapper.prepend($notices);
+
+    if (!this.is_ready) {
+      this.elements.$noticesWrapper.removeClass('e-woocommerce-notices-wrapper-loading');
+      this.is_ready = true;
+    }
+
+    if (scrollToNotices) {
+      let $scrollToElement = $notices;
+
+      if (!$scrollToElement.length) {
+        $scrollToElement = this.elements.$woocommerceCheckoutForm;
+      }
+
+      if ($scrollToElement.length) {
+        // Scrolls to the notice and puts it in the middle of the window so users' attention is drawn to it.
+        this.elements.$documentScrollToElements.animate({
+          scrollTop: $scrollToElement.offset().top - document.documentElement.clientHeight / 2
+        }, 1000);
+      }
+    }
+  }
+
+  onInit() {
+    super.onInit();
+    this.is_ready = false;
+    this.moveNotices(true);
+  }
+
+  bindEvents() {
+    elementorFrontend.elements.$body.on('updated_wc_div updated_checkout updated_cart_totals applied_coupon removed_coupon applied_coupon_in_checkout removed_coupon_in_checkout checkout_error', () => this.moveNotices(true));
+  }
+
+}
+
+exports.default = _default;
+
+/***/ }),
+
+/***/ "../modules/woocommerce/assets/js/frontend/handlers/purchase-summary.js":
+/*!******************************************************************************!*\
+  !*** ../modules/woocommerce/assets/js/frontend/handlers/purchase-summary.js ***!
+  \******************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.default = void 0;
+
+var _base = _interopRequireDefault(__webpack_require__(/*! ./base */ "../modules/woocommerce/assets/js/frontend/handlers/base.js"));
+
+class PurchaseSummaryHandler extends _base.default {
+  getDefaultSettings() {
+    return {
+      selectors: {
+        container: '.elementor-widget-woocommerce-purchase-summary',
+        address: 'address',
+        purchasenote: '.product-purchase-note'
+      }
+    };
+  }
+
+  getDefaultElements() {
+    const selectors = this.getSettings('selectors');
+    return {
+      $container: this.$element.find(selectors.container),
+      $address: this.$element.find(selectors.address),
+      $purchasenote: this.$element.find(selectors.purchasenote)
+    };
+  }
+
+  onElementChange(propertyName) {
+    // When the 'General Text' Typography, 'Section' Padding, or Border Width is changed, the height of the boxes need to update as well.
+    const properties = ['general_text_typography', 'sections_padding', 'sections_border_width'];
+
+    for (const property of properties) {
+      if (propertyName.startsWith(property)) {
+        this.equalizeElementHeight(this.elements.$address);
+      }
+    } // Remove padding on the purchase notes.
+
+
+    if (propertyName.startsWith('order_details_rows_gap')) {
+      this.removePaddingBetweenPurchaseNote(this.elements.$purchasenote);
+    }
+  }
+
+  applyButtonsHoverAnimation() {
+    const elementSettings = this.getElementSettings();
+
+    if (elementSettings.order_details_button_hover_animation) {
+      this.$element.find('.order-again .button, td .button').addClass('elementor-animation-' + elementSettings.order_details_button_hover_animation);
+    }
+  }
+
+  onInit(...args) {
+    super.onInit(...args);
+    this.equalizeElementHeight(this.elements.$address);
+    this.removePaddingBetweenPurchaseNote(this.elements.$purchasenote);
+    this.applyButtonsHoverAnimation();
+  }
+
+}
+
+exports.default = PurchaseSummaryHandler;
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!**************************!*\
+  !*** external "wp.i18n" ***!
+  \**************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = wp.i18n;
 
 /***/ })
 

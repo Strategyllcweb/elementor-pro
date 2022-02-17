@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.5.1 - 10-11-2021 */
+/*! elementor-pro - v3.6.2 - 14-02-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -747,6 +747,7 @@ exports.default = _default;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
@@ -835,7 +836,7 @@ var CustomIcons = /*#__PURE__*/function (_CustomAssetsBase) {
           footer: jQuery('#elementor-custom-icons-template-footer').html(),
           duplicatePrefix: jQuery('#elementor-custom-icons-template-duplicate-prefix').html()
         },
-        notice: ElementorProConfig.i18n.fontsUploadEmptyNotice
+        notice: __('Upload an icon set to publish.', 'elementor-pro')
       };
     }
   }, {
@@ -1064,6 +1065,7 @@ exports.default = _default;
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
@@ -1137,7 +1139,7 @@ var CustomFontsManager = /*#__PURE__*/function (_CustomAssetsBase) {
           publishButton: '#publish',
           publishButtonSpinner: '#publishing-action > .spinner'
         },
-        notice: ElementorProConfig.i18n.fontsUploadEmptyNotice,
+        notice: __('Choose a font to publish.', 'elementor-pro'),
         fontLabelTemplate: '<ul class="row-font-label">' + '<li class="row-font-weight">{{weight}}</li>' + '<li class="row-font-style">{{style}}</li>' + '<li class="row-font-preview">{{preview}}</li>' + '{{toolbar}}' + '</ul>'
       };
     }
@@ -2252,13 +2254,61 @@ module.exports = function () {
         return;
       }
 
-      var editUrl = ElementorProConfig.i18n.home_url + '?p=' + templateID + '&elementor';
+      var editUrl = elementorAdmin.config.home_url + '?p=' + templateID + '&elementor';
       $editButton.prop('href', editUrl).show();
     });
   };
 
   self.init();
 };
+
+/***/ }),
+
+/***/ "../modules/popup/assets/js/admin/admin.js":
+/*!*************************************************!*\
+  !*** ../modules/popup/assets/js/admin/admin.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports.default = void 0;
+
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
+
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
+
+var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+
+var _default = /*#__PURE__*/function (_elementorModules$Mod) {
+  (0, _inherits2.default)(_default, _elementorModules$Mod);
+
+  var _super = (0, _createSuper2.default)(_default);
+
+  function _default() {
+    var _this;
+
+    (0, _classCallCheck2.default)(this, _default);
+    _this = _super.call(this);
+    new elementorModules.admin.MenuHandler({
+      path: 'edit.php?post_type=elementor_library&tabs_group=popup&elementor_library_type=popup'
+    });
+    return _this;
+  }
+
+  return _default;
+}(elementorModules.Module);
+
+exports.default = _default;
 
 /***/ }),
 
@@ -6482,6 +6532,17 @@ if (__webpack_require__(/*! ./_fails */ "../node_modules/core-js/modules/_fails.
 }
 
 
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!**************************!*\
+  !*** external "wp.i18n" ***!
+  \**************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = wp.i18n;
+
 /***/ })
 
 /******/ 	});
@@ -6520,6 +6581,10 @@ var __webpack_exports__ = {};
   \***************************************/
 
 
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
+
+var _admin = _interopRequireDefault(__webpack_require__(/*! modules/popup/assets/js/admin/admin */ "../modules/popup/assets/js/admin/admin.js"));
+
 var modules = {
   widget_template_edit_button: __webpack_require__(/*! modules/library/assets/js/admin */ "../modules/library/assets/js/admin.js"),
   forms_integrations: __webpack_require__(/*! modules/forms/assets/js/admin */ "../modules/forms/assets/js/admin.js"),
@@ -6532,7 +6597,8 @@ window.elementorProAdmin = {
   forms_integrations: new modules.forms_integrations(),
   assetsManager: new modules.AssetsManager(),
   roleManager: new modules.RoleManager(),
-  themeBuilder: new modules.ThemeBuilder()
+  themeBuilder: new modules.ThemeBuilder(),
+  popup: new _admin.default()
 };
 jQuery(function () {
   elementorProAdmin.roleManager.advancedRoleManager.init();

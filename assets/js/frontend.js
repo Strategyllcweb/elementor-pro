@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.5.1 - 10-11-2021 */
+/*! elementor-pro - v3.6.2 - 14-02-2022 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["frontend"],{
 
 /***/ "../node_modules/@babel/runtime/helpers/defineProperty.js":
@@ -328,7 +328,7 @@ class _default extends elementorModules.frontend.handlers.Base {
         $dimensionsElement;
     const elementType = this.getElementType();
 
-    if ('element' === type && 'section' !== elementType) {
+    if ('element' === type && !['section', 'container'].includes(elementType)) {
       $dimensionsElement = $element;
       let childElementSelector;
 
@@ -775,8 +775,10 @@ class _default extends elementorModules.ViewModule {
           this.removeAnimationFrameRequest();
         }
       }
-    });
-    this.intersectionObserver.observe(this.motionFX.elements.$parent[0]);
+    }); // Determine which element we should observe.
+
+    const observedElement = 'page' === this.motionFX.getSettings('range') ? elementorFrontend.elements.$body[0] : this.motionFX.elements.$parent[0];
+    this.intersectionObserver.observe(observedElement);
   }
 
   runCallback(...args) {
@@ -1236,6 +1238,7 @@ class _default extends elementorModules.Module {
   constructor() {
     super();
     elementorFrontend.elementsHandler.attachHandler('section', _sticky.default, null);
+    elementorFrontend.elementsHandler.attachHandler('container', _sticky.default, null);
     elementorFrontend.elementsHandler.attachHandler('widget', _sticky.default, null);
   }
 
@@ -1261,11 +1264,11 @@ exports.default = void 0;
 
 var _default = elementorModules.frontend.handlers.Base.extend({
   bindEvents() {
-    elementorFrontend.addListenerOnce(this.getUniqueHandlerID() + 'sticky', 'resize', this.run);
+    elementorFrontend.addListenerOnce(this.getUniqueHandlerID() + 'sticky', 'resize', this.refresh);
   },
 
   unbindEvents() {
-    elementorFrontend.removeListeners(this.getUniqueHandlerID() + 'sticky', 'resize', this.run);
+    elementorFrontend.removeListeners(this.getUniqueHandlerID() + 'sticky', 'resize', this.refresh);
   },
 
   isStickyInstanceActive() {
@@ -1276,7 +1279,6 @@ var _default = elementorModules.frontend.handlers.Base.extend({
    * Get the current active setting value for a responsive control.
    *
    * @param {string} setting
-   *
    * @return {any} - Setting value.
    */
   getResponsiveSetting(setting) {
@@ -1288,7 +1290,6 @@ var _default = elementorModules.frontend.handlers.Base.extend({
    * Return an array of settings names for responsive control (e.g. `settings`, `setting_tablet`, `setting_mobile` ).
    *
    * @param {string} setting
-   *
    * @return {string[]} - List of settings.
    */
   getResponsiveSettingList(setting) {
@@ -1314,7 +1315,7 @@ var _default = elementorModules.frontend.handlers.Base.extend({
         $wpAdminBar = elementorFrontend.elements.$wpAdminBar;
 
     if (elementSettings.sticky_parent) {
-      stickyOptions.parent = '.elementor-widget-wrap';
+      stickyOptions.parent = '.e-container, .elementor-widget-wrap';
     }
 
     if ($wpAdminBar.length && 'top' === elementSettings.sticky && 'fixed' === $wpAdminBar.css('position')) {
@@ -1352,6 +1353,10 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     }
   },
 
+  refresh() {
+    this.run(true);
+  },
+
   reactivate() {
     this.deactivate();
     this.activate();
@@ -1380,9 +1385,7 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     // The `run` function requests the current device mode from the CSS so it's not ready immediately.
     // (need to wait for the `deviceMode` event to change the CSS).
     // See `elementorFrontend.getCurrentDeviceMode()` for reference.
-    setTimeout(() => {
-      this.run(true);
-    });
+    setTimeout(this.refresh);
   },
 
   onInit() {
