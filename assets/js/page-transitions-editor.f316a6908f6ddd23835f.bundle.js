@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.6.3 - 28-02-2022 */
+/*! elementor-pro - v3.6.5 - 12-04-2022 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["page-transitions-editor"],{
 
 /***/ "../modules/page-transitions/assets/js/editor/commands/animate.js":

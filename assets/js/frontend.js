@@ -1,5 +1,30 @@
-/*! elementor-pro - v3.6.3 - 28-02-2022 */
+/*! elementor-pro - v3.6.5 - 12-04-2022 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["frontend"],{
+
+/***/ "../node_modules/@babel/runtime/helpers/defineProperty.js":
+/*!****************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/defineProperty.js ***!
+  \****************************************************************/
+/***/ ((module) => {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
 
 /***/ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js":
 /*!***********************************************************************!*\
@@ -712,17 +737,29 @@ exports["default"] = _default;
 /*!******************************************************************************!*\
   !*** ../modules/motion-fx/assets/js/frontend/motion-fx/interactions/base.js ***!
   \******************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
 
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "../node_modules/@babel/runtime/helpers/defineProperty.js"));
+
 class _default extends elementorModules.ViewModule {
+  constructor() {
+    super(...arguments);
+    (0, _defineProperty2.default)(this, "onInsideViewport", () => {
+      this.run();
+      this.animationFrameRequest = requestAnimationFrame(this.onInsideViewport);
+    });
+  }
+
   __construct(options) {
     this.motionFX = options.motionFX;
 
@@ -745,11 +782,6 @@ class _default extends elementorModules.ViewModule {
     const observedElement = 'page' === this.motionFX.getSettings('range') ? elementorFrontend.elements.$body[0] : this.motionFX.elements.$parent[0];
     this.intersectionObserver.observe(observedElement);
   }
-
-  onInsideViewport = () => {
-    this.run();
-    this.animationFrameRequest = requestAnimationFrame(this.onInsideViewport);
-  };
 
   runCallback() {
     const callback = this.getSettings('callback');
@@ -955,12 +987,12 @@ class _default extends elementorModules.ViewModule {
   }
 
   bindEvents() {
-    this.onWindowResize = this.onWindowResize.bind(this);
-    elementorFrontend.elements.$window.on('resize', this.onWindowResize);
+    this.defineDimensions = this.defineDimensions.bind(this);
+    elementorFrontend.elements.$window.on('resize elementor-pro/motion-fx/recalc', this.defineDimensions);
   }
 
   unbindEvents() {
-    elementorFrontend.elements.$window.off('resize', this.onWindowResize);
+    elementorFrontend.elements.$window.off('resize elementor-pro/motion-fx/recalc', this.defineDimensions);
   }
 
   addBackgroundLayer() {
@@ -1128,10 +1160,6 @@ class _default extends elementorModules.ViewModule {
     this.actions = new _actions.default(settings);
     this.initInteractionsTypes();
     this.runInteractions();
-  }
-
-  onWindowResize() {
-    this.defineDimensions();
   }
 
 }
