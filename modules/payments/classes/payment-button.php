@@ -2,6 +2,7 @@
 namespace ElementorPro\Modules\Payments\Classes;
 
 use Elementor\Utils;
+use Elementor\Widget_Base;
 use Elementor\Controls_Manager;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
 use Elementor\Group_Control_Typography;
@@ -469,7 +470,7 @@ abstract class Payment_Button extends Widget_Button {
 	}
 
 	// Render the checkout button.
-	protected function render_button( $tag = 'a' ) {
+	protected function render_button( Widget_Base $instance = null, $tag = 'a' ) {
 		$this->add_render_attribute( 'button', 'class', 'elementor-payment-button' );
 
 		?>
