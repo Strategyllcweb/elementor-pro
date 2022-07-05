@@ -36,12 +36,18 @@ class API {
 	 * @return \stdClass|\WP_Error
 	 */
 	private static function remote_post( $body_args = [] ) {
+		$use_home_url = true;
+
 		/**
-		 * Allow third party plugins to set the url to get_site_url() instead of home_url().
+		 * The license API uses `home_url()` function to retrieve the URL. This hook allows
+		 * developers to use `get_site_url()` instead of `home_url()` to set the URL.
 		 *
-		 * @param boolean Whether to use home_url() or get_site_url().
+		 * When set to `true` (default) it uses `home_url()`.
+		 * When set to `false` it uses `get_site_url()`.
+		 *
+		 * @param boolean $use_home_url Whether to use `home_url()` or `get_site_url()`.
 		 */
-		$use_home_url = apply_filters( 'elementor_pro/license/api/use_home_url', true );
+		$use_home_url = apply_filters( 'elementor_pro/license/api/use_home_url', $use_home_url );
 
 		$body_args = wp_parse_args(
 			$body_args,
@@ -158,6 +164,7 @@ class API {
 		];
 
 		$license_key = Admin::get_license_key();
+
 		if ( empty( $license_key ) ) {
 			return $license_data_error;
 		}
@@ -228,15 +235,6 @@ class API {
 		}
 
 		return $info_data;
-	}
-
-	/**
-	 * @param $version
-	 *
-	 * @deprecated 2.7.0 Use `API::get_plugin_package_url()` method instead.
-	 */
-	public static function get_previous_package_url( $version ) {
-		return self::get_plugin_package_url( $version );
 	}
 
 	public static function get_plugin_package_url( $version ) {

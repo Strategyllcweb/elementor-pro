@@ -285,6 +285,36 @@ class Paypal_Button extends Payment_Button {
 		$this->end_controls_section();
 	}
 
+	/**
+	 * Updates Button tab controls in 'Style' tab
+	 *
+	 * @since 3.7.0
+	 */
+	public function register_paypal_button_controls() {
+		parent::register_controls();
+
+		$this->update_control( 'selected_icon', [
+			'default' => [
+				'value' => 'fab fa-paypal',
+				'library' => 'fa-brands',
+			],
+		] );
+
+		$this->update_control( 'background_color', [
+			'default' => '#032E82',
+		] );
+	}
+
+	/**
+	 * Edit button control initial UI
+	 *
+	 * @since 3.7.0
+	 *
+	 */
+	protected function register_controls() {
+		$this->register_paypal_button_controls();
+	}
+
 	// Custom sandbox controls.
 	protected function register_sandbox_controls() {
 		$this->add_control(
