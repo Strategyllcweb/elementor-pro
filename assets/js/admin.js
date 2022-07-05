@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.6.5 - 12-04-2022 */
+/*! elementor-pro - v3.7.2 - 15-06-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -238,41 +238,6 @@ module.exports = _createClass, module.exports.__esModule = true, module.exports[
 
 /***/ }),
 
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js":
-/*!*********************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/createSuper.js ***!
-  \*********************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
-
-var getPrototypeOf = __webpack_require__(/*! ./getPrototypeOf.js */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js");
-
-var isNativeReflectConstruct = __webpack_require__(/*! ./isNativeReflectConstruct.js */ "../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js");
-
-var possibleConstructorReturn = __webpack_require__(/*! ./possibleConstructorReturn.js */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js");
-
-function _createSuper(Derived) {
-  var hasNativeReflectConstruct = isNativeReflectConstruct();
-  return function _createSuperInternal() {
-    var Super = getPrototypeOf(Derived),
-        result;
-
-    if (hasNativeReflectConstruct) {
-      var NewTarget = getPrototypeOf(this).constructor;
-      result = _Reflect$construct(Super, arguments, NewTarget);
-    } else {
-      result = Super.apply(this, arguments);
-    }
-
-    return possibleConstructorReturn(this, result);
-  };
-}
-
-module.exports = _createSuper, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
 /***/ "../node_modules/@babel/runtime-corejs2/helpers/get.js":
 /*!*************************************************************!*\
   !*** ../node_modules/@babel/runtime-corejs2/helpers/get.js ***!
@@ -380,31 +345,6 @@ function _interopRequireDefault(obj) {
 }
 
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js":
-/*!**********************************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js ***!
-  \**********************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
-
-function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !_Reflect$construct) return false;
-  if (_Reflect$construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-module.exports = _isNativeReflectConstruct, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -613,6 +553,8 @@ module.exports = function () {
 "use strict";
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
@@ -629,12 +571,18 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var CustomAssetsBase = /*#__PURE__*/function (_elementorModules$Vie) {
   (0, _inherits2.default)(CustomAssetsBase, _elementorModules$Vie);
 
-  var _super = (0, _createSuper2.default)(CustomAssetsBase);
+  var _super = _createSuper(CustomAssetsBase);
 
   function CustomAssetsBase() {
     (0, _classCallCheck2.default)(this, CustomAssetsBase);
@@ -729,6 +677,8 @@ exports["default"] = _default;
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
@@ -755,20 +705,24 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/get */ "../node_modules/@babel/runtime-corejs2/helpers/get.js"));
 
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
 
 var _customAssetsBase = _interopRequireDefault(__webpack_require__(/*! ./custom-assets-base */ "../modules/assets-manager/assets/js/admin/custom-assets-base.js"));
 
 var _elementorProDropzone = _interopRequireDefault(__webpack_require__(/*! ./fields/elementor-pro-dropzone */ "../modules/assets-manager/assets/js/admin/fields/elementor-pro-dropzone.js"));
 
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
 var CustomIcons = /*#__PURE__*/function (_CustomAssetsBase) {
   (0, _inherits2.default)(CustomIcons, _CustomAssetsBase);
 
-  var _super = (0, _createSuper2.default)(CustomIcons);
+  var _super = _createSuper(CustomIcons);
 
   function CustomIcons() {
     (0, _classCallCheck2.default)(this, CustomIcons);
@@ -1047,6 +1001,8 @@ exports["default"] = _default;
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
@@ -1069,11 +1025,11 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _get3 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/get */ "../node_modules/@babel/runtime-corejs2/helpers/get.js"));
 
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
 
 var _customAssetsBase = _interopRequireDefault(__webpack_require__(/*! ./custom-assets-base */ "../modules/assets-manager/assets/js/admin/custom-assets-base.js"));
 
@@ -1081,10 +1037,14 @@ var _elementorProUpload = _interopRequireDefault(__webpack_require__(/*! ./field
 
 var _elementorProRepeater = _interopRequireDefault(__webpack_require__(/*! ./fields/elementor-pro-repeater */ "../modules/assets-manager/assets/js/admin/fields/elementor-pro-repeater.js"));
 
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
 var CustomFontsManager = /*#__PURE__*/function (_CustomAssetsBase) {
   (0, _inherits2.default)(CustomFontsManager, _CustomAssetsBase);
 
-  var _super = (0, _createSuper2.default)(CustomFontsManager);
+  var _super = _createSuper(CustomFontsManager);
 
   function CustomFontsManager() {
     (0, _classCallCheck2.default)(this, CustomFontsManager);
@@ -1304,6 +1264,8 @@ exports["default"] = CustomFontsManager;
 "use strict";
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
@@ -1324,16 +1286,20 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/get */ "../node_modules/@babel/runtime-corejs2/helpers/get.js"));
 
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var DropZoneField = /*#__PURE__*/function (_elementorModules$Vie) {
   (0, _inherits2.default)(DropZoneField, _elementorModules$Vie);
 
-  var _super = (0, _createSuper2.default)(DropZoneField);
+  var _super = _createSuper(DropZoneField);
 
   function DropZoneField() {
     (0, _classCallCheck2.default)(this, DropZoneField);
@@ -1881,6 +1847,8 @@ module.exports = {
 "use strict";
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
@@ -1897,12 +1865,18 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var _default = /*#__PURE__*/function (_elementorModules$Vie) {
   (0, _inherits2.default)(_default, _elementorModules$Vie);
 
-  var _super = (0, _createSuper2.default)(_default);
+  var _super = _createSuper(_default);
 
   function _default() {
     (0, _classCallCheck2.default)(this, _default);
@@ -2243,6 +2217,103 @@ module.exports = function () {
 
 /***/ }),
 
+/***/ "../modules/payments/assets/js/admin.js":
+/*!**********************************************!*\
+  !*** ../modules/payments/assets/js/admin.js ***!
+  \**********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+module.exports = function () {
+  var ApiValidations = __webpack_require__(/*! ./admin/api-validations */ "../modules/payments/assets/js/admin/api-validations.js");
+
+  this.stripeTestSecretKey = new ApiValidations('stripe_test_secret_key');
+  this.stripeLiveSecretKey = new ApiValidations('stripe_live_secret_key');
+};
+
+/***/ }),
+
+/***/ "../modules/payments/assets/js/admin/api-validations.js":
+/*!**************************************************************!*\
+  !*** ../modules/payments/assets/js/admin/api-validations.js ***!
+  \**************************************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+module.exports = function (key) {
+  var self = this;
+
+  self.cacheElements = function () {
+    this.cache = {
+      $button: jQuery('#elementor_pro_' + key + '_button'),
+      $apiKeyField: jQuery('#elementor_pro_' + key)
+    };
+  };
+
+  self.bindEvents = function () {
+    this.cache.$button.on('click', function (event) {
+      event.preventDefault();
+      self.validateApi();
+    });
+    this.cache.$apiKeyField.on('change', function () {
+      self.setState('clear');
+    });
+  };
+
+  self.validateApi = function () {
+    this.setState('loading');
+    var apiKey = this.cache.$apiKeyField.val();
+
+    if ('' === apiKey) {
+      this.setState('clear');
+      return;
+    }
+
+    jQuery.post(ajaxurl, {
+      action: self.cache.$button.data('action'),
+      secret_key: apiKey,
+      _nonce: self.cache.$button.data('nonce')
+    }).done(function (data) {
+      if (data.success) {
+        self.setState('success');
+      } else {
+        self.setState('error');
+      }
+    }).fail(function () {
+      self.setState();
+    });
+  };
+
+  self.setState = function (type) {
+    var classes = ['loading', 'success', 'error'],
+        currentClass,
+        classIndex;
+
+    for (classIndex in classes) {
+      currentClass = classes[classIndex];
+
+      if (type === currentClass) {
+        this.cache.$button.addClass(currentClass);
+      } else {
+        this.cache.$button.removeClass(currentClass);
+      }
+    }
+  };
+
+  self.init = function () {
+    this.cacheElements();
+    this.bindEvents();
+  };
+
+  self.init();
+};
+
+/***/ }),
+
 /***/ "../modules/popup/assets/js/admin/admin.js":
 /*!*************************************************!*\
   !*** ../modules/popup/assets/js/admin/admin.js ***!
@@ -2251,6 +2322,8 @@ module.exports = function () {
 
 "use strict";
 
+
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
 
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
@@ -2266,16 +2339,20 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
 
-var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var _default = /*#__PURE__*/function (_elementorModules$Mod) {
   (0, _inherits2.default)(_default, _elementorModules$Mod);
 
-  var _super = (0, _createSuper2.default)(_default);
+  var _super = _createSuper(_default);
 
   function _default() {
     var _elementorModules$adm;
@@ -6580,7 +6657,8 @@ var modules = {
   forms_integrations: __webpack_require__(/*! modules/forms/assets/js/admin */ "../modules/forms/assets/js/admin.js"),
   AssetsManager: __webpack_require__(/*! modules/assets-manager/assets/js/admin */ "../modules/assets-manager/assets/js/admin.js"),
   RoleManager: __webpack_require__(/*! modules/role-manager/assets/js/admin */ "../modules/role-manager/assets/js/admin.js"),
-  ThemeBuilder: __webpack_require__(/*! modules/theme-builder/assets/js/admin/admin */ "../modules/theme-builder/assets/js/admin/admin.js")
+  ThemeBuilder: __webpack_require__(/*! modules/theme-builder/assets/js/admin/admin */ "../modules/theme-builder/assets/js/admin/admin.js"),
+  StripeIntegration: __webpack_require__(/*! modules/payments/assets/js/admin */ "../modules/payments/assets/js/admin.js")
 };
 window.elementorProAdmin = {
   widget_template_edit_button: new modules.widget_template_edit_button(),
@@ -6588,6 +6666,7 @@ window.elementorProAdmin = {
   assetsManager: new modules.AssetsManager(),
   roleManager: new modules.RoleManager(),
   themeBuilder: new modules.ThemeBuilder(),
+  StripeIntegration: new modules.StripeIntegration(),
   popup: new _admin.default()
 };
 jQuery(function () {

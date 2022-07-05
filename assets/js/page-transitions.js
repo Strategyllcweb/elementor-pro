@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.6.5 - 12-04-2022 */
+/*! elementor-pro - v3.7.2 - 15-06-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -49,6 +49,16 @@ module.exports = __webpack_require__(/*! core-js/library/fn/object/get-prototype
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 module.exports = __webpack_require__(/*! core-js/library/fn/object/set-prototype-of */ "../node_modules/core-js/library/fn/object/set-prototype-of.js");
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime-corejs2/core-js/object/values.js":
+/*!***********************************************************************!*\
+  !*** ../node_modules/@babel/runtime-corejs2/core-js/object/values.js ***!
+  \***********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+module.exports = __webpack_require__(/*! core-js/library/fn/object/values */ "../node_modules/core-js/library/fn/object/values.js");
 
 /***/ }),
 
@@ -200,41 +210,6 @@ function _createClass(Constructor, protoProps, staticProps) {
 }
 
 module.exports = _createClass, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js":
-/*!*********************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/createSuper.js ***!
-  \*********************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
-
-var getPrototypeOf = __webpack_require__(/*! ./getPrototypeOf.js */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js");
-
-var isNativeReflectConstruct = __webpack_require__(/*! ./isNativeReflectConstruct.js */ "../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js");
-
-var possibleConstructorReturn = __webpack_require__(/*! ./possibleConstructorReturn.js */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js");
-
-function _createSuper(Derived) {
-  var hasNativeReflectConstruct = isNativeReflectConstruct();
-  return function _createSuperInternal() {
-    var Super = getPrototypeOf(Derived),
-        result;
-
-    if (hasNativeReflectConstruct) {
-      var NewTarget = getPrototypeOf(this).constructor;
-      result = _Reflect$construct(Super, arguments, NewTarget);
-    } else {
-      result = Super.apply(this, arguments);
-    }
-
-    return possibleConstructorReturn(this, result);
-  };
-}
-
-module.exports = _createSuper, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -508,6 +483,71 @@ var _preloader = __webpack_require__(/*! ./preloader/preloader */ "../modules/pa
 
 /***/ }),
 
+/***/ "../modules/page-transitions/assets/js/frontend/components/page-transition/filters.js":
+/*!********************************************************************************************!*\
+  !*** ../modules/page-transitions/assets/js/frontend/components/page-transition/filters.js ***!
+  \********************************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
+_Object$defineProperty(exports, "__esModule", {
+  value: true
+});
+
+exports["default"] = void 0;
+
+__webpack_require__(/*! core-js/modules/es6.string.starts-with.js */ "../node_modules/core-js/modules/es6.string.starts-with.js");
+
+__webpack_require__(/*! core-js/modules/es6.regexp.match.js */ "../node_modules/core-js/modules/es6.regexp.match.js");
+
+__webpack_require__(/*! core-js/modules/es6.regexp.constructor.js */ "../node_modules/core-js/modules/es6.regexp.constructor.js");
+
+// Ref: https://stackoverflow.com/questions/26088849/url-fragment-allowed-characters
+var urlFragmentPattern = /.*#[\w\-\/$.+()*@?~!&',;=:%]*$/;
+var _default = {
+  // Disable using data attribute.
+  isDisabled: function isDisabled(a) {
+    return a.dataset.hasOwnProperty('eDisablePageTransition');
+  },
+  // Allow only links from same origin and without a URL fragment (e.g. #some-string).
+  isEmptyHref: function isEmptyHref(a) {
+    return !a.getAttribute('href');
+  },
+  isTargetBlank: function isTargetBlank(a) {
+    return '_blank' === a.target;
+  },
+  notSameOrigin: function notSameOrigin(a) {
+    return !a.href.startsWith(window.location.origin);
+  },
+  hasFragment: function hasFragment(a) {
+    return !!a.href.match(urlFragmentPattern);
+  },
+  // Internal page links, popups, etc.
+  // Disable in WooCommerce links.
+  isWoocommerce: function isWoocommerce(a) {
+    var _a$parentElement;
+
+    var isAddToCart = a.href.match(/\?add-to-cart=/),
+        isRemoveFromCart = a.href.match(/\?remove_item=/),
+        isRestoreToCart = a.href.match(/\?undo_item=/),
+        isWoocommercePagination = a.href.match(/\?product-page=/),
+        isWoocommerceLogout = a.href.match(/\?elementor_wc_logout=/),
+        isWoocommerceTab = (_a$parentElement = a.parentElement) === null || _a$parentElement === void 0 ? void 0 : _a$parentElement.classList.contains('woocommerce-MyAccount-navigation-link');
+    return isAddToCart || isRemoveFromCart || isRestoreToCart || isWoocommercePagination || isWoocommerceLogout || isWoocommerceTab;
+  },
+  // Custom regex filter from attributes.
+  isExcluded: function isExcluded(a, exclude) {
+    return a.href.match(new RegExp(exclude));
+  }
+};
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ "../modules/page-transitions/assets/js/frontend/components/page-transition/page-transition.js":
 /*!****************************************************************************************************!*\
   !*** ../modules/page-transitions/assets/js/frontend/components/page-transition/page-transition.js ***!
@@ -516,6 +556,8 @@ var _preloader = __webpack_require__(/*! ./preloader/preloader */ "../modules/pa
 
 "use strict";
 
+
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
 
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
@@ -527,6 +569,8 @@ _Object$defineProperty(exports, "__esModule", {
 
 exports["default"] = exports.PageTransition = void 0;
 
+var _values = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/object/values */ "../node_modules/@babel/runtime-corejs2/core-js/object/values.js"));
+
 var _parseInt2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/parse-int */ "../node_modules/@babel/runtime-corejs2/core-js/parse-int.js"));
 
 var _promise = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/promise */ "../node_modules/@babel/runtime-corejs2/core-js/promise.js"));
@@ -534,12 +578,6 @@ var _promise = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-cor
 __webpack_require__(/*! core-js/modules/es6.object.to-string.js */ "../node_modules/core-js/modules/es6.object.to-string.js");
 
 __webpack_require__(/*! core-js/modules/es6.regexp.to-string.js */ "../node_modules/core-js/modules/es6.regexp.to-string.js");
-
-__webpack_require__(/*! core-js/modules/es6.string.starts-with.js */ "../node_modules/core-js/modules/es6.string.starts-with.js");
-
-__webpack_require__(/*! core-js/modules/es6.regexp.match.js */ "../node_modules/core-js/modules/es6.regexp.match.js");
-
-__webpack_require__(/*! core-js/modules/es6.regexp.constructor.js */ "../node_modules/core-js/modules/es6.regexp.constructor.js");
 
 __webpack_require__(/*! core-js/modules/es6.regexp.replace.js */ "../node_modules/core-js/modules/es6.regexp.replace.js");
 
@@ -549,16 +587,24 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
 
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/wrapNativeSuper */ "../node_modules/@babel/runtime-corejs2/helpers/wrapNativeSuper.js"));
 
 var _pageTransitionComponent = _interopRequireDefault(__webpack_require__(/*! ./page-transition.component.scss */ "../modules/page-transitions/assets/js/frontend/components/page-transition/page-transition.component.scss"));
 
+var _filters = _interopRequireDefault(__webpack_require__(/*! ./filters */ "../modules/page-transitions/assets/js/frontend/components/page-transition/filters.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
 var PageTransition = /*#__PURE__*/function (_HTMLElement) {
   (0, _inherits2.default)(PageTransition, _HTMLElement);
 
-  var _super = (0, _createSuper2.default)(PageTransition);
+  var _super = _createSuper(PageTransition);
 
   /**
    * Initialize the Page Transitions element.
@@ -637,33 +683,11 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
   }, {
     key: "shouldPageTriggerTransition",
     value: function shouldPageTriggerTransition(a) {
-      var _a$parentElement;
+      var _this2 = this;
 
-      // Ref: https://stackoverflow.com/questions/26088849/url-fragment-allowed-characters
-      var urlFragmentPattern = /.*#[\w\-\/$.+()*@?~!&',;=:%]*$/; // Default filter.
-
-      var isEmptyHref = !a.getAttribute('href'),
-          isTargetBlank = '_blank' === a.target,
-          isSameOrigin = a.href.startsWith(window.location.origin),
-          hasFragment = !!a.href.match(urlFragmentPattern),
-          // Internal page links, popups, etc.
-      isAddToCart = a.href.match(/\?add-to-cart=/),
-          isRemoveFromCart = a.href.match(/\?remove_item=/),
-          isRestoreToCart = a.href.match(/\?undo_item=/),
-          isWoocommercePagination = a.href.match(/\?product-page=/),
-          isWoocommerceLogout = a.href.match(/\?elementor_wc_logout=/),
-          isWoocommerceTab = (_a$parentElement = a.parentElement) === null || _a$parentElement === void 0 ? void 0 : _a$parentElement.classList.contains('woocommerce-MyAccount-navigation-link');
-      var isWoocommerce = isAddToCart || isRemoveFromCart || isRestoreToCart || isWoocommercePagination || isWoocommerceLogout || isWoocommerceTab; // Allow only links from same origin and without a URL fragment (e.g. #some-string).
-
-      var filter = !isEmptyHref && !isTargetBlank && isSameOrigin && !hasFragment && !isWoocommerce; // Custom regex filter from attributes.
-
-      var exclude = this.getAttribute('exclude');
-
-      if (exclude) {
-        filter = filter && !a.href.match(new RegExp(exclude));
-      }
-
-      return filter;
+      return (0, _values.default)(_filters.default).every(function (shouldDisable) {
+        return !shouldDisable(a, _this2.getAttribute('exclude'));
+      });
     }
     /**
      * Hide the loader on page show.
@@ -674,7 +698,7 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
   }, {
     key: "onPageShow",
     value: function onPageShow() {
-      var _this2 = this;
+      var _this3 = this;
 
       // To disable animation on back / forward click.
       if (this.classList.contains(this.classes.exiting)) {
@@ -684,7 +708,7 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
 
 
       this.animateState('entering').then(function () {
-        _this2.classList.add(_this2.classes.entered);
+        _this3.classList.add(_this3.classes.entered);
       });
     }
     /**
@@ -697,13 +721,13 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
   }, {
     key: "onLinkClick",
     value: function onLinkClick(e) {
-      var _this3 = this;
+      var _this4 = this;
 
       e.preventDefault();
       var href = e.currentTarget.href;
       this.classList.remove(this.classes.entered);
       this.animateState('exiting', this.getPreloaderDelay()).then(function () {
-        _this3.classList.add(_this3.classes.exiting); // Redirect the user to the clicked href only after the Page Transition has entered.
+        _this4.classList.add(_this4.classes.exiting); // Redirect the user to the clicked href only after the Page Transition has entered.
 
 
         location.href = href;
@@ -749,20 +773,20 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
   }, {
     key: "bindEvents",
     value: function bindEvents() {
-      var _this4 = this;
+      var _this5 = this;
 
       window.addEventListener('pageshow', this.onPageShow.bind(this));
       window.addEventListener('DOMContentLoaded', function () {
-        _this4.elements = _this4.getElements(); // Bind events to all relevant links.
+        _this5.elements = _this5.getElements(); // Bind events to all relevant links.
 
-        _this4.elements.links.forEach(function (a) {
-          if (!_this4.shouldPageTriggerTransition(a)) {
+        _this5.elements.links.forEach(function (a) {
+          if (!_this5.shouldPageTriggerTransition(a)) {
             return;
           }
 
-          a.addEventListener('click', _this4.onLinkClick.bind(_this4));
-          a.addEventListener('mouseenter', _this4.onLinkMouseEnter.bind(_this4));
-          a.addEventListener('touchstart', _this4.onLinkMouseEnter.bind(_this4));
+          a.addEventListener('click', _this5.onLinkClick.bind(_this5));
+          a.addEventListener('mouseenter', _this5.onLinkMouseEnter.bind(_this5));
+          a.addEventListener('touchstart', _this5.onLinkMouseEnter.bind(_this5));
         });
       });
     }
@@ -771,7 +795,7 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
      *
      * @param {string} str - String to escape.
      *
-     * @return {string}
+     * @return {string} escaped string
      */
 
   }, {
@@ -915,7 +939,7 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
   }, {
     key: "animate",
     value: function animate() {
-      var _this5 = this;
+      var _this6 = this;
 
       // Don't animate if there is already an animation in progress.
       if (this.isAnimating) {
@@ -932,11 +956,11 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
         // Defer to make sure that the `entered` class is fully removed before animating.
         // Return a Promise for animations chaining.
         setTimeout(function () {
-          _this5.animateState('exiting', delay).then(function () {
-            _this5.animateState('entering').then(function () {
-              _this5.classList.add(_this5.classes.entered);
+          _this6.animateState('exiting', delay).then(function () {
+            _this6.animateState('entering').then(function () {
+              _this6.classList.add(_this6.classes.entered);
 
-              _this5.isAnimating = false;
+              _this6.isAnimating = false;
               resolve();
             });
           });
@@ -955,11 +979,10 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
     key: "animateState",
     value: function animateState(state) {
       var _this$classes,
-          _this6 = this;
+          _this7 = this;
 
       var delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-      var animationDuration = this.getAnimationDuration(),
-          className = (_this$classes = this.classes) === null || _this$classes === void 0 ? void 0 : _this$classes[state];
+      var className = (_this$classes = this.classes) === null || _this$classes === void 0 ? void 0 : _this$classes[state];
 
       if (!className) {
         return new _promise.default(function (resolve, reject) {
@@ -971,9 +994,10 @@ var PageTransition = /*#__PURE__*/function (_HTMLElement) {
       this.classList.remove(className);
       this.classList.add(className); // Return a Promise for animations chaining.
 
+      var animationDuration = this.getAnimationDuration();
       return new _promise.default(function (resolve) {
         setTimeout(function () {
-          _this6.classList.remove(className);
+          _this7.classList.remove(className);
 
           resolve(state);
         }, animationDuration + delay);
@@ -1025,6 +1049,8 @@ exports["default"] = _default;
 "use strict";
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
@@ -1047,16 +1073,22 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
 
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/wrapNativeSuper */ "../node_modules/@babel/runtime-corejs2/helpers/wrapNativeSuper.js"));
 
 var _preloaderComponent = _interopRequireDefault(__webpack_require__(/*! ./preloader.component.scss */ "../modules/page-transitions/assets/js/frontend/components/preloader/preloader.component.scss"));
 
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+
 var Preloader = /*#__PURE__*/function (_HTMLElement) {
   (0, _inherits2.default)(Preloader, _HTMLElement);
 
-  var _super = (0, _createSuper2.default)(Preloader);
+  var _super = _createSuper(Preloader);
 
   function Preloader() {
     (0, _classCallCheck2.default)(this, Preloader);
@@ -1249,6 +1281,18 @@ module.exports = __webpack_require__(/*! ../../modules/_core */ "../node_modules
 
 __webpack_require__(/*! ../../modules/es6.object.set-prototype-of */ "../node_modules/core-js/library/modules/es6.object.set-prototype-of.js");
 module.exports = __webpack_require__(/*! ../../modules/_core */ "../node_modules/core-js/library/modules/_core.js").Object.setPrototypeOf;
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/library/fn/object/values.js":
+/*!***********************************************************!*\
+  !*** ../node_modules/core-js/library/fn/object/values.js ***!
+  \***********************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+__webpack_require__(/*! ../../modules/es7.object.values */ "../node_modules/core-js/library/modules/es7.object.values.js");
+module.exports = __webpack_require__(/*! ../../modules/_core */ "../node_modules/core-js/library/modules/_core.js").Object.values;
 
 
 /***/ }),
@@ -2908,6 +2952,37 @@ module.exports = function (KEY, exec) {
 
 /***/ }),
 
+/***/ "../node_modules/core-js/library/modules/_object-to-array.js":
+/*!*******************************************************************!*\
+  !*** ../node_modules/core-js/library/modules/_object-to-array.js ***!
+  \*******************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var DESCRIPTORS = __webpack_require__(/*! ./_descriptors */ "../node_modules/core-js/library/modules/_descriptors.js");
+var getKeys = __webpack_require__(/*! ./_object-keys */ "../node_modules/core-js/library/modules/_object-keys.js");
+var toIObject = __webpack_require__(/*! ./_to-iobject */ "../node_modules/core-js/library/modules/_to-iobject.js");
+var isEnum = (__webpack_require__(/*! ./_object-pie */ "../node_modules/core-js/library/modules/_object-pie.js").f);
+module.exports = function (isEntries) {
+  return function (it) {
+    var O = toIObject(it);
+    var keys = getKeys(O);
+    var length = keys.length;
+    var i = 0;
+    var result = [];
+    var key;
+    while (length > i) {
+      key = keys[i++];
+      if (!DESCRIPTORS || isEnum.call(O, key)) {
+        result.push(isEntries ? [key, O[key]] : O[key]);
+      }
+    }
+    return result;
+  };
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/library/modules/_parse-int.js":
 /*!*************************************************************!*\
   !*** ../node_modules/core-js/library/modules/_parse-int.js ***!
@@ -4425,6 +4500,25 @@ __webpack_require__(/*! ./_set-collection-of */ "../node_modules/core-js/library
 var $export = __webpack_require__(/*! ./_export */ "../node_modules/core-js/library/modules/_export.js");
 
 $export($export.P + $export.R, 'Map', { toJSON: __webpack_require__(/*! ./_collection-to-json */ "../node_modules/core-js/library/modules/_collection-to-json.js")('Map') });
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/library/modules/es7.object.values.js":
+/*!********************************************************************!*\
+  !*** ../node_modules/core-js/library/modules/es7.object.values.js ***!
+  \********************************************************************/
+/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+
+// https://github.com/tc39/proposal-object-values-entries
+var $export = __webpack_require__(/*! ./_export */ "../node_modules/core-js/library/modules/_export.js");
+var $values = __webpack_require__(/*! ./_object-to-array */ "../node_modules/core-js/library/modules/_object-to-array.js")(false);
+
+$export($export.S, 'Object', {
+  values: function values(it) {
+    return $values(it);
+  }
+});
 
 
 /***/ }),

@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.6.5 - 12-04-2022 */
+/*! elementor-pro - v3.7.2 - 15-06-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -140,41 +140,6 @@ module.exports = _createClass, module.exports.__esModule = true, module.exports[
 
 /***/ }),
 
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js":
-/*!*********************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/createSuper.js ***!
-  \*********************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
-
-var getPrototypeOf = __webpack_require__(/*! ./getPrototypeOf.js */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js");
-
-var isNativeReflectConstruct = __webpack_require__(/*! ./isNativeReflectConstruct.js */ "../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js");
-
-var possibleConstructorReturn = __webpack_require__(/*! ./possibleConstructorReturn.js */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js");
-
-function _createSuper(Derived) {
-  var hasNativeReflectConstruct = isNativeReflectConstruct();
-  return function _createSuperInternal() {
-    var Super = getPrototypeOf(Derived),
-        result;
-
-    if (hasNativeReflectConstruct) {
-      var NewTarget = getPrototypeOf(this).constructor;
-      result = _Reflect$construct(Super, arguments, NewTarget);
-    } else {
-      result = Super.apply(this, arguments);
-    }
-
-    return possibleConstructorReturn(this, result);
-  };
-}
-
-module.exports = _createSuper, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
 /***/ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js":
 /*!************************************************************************!*\
   !*** ../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js ***!
@@ -245,31 +210,6 @@ function _interopRequireDefault(obj) {
 }
 
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js":
-/*!**********************************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js ***!
-  \**********************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
-
-function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !_Reflect$construct) return false;
-  if (_Reflect$construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-module.exports = _isNativeReflectConstruct, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -351,6 +291,8 @@ module.exports = _typeof, module.exports.__esModule = true, module.exports["defa
 /* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
 var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
@@ -375,12 +317,18 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 var Preview = /*#__PURE__*/function (_elementorModules$Vie) {
   (0, _inherits2.default)(Preview, _elementorModules$Vie);
 
-  var _super = (0, _createSuper2.default)(Preview);
+  var _super = _createSuper(Preview);
 
   function Preview() {
     var _this;

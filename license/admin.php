@@ -326,15 +326,6 @@ class Admin {
 		return false;
 	}
 
-	/**
-	 * @deprecated 2.9.0 Use ElementorPro\License\API::is_license_about_to_expire() instead
-	 *
-	 * @return bool
-	 */
-	public function is_license_about_to_expire() {
-		return Api::is_license_about_to_expire();
-	}
-
 	public function admin_license_details() {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -616,6 +607,8 @@ class Admin {
 							<?php printf(
 								/* translators: 1: Bold text Open Tag, 2: Bold text closing tag, 3: Link open tag, 4: Link closing tag. */
 								esc_html__( '%1$sYour License Has Expired.%2$s %3$sRenew your license today%4$s to keep getting feature updates, premium support and unlimited access to the template library.', 'elementor-pro' ),
+								'<strong>',
+								'</strong>',
 								'<a href="https://go.elementor.com/renew/" target="_blank">',
 								'</a>'
 							); ?>

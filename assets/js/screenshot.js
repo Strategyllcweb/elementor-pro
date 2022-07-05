@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.6.5 - 12-04-2022 */
+/*! elementor-pro - v3.7.2 - 15-06-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -268,41 +268,6 @@ module.exports = _createClass, module.exports.__esModule = true, module.exports[
 
 /***/ }),
 
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js":
-/*!*********************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/createSuper.js ***!
-  \*********************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
-
-var getPrototypeOf = __webpack_require__(/*! ./getPrototypeOf.js */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js");
-
-var isNativeReflectConstruct = __webpack_require__(/*! ./isNativeReflectConstruct.js */ "../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js");
-
-var possibleConstructorReturn = __webpack_require__(/*! ./possibleConstructorReturn.js */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js");
-
-function _createSuper(Derived) {
-  var hasNativeReflectConstruct = isNativeReflectConstruct();
-  return function _createSuperInternal() {
-    var Super = getPrototypeOf(Derived),
-        result;
-
-    if (hasNativeReflectConstruct) {
-      var NewTarget = getPrototypeOf(this).constructor;
-      result = _Reflect$construct(Super, arguments, NewTarget);
-    } else {
-      result = Super.apply(this, arguments);
-    }
-
-    return possibleConstructorReturn(this, result);
-  };
-}
-
-module.exports = _createSuper, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
 /***/ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js":
 /*!************************************************************************!*\
   !*** ../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js ***!
@@ -440,31 +405,6 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 
 /***/ }),
 
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js":
-/*!**********************************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/isNativeReflectConstruct.js ***!
-  \**********************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
-
-function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !_Reflect$construct) return false;
-  if (_Reflect$construct.sham) return false;
-  if (typeof Proxy === "function") return true;
-
-  try {
-    Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
-}
-
-module.exports = _isNativeReflectConstruct, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
 /***/ "../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js":
 /*!*************************************************************************!*\
   !*** ../node_modules/@babel/runtime-corejs2/helpers/iterableToArray.js ***!
@@ -496,57 +436,6 @@ function _nonIterableSpread() {
 }
 
 module.exports = _nonIterableSpread, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js":
-/*!***********************************************************************!*\
-  !*** ../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js ***!
-  \***********************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var _Object$keys = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "../node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
-
-var _Object$getOwnPropertySymbols = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-symbols */ "../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
-
-var _Object$getOwnPropertyDescriptor = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptor */ "../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
-
-var _Object$getOwnPropertyDescriptors = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptors */ "../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js");
-
-var _Object$defineProperties = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
-
-var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
-
-var defineProperty = __webpack_require__(/*! ./defineProperty.js */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js");
-
-function ownKeys(object, enumerableOnly) {
-  var keys = _Object$keys(object);
-
-  if (_Object$getOwnPropertySymbols) {
-    var symbols = _Object$getOwnPropertySymbols(object);
-
-    enumerableOnly && (symbols = symbols.filter(function (sym) {
-      return _Object$getOwnPropertyDescriptor(object, sym).enumerable;
-    })), keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
-      defineProperty(target, key, source[key]);
-    }) : _Object$getOwnPropertyDescriptors ? _Object$defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
-      _Object$defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key));
-    });
-  }
-
-  return target;
-}
-
-module.exports = _objectSpread2, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -5130,6 +5019,20 @@ var __webpack_exports__ = {};
   \**************************************************************/
 
 
+var _Reflect$construct = __webpack_require__(/*! @babel/runtime-corejs2/core-js/reflect/construct */ "../node_modules/@babel/runtime-corejs2/core-js/reflect/construct.js");
+
+var _Object$keys = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/keys */ "../node_modules/@babel/runtime-corejs2/core-js/object/keys.js");
+
+var _Object$getOwnPropertySymbols = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-symbols */ "../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-symbols.js");
+
+var _Object$getOwnPropertyDescriptor = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptor */ "../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js");
+
+var _Object$getOwnPropertyDescriptors = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/get-own-property-descriptors */ "../node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptors.js");
+
+var _Object$defineProperties = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-properties */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-properties.js");
+
+var _Object$defineProperty = __webpack_require__(/*! @babel/runtime-corejs2/core-js/object/define-property */ "../node_modules/@babel/runtime-corejs2/core-js/object/define-property.js");
+
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime-corejs2/helpers/interopRequireDefault */ "../node_modules/@babel/runtime-corejs2/helpers/interopRequireDefault.js");
 
 var _promise = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/core-js/promise */ "../node_modules/@babel/runtime-corejs2/core-js/promise.js"));
@@ -5150,7 +5053,7 @@ __webpack_require__(/*! core-js/modules/web.dom.iterable.js */ "../node_modules/
 
 var _toConsumableArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/toConsumableArray */ "../node_modules/@babel/runtime-corejs2/helpers/toConsumableArray.js"));
 
-var _objectSpread2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/objectSpread2 */ "../node_modules/@babel/runtime-corejs2/helpers/objectSpread2.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/defineProperty */ "../node_modules/@babel/runtime-corejs2/helpers/defineProperty.js"));
 
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/classCallCheck */ "../node_modules/@babel/runtime-corejs2/helpers/classCallCheck.js"));
 
@@ -5158,17 +5061,25 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 
 var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/get */ "../node_modules/@babel/runtime-corejs2/helpers/get.js"));
 
-var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
-
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/inherits */ "../node_modules/@babel/runtime-corejs2/helpers/inherits.js"));
 
-var _createSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/createSuper */ "../node_modules/@babel/runtime-corejs2/helpers/createSuper.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime-corejs2/helpers/possibleConstructorReturn.js"));
+
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime-corejs2/helpers/getPrototypeOf */ "../node_modules/@babel/runtime-corejs2/helpers/getPrototypeOf.js"));
+
+function ownKeys(object, enumerableOnly) { var keys = _Object$keys(object); if (_Object$getOwnPropertySymbols) { var symbols = _Object$getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return _Object$getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { (0, _defineProperty2.default)(target, key, source[key]); }) : _Object$getOwnPropertyDescriptors ? _Object$defineProperties(target, _Object$getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { _Object$defineProperty(target, key, _Object$getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = _Reflect$construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !_Reflect$construct) return false; if (_Reflect$construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(_Reflect$construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 
 /* global ElementorScreenshotConfig */
 var Screenshot = /*#__PURE__*/function (_elementorModules$Vie) {
   (0, _inherits2.default)(Screenshot, _elementorModules$Vie);
 
-  var _super = (0, _createSuper2.default)(Screenshot);
+  var _super = _createSuper(Screenshot);
 
   function Screenshot() {
     (0, _classCallCheck2.default)(this, Screenshot);
@@ -5178,7 +5089,7 @@ var Screenshot = /*#__PURE__*/function (_elementorModules$Vie) {
   (0, _createClass2.default)(Screenshot, [{
     key: "getDefaultSettings",
     value: function getDefaultSettings() {
-      return (0, _objectSpread2.default)({
+      return _objectSpread({
         empty_content_headline: 'Empty Content.',
         crop: {
           width: 1200,
@@ -5580,7 +5491,7 @@ var Screenshot = /*#__PURE__*/function (_elementorModules$Vie) {
      * Final method of the screenshot.
      *
      * @param {boolean} success
-     * @param {string} imageUrl
+     * @param {string}  imageUrl
      */
 
   }, {
@@ -5603,7 +5514,7 @@ var Screenshot = /*#__PURE__*/function (_elementorModules$Vie) {
     /**
      * Log messages for debugging.
      *
-     * @param {any} message
+     * @param {any}     message
      * @param {string?} timerMethod
      */
 

@@ -43,11 +43,6 @@ trait Base_Widget_Trait {
 		];
 	}
 
-	// TODO: Remove this method when the minimum core version is 3.3.1.
-	public function get_css_config() {
-		return $this->get_widget_css_config( $this->get_group_name() );
-	}
-
 	public function get_responsive_widgets_config() {
 		$responsive_widgets_data_manager = $this->get_responsive_widgets_data_manager();
 
