@@ -1,46 +1,5 @@
-/*! elementor-pro - v3.7.2 - 15-06-2022 */
+/*! elementor-pro - v3.7.7 - 20-09-2022 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["frontend"],{
-
-/***/ "../node_modules/@babel/runtime/helpers/defineProperty.js":
-/*!****************************************************************!*\
-  !*** ../node_modules/@babel/runtime/helpers/defineProperty.js ***!
-  \****************************************************************/
-/***/ ((module) => {
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
-
-/***/ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js":
-/*!***********************************************************************!*\
-  !*** ../node_modules/@babel/runtime/helpers/interopRequireDefault.js ***!
-  \***********************************************************************/
-/***/ ((module) => {
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {
-    "default": obj
-  };
-}
-
-module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ }),
 
 /***/ "../assets/dev/js/frontend/frontend.js":
 /*!*********************************************!*\
@@ -1321,7 +1280,11 @@ var _default = elementorModules.frontend.handlers.Base.extend({
         stickyActive: 'elementor-sticky--active elementor-section--handles-inside',
         stickyEffects: 'elementor-sticky--effects',
         spacer: 'elementor-sticky__spacer'
-      }
+      },
+      isRTL: elementorFrontend.config.is_rtl,
+      // In edit mode, since the preview is an iframe, the scrollbar is on the left. The scrollbar width is
+      // compensated for in this case.
+      handleScrollbarWidth: elementorFrontend.isEditMode()
     },
           $wpAdminBar = elementorFrontend.elements.$wpAdminBar;
 
@@ -1331,6 +1294,12 @@ var _default = elementorModules.frontend.handlers.Base.extend({
 
     if ($wpAdminBar.length && 'top' === elementSettings.sticky && 'fixed' === $wpAdminBar.css('position')) {
       stickyOptions.offset += $wpAdminBar.height();
+    }
+
+    if (this.$element[0].parentElement?.classList.contains('e-container')) {
+      stickyOptions.relativeTarget = 'document';
+    } else {
+      stickyOptions.relativeTarget = 'parent';
     }
 
     return stickyOptions;
@@ -1474,6 +1443,47 @@ class _default extends elementorModules.Module {
 }
 
 exports["default"] = _default;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/defineProperty.js":
+/*!****************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/defineProperty.js ***!
+  \****************************************************************/
+/***/ ((module) => {
+
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+module.exports = _defineProperty, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ }),
+
+/***/ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js":
+/*!***********************************************************************!*\
+  !*** ../node_modules/@babel/runtime/helpers/interopRequireDefault.js ***!
+  \***********************************************************************/
+/***/ ((module) => {
+
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : {
+    "default": obj
+  };
+}
+
+module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ })
 

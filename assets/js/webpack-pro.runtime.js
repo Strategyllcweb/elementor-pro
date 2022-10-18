@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.7.2 - 15-06-2022 */
+/*! elementor-pro - v3.7.7 - 20-09-2022 */
 /******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({});
@@ -82,7 +82,7 @@
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
 /******/ 			if (chunkId === "code-highlight") return "" + chunkId + ".025966fc6b037ea07f05.bundle.js";
-/******/ 			if (chunkId === "video-playlist") return "" + chunkId + ".1aa3281934eb1be42914.bundle.js";
+/******/ 			if (chunkId === "video-playlist") return "" + chunkId + ".a2dc3a9ebe305b0647b2.bundle.js";
 /******/ 			if (chunkId === "paypal-button") return "" + chunkId + ".35291ad27cdc2a8a7921.bundle.js";
 /******/ 			if (chunkId === "stripe-button") return "" + chunkId + ".3c4e82ad4f8635e44542.bundle.js";
 /******/ 			if (chunkId === "progress-tracker") return "" + chunkId + ".d38557a8e9be0c7ac097.bundle.js";
