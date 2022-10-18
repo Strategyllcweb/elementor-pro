@@ -10,10 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 trait Base_Widget_Trait {
 	public function is_editable() {
-		if ( License_API::is_license_active() ) {
-			return true;
-		}
-		return License_API::is_license_expired() && ! License_API::is_licence_pro_trial();
+		return License_API::is_license_active();
 	}
 
 	public function get_categories() {

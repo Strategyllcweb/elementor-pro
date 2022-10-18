@@ -112,6 +112,10 @@ class Editor extends App {
 
 	public function on_elementor_init() {
 		Plugin::elementor()->editor->notice_bar = new Notice_Bar();
+
+		if ( isset( Plugin::elementor()->editor->promotion ) ) {
+			Plugin::elementor()->editor->promotion = new Promotion();
+		}
 	}
 
 	public function on_elementor_editor_init() {

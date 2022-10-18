@@ -115,7 +115,11 @@ class API {
 	private static function get_transient( $cache_key ) {
 		$cache = get_option( $cache_key );
 
-		if ( empty( $cache['timeout'] ) || current_time( 'timestamp' ) > $cache['timeout'] ) {
+		if ( empty( $cache['timeout'] ) ) {
+			return false;
+		}
+
+		if ( current_time( 'timestamp' ) > $cache['timeout'] && is_user_logged_in() ) {
 			return false;
 		}
 
@@ -322,9 +326,12 @@ class API {
 				'<a href="https://go.elementor.com/upgrade/" target="_blank">',
 				'</a>'
 			),
-			'expired' => sprintf(
-			/* translators: 1: Bold text Open Tag, 2: Bold text closing tag, 3: Link open tag, 4: Link closing tag. */
-				esc_html__( '%1$sYour License Has Expired.%2$s %3$sRenew your license today%4$s to keep getting feature updates, premium support and unlimited access to the template library.', 'elementor-pro' ),
+			'expired' => printf(
+				/* translators: 1: Bold text Open Tag, 2: Bold text closing tag, 3: Link open tag, 4: Link closing tag. */
+				esc_html__(
+					'%1$sOh no! Your Elementor Pro license has expired.%2$s Want to keep creating secure and high-performing websites? Renew your subscription to regain access to all of the Elementor Pro widgets, templates, updates & more. %3$sRenew now%4$s',
+					'elementor-pro'
+				),
 				'<strong>',
 				'</strong>',
 				'<a href="https://go.elementor.com/renew/" target="_blank">',

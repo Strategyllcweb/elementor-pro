@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.7.2 - 15-06-2022 */
+/*! elementor-pro - v3.7.7 - 20-09-2022 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["video-playlist"],{
 
@@ -476,6 +476,12 @@ class VideoPlaylistHandler extends _baseTabs.default {
       (0, _urlParams.setVideoParams)(this.playlistId, this.playlistItemsArray, this.currentPlaylistItemIndex);
     }
 
+    if (isUrlParamsExist) {
+      this.$element[0]?.scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+
     this.handleFirstVideoActivation(isLazyLoad);
   }
   /*
@@ -487,8 +493,7 @@ class VideoPlaylistHandler extends _baseTabs.default {
 
   handleFirstVideoActivation(isLazyLoad) {
     if (!isLazyLoad) {
-      this.activateDefaultTab(this.currentPlaylistItemIndex);
-      this.$element[0]?.scrollIntoView(); // No need to use the observer since "lazy load is" off.
+      this.activateDefaultTab(this.currentPlaylistItemIndex); // No need to use the observer since "lazy load is" off.
 
       return;
     }
@@ -1428,4 +1433,4 @@ function setVideoParams(playlistId, playlistItemsArray, videoId) {
 /***/ })
 
 }]);
-//# sourceMappingURL=video-playlist.1aa3281934eb1be42914.bundle.js.map
+//# sourceMappingURL=video-playlist.a2dc3a9ebe305b0647b2.bundle.js.map
