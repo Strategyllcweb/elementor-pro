@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.7.7 - 20-09-2022 */
+/*! elementor-pro - v3.9.0 - 06-12-2022 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["preloaded-elements-handlers"],{
 
@@ -46,6 +46,8 @@ var _frontendLegacy16 = _interopRequireDefault(__webpack_require__(/*! modules/t
 
 var _frontendLegacy17 = _interopRequireDefault(__webpack_require__(/*! modules/woocommerce/assets/js/frontend/frontend-legacy */ "../modules/woocommerce/assets/js/frontend/frontend-legacy.js"));
 
+var _frontendLegacy18 = _interopRequireDefault(__webpack_require__(/*! modules/loop-builder/assets/js/frontend/frontend-legacy */ "../modules/loop-builder/assets/js/frontend/frontend-legacy.js"));
+
 const extendDefaultHandlers = defaultHandlers => {
   const handlers = {
     animatedText: _frontendLegacy.default,
@@ -64,7 +66,8 @@ const extendDefaultHandlers = defaultHandlers => {
     themeBuilder: _frontendLegacy15.default,
     themeElements: _frontendLegacy16.default,
     woocommerce: _frontendLegacy17.default,
-    tableOfContents: _frontendLegacy14.default
+    tableOfContents: _frontendLegacy14.default,
+    loopBuilder: _frontendLegacy18.default
   };
   return { ...defaultHandlers,
     ...handlers
@@ -202,6 +205,177 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../assets/dev/js/preview/utils/document-handle.js":
+/*!*********************************************************!*\
+  !*** ../assets/dev/js/preview/utils/document-handle.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.createElement = createElement;
+exports["default"] = addDocumentHandle;
+const EDIT_HANDLE_CLASS_NAME = 'elementor-document-handle';
+const EDIT_MODE_CLASS_NAME = 'elementor-edit-mode';
+const EDIT_CONTEXT = 'edit';
+const SAVE_HANDLE_CLASS_NAME = 'elementor-document-save-back-handle';
+const SAVE_CONTEXT = 'save';
+/**
+ * @param {Object}        handleTarget
+ * @param {HTMLElement}   handleTarget.element
+ * @param {string|number} handleTarget.id      - Document ID.
+ * @param {string}        handleTarget.title
+ * @param {string}        context              - Edit/Save
+ * @param {Function|null} onCloseDocument      - Callback to run when outgoing document is closed.
+ */
+
+function addDocumentHandle(_ref) {
+  let {
+    element,
+    id,
+    title = __('Template', 'elementor-pro')
+  } = _ref;
+  let context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : EDIT_CONTEXT;
+  let onCloseDocument = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+  if (EDIT_CONTEXT === context) {
+    if (!id || !element) {
+      throw Error('`id` and `element` are required.');
+    }
+
+    if (isCurrentlyEditing(element) || hasHandle(element)) {
+      return;
+    }
+  }
+
+  const handleElement = createHandleElement({
+    title,
+    onClick: () => onDocumentClick(id, context, onCloseDocument)
+  }, context);
+  element.prepend(handleElement);
+
+  if (EDIT_CONTEXT === context) {
+    element.dataset.editableElementorDocument = id;
+  }
+}
+/**
+ * @param {HTMLElement} element
+ *
+ * @return {boolean} Whether the element is currently being edited.
+ */
+
+
+function isCurrentlyEditing(element) {
+  return element.classList.contains(EDIT_MODE_CLASS_NAME);
+}
+/**
+ * @param {HTMLElement} element
+ *
+ * @return {boolean} Whether the element has a handle.
+ */
+
+
+function hasHandle(element) {
+  return !!element.querySelector(`:scope > .${EDIT_HANDLE_CLASS_NAME}`);
+}
+/**
+ * @param {Object}   handleProperties
+ * @param {string}   handleProperties.title
+ * @param {Function} handleProperties.onClick
+ * @param {string}   context
+ *
+ * @return {HTMLElement} The newly generated Handle element
+ */
+
+
+function createHandleElement(_ref2, context) {
+  let {
+    title,
+    onClick
+  } = _ref2;
+  const element = createElement({
+    tag: 'div',
+    classNames: EDIT_CONTEXT === context ? [EDIT_HANDLE_CLASS_NAME] : [EDIT_HANDLE_CLASS_NAME, SAVE_HANDLE_CLASS_NAME],
+    children: [createElement({
+      tag: 'i',
+      classNames: [getHandleIcon(context)]
+    }), createElement({
+      tag: 'div',
+      classNames: [`${EDIT_CONTEXT === context ? EDIT_HANDLE_CLASS_NAME : SAVE_HANDLE_CLASS_NAME}__title`],
+      children: [document.createTextNode(EDIT_CONTEXT === context ? __('Edit %s', 'elementor-pro').replace('%s', title) : __('Save %s', 'elementor-pro').replace('%s', title))]
+    })]
+  });
+  element.addEventListener('click', onClick);
+  return element;
+}
+
+function getHandleIcon(context) {
+  let icon = 'eicon-edit';
+
+  if (SAVE_CONTEXT === context) {
+    icon = elementorFrontend.config.is_rtl ? 'eicon-arrow-right' : 'eicon-arrow-left';
+  }
+
+  return icon;
+}
+/**
+ * Util for creating HTML element.
+ *
+ * @param {Object}        elementProperties
+ * @param {string}        elementProperties.tag
+ * @param {string[]}      elementProperties.classNames
+ * @param {HTMLElement[]} elementProperties.children
+ *
+ * @return {HTMLElement} Generated Element
+ */
+
+
+function createElement(_ref3) {
+  let {
+    tag,
+    classNames = [],
+    children = []
+  } = _ref3;
+  const element = document.createElement(tag);
+  element.classList.add(...classNames);
+  children.forEach(child => element.appendChild(child));
+  return element;
+}
+/**
+ * @param {string|number} id
+ * @param {string}        context
+ * @param {Function|null} onCloseDocument
+ *
+ * @return {Promise<void>}
+ */
+
+
+async function onDocumentClick(id, context) {
+  let onCloseDocument = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+
+  if (EDIT_CONTEXT === context) {
+    window.top.$e.internal('panel/state-loading');
+    await window.top.$e.run('editor/documents/switch', {
+      id: parseInt(id),
+      onClose: onCloseDocument
+    });
+    window.top.$e.internal('panel/state-ready');
+  } else {
+    elementorCommon.api.internal('panel/state-loading');
+    elementorCommon.api.run('editor/documents/switch', {
+      id: elementor.config.initial_document.id,
+      mode: 'save',
+      shouldScroll: false
+    }).finally(() => elementorCommon.api.internal('panel/state-ready'));
+  }
+}
+
+/***/ }),
+
 /***/ "../modules/animated-headline/assets/js/frontend/frontend-legacy.js":
 /*!**************************************************************************!*\
   !*** ../modules/animated-headline/assets/js/frontend/frontend-legacy.js ***!
@@ -265,12 +439,12 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     const iterationDelay = this.getElementSettings('rotate_iteration_delay'),
           settings = {
       animationDelay: iterationDelay || 2500,
-      //letters effect
+      // Letters effect
       lettersDelay: iterationDelay * 0.02 || 50,
-      //typing effect
+      // Typing effect
       typeLettersDelay: iterationDelay * 0.06 || 150,
       selectionDuration: iterationDelay * 0.2 || 500,
-      //clip effect
+      // Clip effect
       revealDuration: iterationDelay * 0.24 || 600,
       revealAnimationDelay: iterationDelay * 0.6 || 1500,
       // Highlighted headline
@@ -448,7 +622,7 @@ var _default = elementorModules.frontend.handlers.Base.extend({
       $dynamicWrapper.width($dynamicWrapper.width() + 10);
     } else if ('typing' !== animationType) {
       self.setDynamicWrapperWidth(self.elements.$dynamicText);
-    } //trigger animation
+    } // Trigger animation
 
 
     setTimeout(function () {
@@ -478,11 +652,11 @@ var _default = elementorModules.frontend.handlers.Base.extend({
   },
 
   rotateHeadline() {
-    var settings = this.getSettings(); //insert <span> for each letter of a changing word
+    var settings = this.getSettings(); // Insert <span> for each letter of a changing word
 
     if (this.elements.$headline.hasClass(settings.classes.letters)) {
       this.singleLetters();
-    } //initialise headline animation
+    } // Initialise headline animation
 
 
     this.animateHeadline();
@@ -862,7 +1036,7 @@ class CarouselBase extends elementorModules.frontend.handlers.SwiperBase {
 
     const changeableProperties = this.getChangeableProperties();
 
-    if (changeableProperties.hasOwnProperty(propertyName)) {
+    if (Object.prototype.hasOwnProperty.call(changeableProperties, propertyName)) {
       this.updateSwiperOption(propertyName);
     }
   }
@@ -2778,13 +2952,13 @@ class Hotspot extends elementorModules.frontend.handlers.Base {
 
     if ('no' === isSequencedAnimation) {
       return;
-    } //start sequenced animation when element on viewport
+    } // Start sequenced animation when element on viewport
 
 
     const hotspotObserver = elementorModules.utils.Scroll.scrollObserver({
       callback: event => {
         if (event.isInViewport) {
-          hotspotObserver.unobserve(this.$element[0]); //add delay for each hotspot
+          hotspotObserver.unobserve(this.$element[0]); // Add delay for each hotspot
 
           this.elements.$hotspot.each((index, element) => {
             if (0 === index) {
@@ -2835,6 +3009,193 @@ class Hotspot extends elementorModules.frontend.handlers.Base {
 }
 
 exports["default"] = Hotspot;
+
+/***/ }),
+
+/***/ "../modules/loop-builder/assets/js/frontend/frontend-legacy.js":
+/*!*********************************************************************!*\
+  !*** ../modules/loop-builder/assets/js/frontend/frontend-legacy.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _loopGrid = _interopRequireDefault(__webpack_require__(/*! ./handlers/loop-grid */ "../modules/loop-builder/assets/js/frontend/handlers/loop-grid.js"));
+
+var _loadMore = _interopRequireDefault(__webpack_require__(/*! ./handlers/load-more */ "../modules/loop-builder/assets/js/frontend/handlers/load-more.js"));
+
+class _default extends elementorModules.Module {
+  constructor() {
+    super();
+    ['post', 'product'].forEach(skinName => {
+      elementorFrontend.elementsHandler.attachHandler('loop-grid', _loadMore.default, skinName);
+      elementorFrontend.elementsHandler.attachHandler('loop-grid', _loopGrid.default, skinName);
+    });
+  }
+
+}
+
+exports["default"] = _default;
+
+/***/ }),
+
+/***/ "../modules/loop-builder/assets/js/frontend/handlers/load-more.js":
+/*!************************************************************************!*\
+  !*** ../modules/loop-builder/assets/js/frontend/handlers/load-more.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _loadMore = _interopRequireDefault(__webpack_require__(/*! modules/posts/assets/js/frontend/handlers/load-more */ "../modules/posts/assets/js/frontend/handlers/load-more.js"));
+
+class LoopLoadMore extends _loadMore.default {
+  getDefaultSettings() {
+    const defaultSettings = super.getDefaultSettings();
+    defaultSettings.selectors.postsContainer = '.elementor-loop-container';
+    defaultSettings.selectors.postWrapperTag = '.e-loop-item';
+    defaultSettings.selectors.loadMoreButton = '.e-loop__load-more .elementor-button';
+    return defaultSettings;
+  }
+
+  afterInsertPosts(postsElements) {
+    super.afterInsertPosts(postsElements);
+    this.runElementHandlers(postsElements);
+  }
+
+  runElementHandlers(postsElements) {
+    [...postsElements].flatMap(el => [...el.querySelectorAll('.elementor-element')]).forEach(el => elementorFrontend.elementsHandler.runReadyTrigger(el));
+  }
+
+}
+
+exports["default"] = LoopLoadMore;
+
+/***/ }),
+
+/***/ "../modules/loop-builder/assets/js/frontend/handlers/loop-grid.js":
+/*!************************************************************************!*\
+  !*** ../modules/loop-builder/assets/js/frontend/handlers/loop-grid.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+/* provided dependency */ var __ = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n")["__"];
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _posts = _interopRequireDefault(__webpack_require__(/*! modules/posts/assets/js/frontend/handlers/posts */ "../modules/posts/assets/js/frontend/handlers/posts.js"));
+
+var _documentHandle = _interopRequireDefault(__webpack_require__(/*! elementor-pro/preview/utils/document-handle */ "../assets/dev/js/preview/utils/document-handle.js"));
+
+class LoopGrid extends _posts.default {
+  getSkinPrefix() {
+    return '';
+  }
+
+  getDefaultSettings() {
+    const defaultSettings = super.getDefaultSettings();
+    defaultSettings.selectors.post = '.elementor-loop-container .elementor';
+    defaultSettings.selectors.postsContainer = '.elementor-loop-container';
+    return defaultSettings;
+  }
+  /**
+   * Fit Images is used in the extended Posts widget handler to apply the "Image Size", "Image Ratio" and
+   * "Image Width" controls. These controls don't exist in the Loop Grid widget, so we override `fitImages()`
+   * to disable it's functionality.
+   */
+
+
+  fitImages() {}
+
+  getVerticalSpaceBetween() {
+    return this.getElementSettings(this.getSkinPrefix() + 'row_gap.size');
+  }
+  /**
+   * This is a callback that runs when the "Edit Template" document handle is clicked in the Editor.
+   */
+
+
+  onInPlaceEditTemplate() {
+    const templateID = this.getElementSettings('template_id'),
+          elementsToRemove = ['style#loop-' + templateID, 'link#font-loop-' + templateID, 'style#loop-dynamic-' + templateID];
+    elementsToRemove.forEach(elementToRemove => {
+      this.$element.find(elementToRemove).remove();
+    });
+  }
+
+  attachEditDocumentHandle() {
+    // eslint-disable-next-line computed-property-spacing
+    const element = this.$element.find('[data-elementor-type="loop-item"]').first()[0],
+          id = this.getElementSettings('template_id');
+
+    if (element && id) {
+      (0, _documentHandle.default)({
+        element,
+        title: __('Template', 'elementor-pro'),
+        id
+      }, 'edit', () => this.onInPlaceEditTemplate());
+    }
+  }
+
+  handleCTA() {
+    const emptyViewContainer = document.querySelector(`[data-id="${this.getID()}"] .e-loop-empty-view__wrapper`);
+
+    if (!emptyViewContainer) {
+      return;
+    }
+
+    const shadowRoot = emptyViewContainer.attachShadow({
+      mode: 'open'
+    });
+    shadowRoot.appendChild(elementorPro.modules.loopBuilder.getCtaStyles());
+    shadowRoot.appendChild(elementorPro.modules.loopBuilder.getCtaContent());
+    const ctaButton = shadowRoot.querySelector('.e-loop-empty-view__box-cta');
+    ctaButton.addEventListener('click', () => {
+      elementorPro.modules.loopBuilder.createTemplate();
+    });
+  }
+  /**
+   * Allows 3rd party add-ons to run code on the Loop Grid handler when the handler is initialized in the Editor.
+   */
+
+
+  doEditorInitAction() {
+    elementor.hooks.doAction('editor/widgets/loop-grid/on-init', this);
+  }
+
+  onInit() {
+    super.onInit(...arguments);
+
+    if (elementorFrontend.isEditMode()) {
+      this.doEditorInitAction();
+      this.attachEditDocumentHandle();
+      this.handleCTA();
+    }
+  }
+
+}
+
+exports["default"] = LoopGrid;
 
 /***/ }),
 
@@ -3199,7 +3560,7 @@ class lottieHandler extends elementorModules.frontend.handlers.Base {
 
     if (startPoint && startPoint > firstFrame) {
       firstFrame = startPoint;
-    } // limiting max end point to animation last frame.
+    } // Limiting max end point to animation last frame.
 
 
     if (endPoint && endPoint < lastFrame) {
@@ -3800,7 +4161,7 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     if (iconValue) {
       // The value of iconValue can be either className inside the editor or a markup in the frontend.
       subIndicatorsContent = iconValue.indexOf('<') > -1 ? iconValue : `<i class="${iconValue}"></i>`;
-    } // subIndicators param - Added for backwards compatibility:
+    } // SubIndicators param - Added for backwards compatibility:
     // If the old 'indicator' control value = 'none', the <span class="sub-arrow"> wrapper element is removed
 
 
@@ -3967,8 +4328,6 @@ class _default extends elementorModules.frontend.Document {
               id = this.getSettings('id'),
               triggerPopupEvent = eventType => {
           const event = 'elementor/popup/' + eventType;
-          elementorFrontend.elements.$document.trigger(event, [id, this]); // TODO: Use `elementorFrontend.utils.events.dispatch` when it's in master.
-
           window.dispatchEvent(new CustomEvent(event, {
             detail: {
               id,
@@ -4610,6 +4969,110 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../modules/popup/assets/js/frontend/timing/times-utils.js":
+/*!*****************************************************************!*\
+  !*** ../modules/popup/assets/js/frontend/timing/times-utils.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+class TimesUtils {
+  constructor(args) {
+    this.uniqueId = args.uniqueId;
+    this.settings = args.settings;
+    this.storage = args.storage;
+  }
+
+  getTimeFramesInSecounds(timeFrame) {
+    const timeFrames = {
+      day: 86400,
+      // Day in seconds
+      week: 604800,
+      // Week in seconds
+      month: 2628288 // Month in seconds
+
+    };
+    return timeFrames[timeFrame];
+  }
+
+  setExpiration(name, value, timeFrame) {
+    const data = this.storage.get(name);
+
+    if (!data) {
+      const options = {
+        lifetimeInSeconds: this.getTimeFramesInSecounds(timeFrame)
+      };
+      this.storage.set(name, value, options);
+      return;
+    }
+
+    this.storage.set(name, value);
+  }
+
+  getImpressionsCount() {
+    const impressionCount = this.storage.get(this.uniqueId) ?? 0;
+    return parseInt(impressionCount);
+  }
+
+  incrementImpressionsCount() {
+    if (!this.settings.period) {
+      this.storage.set('times', (this.storage.get('times') ?? 0) + 1);
+    } else if ('session' !== this.settings.period) {
+      const impressionCount = this.getImpressionsCount();
+      this.setExpiration(this.uniqueId, impressionCount + 1, this.settings.period);
+    } else {
+      sessionStorage.setItem(this.uniqueId, parseInt(sessionStorage.getItem(this.uniqueId) ?? 0) + 1);
+    }
+  }
+
+  shouldCountOnOpen() {
+    if (this.settings.countOnOpen) {
+      this.incrementImpressionsCount();
+    }
+  }
+
+  shouldDisplayPerTimeFrame() {
+    const impressionCount = this.getImpressionsCount();
+
+    if (impressionCount < this.settings.showsLimit) {
+      this.shouldCountOnOpen();
+      return true;
+    }
+
+    return false;
+  }
+
+  shouldDisplayPerSession() {
+    const impressionCount = sessionStorage.getItem(this.uniqueId) ?? 0;
+
+    if (parseInt(impressionCount) < this.settings.showsLimit) {
+      this.shouldCountOnOpen();
+      return true;
+    }
+
+    return false;
+  }
+
+  shouldDisplayBackwordCompatible() {
+    let impressionCount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    let showsLimit = arguments.length > 1 ? arguments[1] : undefined;
+    const shouldDisplay = parseInt(impressionCount) < parseInt(showsLimit);
+    this.shouldCountOnOpen();
+    return shouldDisplay;
+  }
+
+}
+
+exports["default"] = TimesUtils;
+
+/***/ }),
+
 /***/ "../modules/popup/assets/js/frontend/timing/times.js":
 /*!***********************************************************!*\
   !*** ../modules/popup/assets/js/frontend/timing/times.js ***!
@@ -4627,14 +5090,67 @@ exports["default"] = void 0;
 
 var _base = _interopRequireDefault(__webpack_require__(/*! ./base */ "../modules/popup/assets/js/frontend/timing/base.js"));
 
+var _timesUtils = _interopRequireDefault(__webpack_require__(/*! ./times-utils.js */ "../modules/popup/assets/js/frontend/timing/times-utils.js"));
+
 class _default extends _base.default {
+  constructor() {
+    super(...arguments);
+    this.uniqueId = `popup-${this.document.getSettings('id')}-impressions-count`;
+    const {
+      times_count: countOnOpen,
+      times_period: period,
+      times_times: showsLimit
+    } = this.getSettings();
+    this.settings = {
+      countOnOpen,
+      period,
+      showsLimit: parseInt(showsLimit)
+    };
+
+    if ('' === this.settings.period) {
+      this.settings.period = false;
+    }
+
+    if (['', 'close'].includes(this.settings.countOnOpen)) {
+      this.settings.countOnOpen = false;
+      this.onPopupHide();
+    } else {
+      this.settings.countOnOpen = true;
+    }
+
+    this.utils = new _timesUtils.default({
+      uniqueId: this.uniqueId,
+      settings: this.settings,
+      storage: elementorFrontend.storage
+    });
+  }
+
   getName() {
     return 'times';
   }
 
   check() {
-    const displayTimes = this.document.getStorage('times') || 0;
-    return this.getTimingSetting('times') > displayTimes;
+    if (!this.settings.period) {
+      const impressionCount = this.document.getStorage('times') || 0;
+      const showsLimit = this.getTimingSetting('times');
+      return this.utils.shouldDisplayBackwordCompatible(impressionCount, showsLimit);
+    }
+
+    if ('session' !== this.settings.period) {
+      if (!this.utils.shouldDisplayPerTimeFrame()) {
+        return false;
+      }
+    } else if (!this.utils.shouldDisplayPerSession()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  onPopupHide() {
+    elementorFrontend.elements.$window.on('elementor/popup/hide', () => {
+      this.utils.incrementImpressionsCount();
+    });
   }
 
 }
@@ -5178,6 +5694,7 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
     return {
       selectors: {
         postsContainer: '.elementor-posts-container',
+        postWrapperTag: 'article',
         loadMoreButton: '.elementor-button',
         loadMoreSpinnerWrapper: '.e-load-more-spinner',
         loadMoreSpinner: '.e-load-more-spinner i, .e-load-more-spinner svg',
@@ -5311,24 +5828,26 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
 
   handleUiWhenNoPosts() {
     this.elements.postsWidgetWrapper.classList.add(this.classes.loadMorePaginationEnd);
-  }
+  } // eslint-disable-next-line no-unused-vars
+
+
+  afterInsertPosts(postsElements) {}
 
   handleSuccessFetch(result) {
-    this.handleUiAfterLoading(); // Grabbing only the new articles from the response without the existing once (prevent posts duplication).
+    this.handleUiAfterLoading();
+    const selectors = this.getSettings('selectors'); // Grabbing only the new articles from the response without the existing ones (prevent posts duplication).
 
-    const posts = result.querySelectorAll(`[data-id="${this.elementId}"] .elementor-posts-container > article`);
-    const nextPageUrl = result.querySelector('.e-load-more-anchor').getAttribute('data-next-page'); // Converting HTMLCollection to an Array and iterate it.
-
-    const postsHTML = [...posts].reduce((accumulator, post) => {
-      return accumulator + post.outerHTML;
-    }, '');
-    this.elements.postsContainer.insertAdjacentHTML('beforeend', postsHTML);
+    const postsElements = result.querySelectorAll(`[data-id="${this.elementId}"] ${selectors.postsContainer} > ${selectors.postWrapperTag}`);
+    const nextPageUrl = result.querySelector('.e-load-more-anchor').getAttribute('data-next-page');
+    postsElements.forEach(element => this.elements.postsContainer.append(element));
     this.elements.loadMoreAnchor.setAttribute('data-page', this.currentPage);
     this.elements.loadMoreAnchor.setAttribute('data-next-page', nextPageUrl);
 
     if (this.currentPage === this.maxPage) {
       this.handleUiWhenNoPosts();
     }
+
+    this.afterInsertPosts(postsElements);
   }
 
   handlePostsQuery() {
@@ -5340,8 +5859,6 @@ class LoadMore extends elementorModules.frontend.handlers.Base {
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
       this.handleSuccessFetch(doc);
-    }).catch(err => {
-      console.warn('Something went wrong.', err);
     });
   }
 
@@ -5626,8 +6143,11 @@ var _default = elementorModules.frontend.handlers.Base.extend({
   },
 
   bindEvents() {
-    var cid = this.getModelCID();
-    elementorFrontend.addListenerOnce(cid, 'resize', this.onWindowResize);
+    elementorFrontend.addListenerOnce(this.getModelCID(), 'resize', this.onWindowResize);
+  },
+
+  unbindEvents() {
+    elementorFrontend.removeListeners(this.getModelCID(), 'resize', this.onWindowResize);
   },
 
   getClosureMethodsNames() {
@@ -5724,6 +6244,17 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     imagesLoaded(this.elements.$posts, this.runMasonry);
   },
 
+  getVerticalSpaceBetween() {
+    /* The `verticalSpaceBetween` variable is setup in a way that supports older versions of the portfolio widget */
+    let verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'row_gap.size');
+
+    if ('' === this.getSkinPrefix() && '' === verticalSpaceBetween) {
+      verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'item_gap.size');
+    }
+
+    return verticalSpaceBetween;
+  },
+
   runMasonry() {
     var elements = this.elements;
     elements.$posts.css({
@@ -5739,15 +6270,8 @@ var _default = elementorModules.frontend.handlers.Base.extend({
       elements.$postsContainer.height('');
       return;
     }
-    /* The `verticalSpaceBetween` variable is setup in a way that supports older versions of the portfolio widget */
 
-
-    var verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'row_gap.size');
-
-    if ('' === this.getSkinPrefix() && '' === verticalSpaceBetween) {
-      verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'item_gap.size');
-    }
-
+    const verticalSpaceBetween = this.getVerticalSpaceBetween();
     var masonry = new elementorModules.utils.Masonry({
       container: elements.$postsContainer,
       items: elements.$posts.filter(':visible'),
@@ -6154,8 +6678,9 @@ class SlidesHandler extends elementorModules.frontend.handlers.SwiperBase {
 
     const changeableProperties = this.getChangeableProperties();
 
-    if (changeableProperties.hasOwnProperty(propertyName)) {
+    if (Object.prototype.hasOwnProperty.call(changeableProperties, propertyName)) {
       this.updateSwiperOption(propertyName);
+      this.swiper.autoplay.start();
     }
   }
 
@@ -6166,6 +6691,7 @@ class SlidesHandler extends elementorModules.frontend.handlers.SwiperBase {
 
     if ('activeItemIndex' === propertyName) {
       this.swiper.slideToLoop(this.getEditSettings('activeItemIndex') - 1);
+      this.swiper.autoplay.stop();
     }
   }
 
@@ -6574,7 +7100,7 @@ class TOCHandler extends elementorModules.frontend.handlers.Base {
     } // Open new list/nested list
 
 
-    let html = `<${settings.listWrapperTag} class="${settings.classes.listWrapper}">`; // for each list item, build its markup.
+    let html = `<${settings.listWrapperTag} class="${settings.classes.listWrapper}">`; // For each list item, build its markup.
 
     while (this.listItemPointer < this.headingsData.length) {
       const currentItem = this.headingsData[this.listItemPointer];
@@ -6705,14 +7231,14 @@ class TOCHandler extends elementorModules.frontend.handlers.Base {
   expandBox() {
     const boxHeight = this.getCurrentDeviceSetting('min_height');
     this.$element.removeClass(this.getSettings('classes.collapsed'));
-    this.elements.$tocBody.slideDown(); // return container to the full height in case a min-height is defined by the user
+    this.elements.$tocBody.slideDown(); // Return container to the full height in case a min-height is defined by the user
 
     this.elements.$widgetContainer.css('min-height', boxHeight.size + boxHeight.unit);
   }
 
   collapseBox() {
     this.$element.addClass(this.getSettings('classes.collapsed'));
-    this.elements.$tocBody.slideUp(); // close container in case a min-height is defined by the user
+    this.elements.$tocBody.slideUp(); // Close container in case a min-height is defined by the user
 
     this.elements.$widgetContainer.css('min-height', '0px');
   }
@@ -6865,7 +7391,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 
-var _posts = _interopRequireDefault(__webpack_require__(/*! ../../../../../posts/assets/js/frontend/handlers/posts */ "../modules/posts/assets/js/frontend/handlers/posts.js"));
+var _posts = _interopRequireDefault(__webpack_require__(/*! modules/posts/assets/js/frontend/handlers/posts */ "../modules/posts/assets/js/frontend/handlers/posts.js"));
 
 var _default = _posts.default.extend({
   getSkinPrefix() {
@@ -7043,6 +7569,8 @@ var _myAccount = _interopRequireDefault(__webpack_require__(/*! ./handlers/my-ac
 
 var _notices = _interopRequireDefault(__webpack_require__(/*! ./handlers/notices */ "../modules/woocommerce/assets/js/frontend/handlers/notices.js"));
 
+var _productAddToCart = _interopRequireDefault(__webpack_require__(/*! ./handlers/product-add-to-cart */ "../modules/woocommerce/assets/js/frontend/handlers/product-add-to-cart.js"));
+
 class _default extends elementorModules.Module {
   constructor() {
     super();
@@ -7052,6 +7580,7 @@ class _default extends elementorModules.Module {
     elementorFrontend.elementsHandler.attachHandler('woocommerce-cart', _cart.default);
     elementorFrontend.elementsHandler.attachHandler('woocommerce-my-account', _myAccount.default);
     elementorFrontend.elementsHandler.attachHandler('woocommerce-notices', _notices.default);
+    elementorFrontend.elementsHandler.attachHandler('woocommerce-product-add-to-cart', _productAddToCart.default);
     /**
      * `wc-cart` script is enqueued in the Editor by the widget `get_script_depends()`. As a result WooCommerce
      * triggers its cart related event callbacks. One of the callbacks requires `.woocommerce-cart-form` to be in
@@ -7171,7 +7700,7 @@ class Base extends elementorModules.frontend.handlers.Base {
 
   equalizeElementHeight($element) {
     if ($element.length) {
-      $element.removeAttr('style'); // first remove the custom height we added so that the new height can be re-calculated according to the content
+      $element.removeAttr('style'); // First remove the custom height we added so that the new height can be re-calculated according to the content
 
       let maxHeight = 0;
       $element.each((index, element) => {
@@ -7477,7 +8006,7 @@ class Checkout extends _base.default {
     super.onInit(...arguments);
     this.toggleStickyRightColumn();
     this.updateWpReferers();
-    this.equalizeElementHeight(this.elements.$address); // equalize <address> boxes height
+    this.equalizeElementHeight(this.elements.$address); // Equalize <address> boxes height
 
     if (elementorFrontend.isEditMode()) {
       this.elements.$loginForm.show();
@@ -7507,7 +8036,7 @@ class Checkout extends _base.default {
   }
 
   applyCoupon() {
-    // wc_checkout_params is required to continue, ensure the object exists
+    // Wc_checkout_params is required to continue, ensure the object exists
     // eslint-disable-next-line camelcase
     if (!wc_checkout_params) {
       return;
@@ -7969,11 +8498,11 @@ class MyAccountHandler extends _base.default {
   }
 
   equalizeElementHeights() {
-    this.equalizeElementHeight(this.elements.$address); // equalize <address> boxes height
+    this.equalizeElementHeight(this.elements.$address); // Equalize <address> boxes height
 
     if (!this.isEdit) {
       // Auth forms do not display in the Editor
-      this.equalizeElementHeight(this.elements.$authForms); // equalize login/reg boxes height
+      this.equalizeElementHeight(this.elements.$authForms); // Equalize login/reg boxes height
     }
   }
 
@@ -8108,6 +8637,72 @@ class _default extends elementorModules.frontend.handlers.Base {
 }
 
 exports["default"] = _default;
+
+/***/ }),
+
+/***/ "../modules/woocommerce/assets/js/frontend/handlers/product-add-to-cart.js":
+/*!*********************************************************************************!*\
+  !*** ../modules/woocommerce/assets/js/frontend/handlers/product-add-to-cart.js ***!
+  \*********************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+var _base = _interopRequireDefault(__webpack_require__(/*! ./base */ "../modules/woocommerce/assets/js/frontend/handlers/base.js"));
+
+class ProductAddToCart extends _base.default {
+  getDefaultSettings() {
+    return {
+      selectors: {
+        quantityInput: '.e-loop-add-to-cart-form input.qty',
+        addToCartButton: '.e-loop-add-to-cart-form .ajax_add_to_cart',
+        addedToCartButton: '.added_to_cart',
+        loopFormContainer: '.e-loop-add-to-cart-form-container'
+      }
+    };
+  }
+
+  getDefaultElements() {
+    const selectors = this.getSettings('selectors');
+    return {
+      $quantityInput: this.$element.find(selectors.quantityInput),
+      $addToCartButton: this.$element.find(selectors.addToCartButton)
+    };
+  }
+
+  updateAddToCartButtonQuantity() {
+    this.elements.$addToCartButton.attr('data-quantity', this.elements.$quantityInput.val());
+  }
+
+  handleAddedToCart($button) {
+    const selectors = this.getSettings('selectors'),
+          $addToCartButton = $button.siblings(selectors.addedToCartButton),
+          $loopFormContainer = $addToCartButton.parents(selectors.loopFormContainer);
+    $loopFormContainer.children(selectors.addedToCartButton).remove();
+    $loopFormContainer.append($addToCartButton);
+  }
+
+  bindEvents() {
+    super.bindEvents(...arguments);
+    this.elements.$quantityInput.on('change', () => {
+      this.updateAddToCartButtonQuantity();
+    });
+    elementorFrontend.elements.$body.off('added_to_cart.elementor-woocommerce-product-add-to-cart');
+    elementorFrontend.elements.$body.on('added_to_cart.elementor-woocommerce-product-add-to-cart', (e, fragments, cartHash, $button) => {
+      this.handleAddedToCart($button);
+    });
+  }
+
+}
+
+exports["default"] = ProductAddToCart;
 
 /***/ }),
 

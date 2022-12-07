@@ -1,5 +1,71 @@
 # Elementor Pro - by Elementor.com
 
+#### 3.9.0 - 2022-12-06
+
+* New: Added support for WooCommerce to Loop Builder ([#20020](https://github.com/elementor/elementor/issues/20020))
+* Tweak: Added more options to 'Show up to X times' advanced rule in Popups ([#8187](https://github.com/elementor/elementor/issues/8187))
+* Tweak: Allow saving and reloading a page while editing in-place loop item template ([#19882](https://github.com/elementor/elementor/issues/19882))
+* Tweak: Added `$location param` to `elementor/theme/get_location_templates/template_id` hook ([#18453](https://github.com/elementor/elementor/issues/18453))
+* Tweak: Removed redundant labels from group controls ([#11666](https://github.com/elementor/elementor/issues/11666))
+* Tweak: Added support to use sections and columns as the layout structure of a Loop item template
+* Tweak: Disabled movement when a repeater item is in focus in edit mode
+* Tweak: Upgrade the autoprefixer package to better minify CSS files
+* Tweak: Removed duplicate SQL queries on every page for better performance
+* Tweak: Improved License validation mechanism to avoid limitations
+* Tweak: Added more units options to Border Width control in various elements
+* Tweak: Added `em` units to Border Radius control in various elements
+* Tweak: Added 'Equal height' functionality to Loop Grid widget
+* Fix: Issue with Related Products widget and WooCommerce Pixel Manager plugin ([#16934](https://github.com/elementor/elementor/issues/16934))
+* Fix: My Account widget gets hidden when using a single page template with post content ([#19627](https://github.com/elementor/elementor/issues/19627))
+* Fix: Cart is not updated when cache enabled in Menu Cart widget ([#19312](https://github.com/elementor/elementor/issues/19312))
+* Fix: Entrance animations are not working as expected with Infinite Loop and Load on CLick pagination in Loop Grid widget ([#20293](https://github.com/elementor/elementor/issues/20293))
+* Fix: Loading page issues in Form Submissions screen ([#19973](https://github.com/elementor/elementor/issues/19973))
+* Fix: Recently Edited date and time not working as expected in Elementor Overview plugin in WordPress dashboard ([#17966](https://github.com/elementor/elementor/issues/17966))
+* Fix: Recurring license mismatch error message when using translators plugins
+* Fix: Submenu items triggers page transition instead of opening in Nav Menu widget
+* Fix: Query values of Posts widget are not imported correctly when importing a Kit
+* Fix: Loop items are exceeding the widget boundaries in Loop Grid widget
+* Fix: Order by option is not working as expected when choosing Upsells, Cross-Sells and Related Products query in Products widget
+* Fix: Various widgets disappear in certain scenarios when choosing direction Row or Column in Container
+
+#### 3.8.2 - 2022-11-20
+* Fix: Z-index issues when applying sticky to Container
+* Fix: Error message appears on front with Editor and Shop Manager roles when using the Loop Builder widget
+
+#### 3.8.1 - 2022-11-06
+* Fix: Sticky inner section is not staying in the column when applying sticky option in Sections ([#20203](https://github.com/elementor/elementor/issues/20203))
+* Fix: Post Title widget located in a loop item template disappears when enabling the hide title option inside page settings ([#20207](https://github.com/elementor/elementor/issues/20207), [#20255](https://github.com/elementor/elementor/issues/20255))
+* Fix: ACF Dynamic data not rendering correctly in various scenarios ([#20235](https://github.com/elementor/elementor/issues/20235), [#20258](https://github.com/elementor/elementor/issues/20258), [#20277](https://github.com/elementor/elementor/issues/20277))
+* Fix: Z-index issues when applying sticky to Container ([#20227](https://github.com/elementor/elementor/issues/20227))
+
+#### 3.8.0 - 2022-10-30
+* New: Introducing Loop Builder as a beta status experiment - Create powerful & repeating loop templates and populate each one with dynamic content and design flexibility ([#4440](https://github.com/elementor/elementor/issues/4440))
+* Tweak: Add `wp_body_open()` to header in Header template ([#11562](https://github.com/elementor/elementor/issues/11562), [#15828](https://github.com/elementor/elementor/issues/15828), [#13089](https://github.com/elementor/elementor/issues/13089))
+* Tweak: Added support border-radius option to the Code Highlight widget ([#14316](https://github.com/elementor/elementor/issues/14316))
+* Tweak: Import/Export CLI and UI mechanisms were merged into a unified service
+* Tweak: User with no permission to Notes cannot be mentioned in a note
+* Tweak: User with no permission to view a post cannot be mentioned in a note
+* Tweak: Notes was added to the right click context-menu
+* Tweak: Notes panel can be resizable
+* Tweak: Notes panel can be dragged outside of the canvas in responsive mode in the editor
+* Tweak: Updated form validation messages translation strings in Form widget
+* Tweak: Updated translators comments
+* Tweak: Theme Builder logo and Title should be clickable
+* Tweak: Reduced API requests and DB calls on non-write setup
+* Tweak: Added media queries to the Table of Contents widget
+* Fix: Sticky option is not working as expected in various scenarios in Container ([#18357](https://github.com/elementor/elementor/issues/18357), [#19540](https://github.com/elementor/elementor/issues/19540), [#19618](https://github.com/elementor/elementor/issues/19618), [#19777](https://github.com/elementor/elementor/issues/19777), [#19827](https://github.com/elementor/elementor/issues/19827))
+* Fix: Mixed Content errors on HTTPS in Video Playlist Widget ([#18895](https://github.com/elementor/elementor/issues/18895), [#18945](https://github.com/elementor/elementor/issues/18945))
+* Fix: Note's timestamp is being updated according to the last activity in Notes ([#19123](https://github.com/elementor/elementor/issues/19123))
+* Fix: Accessibility attribute `role=navigation` is redundant in Nav Menu widget ([#17582](https://github.com/elementor/elementor/issues/17582))
+* Fix: Accessibility attribute `role=navigation` is redundant in pagination in Posts widget
+* Fix: Share buttons is accessible with keyboard but not clickable
+* Fix: Sub-items icons style is missing in preview with Inline Font Icons experiment in Nav Menu widget
+* Fix: Quotes are appearing as HTML when editing a note in Notes
+* Fix: Label's Icon height increases when Inline Font Icons experiment is active in Hotspot Widget
+* Fix: Sub conditions of templates are not overridden when importing a Kit
+* Fix: X/Y Anchor Point controls were not visible for Scale and Rotate effects
+* Fix: PHP warning notice appears in some situations when using motion effects
+
 #### 3.7.7 - 2022-09-20
 * Fix: Default Flex Grow affects the layout when the container is set to direction Column in various widgets
 
