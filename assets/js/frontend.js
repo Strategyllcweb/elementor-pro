@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.7.7 - 20-09-2022 */
+/*! elementor-pro - v3.9.0 - 06-12-2022 */
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["frontend"],{
 
 /***/ "../assets/dev/js/frontend/frontend.js":
@@ -1286,20 +1286,17 @@ var _default = elementorModules.frontend.handlers.Base.extend({
       // compensated for in this case.
       handleScrollbarWidth: elementorFrontend.isEditMode()
     },
-          $wpAdminBar = elementorFrontend.elements.$wpAdminBar;
-
-    if (elementSettings.sticky_parent) {
-      stickyOptions.parent = '.e-container, .elementor-widget-wrap';
-    }
+          $wpAdminBar = elementorFrontend.elements.$wpAdminBar,
+          isParentContainer = this.isContainerElement(this.$element[0]) && !this.isContainerElement(this.$element[0].parentElement);
 
     if ($wpAdminBar.length && 'top' === elementSettings.sticky && 'fixed' === $wpAdminBar.css('position')) {
       stickyOptions.offset += $wpAdminBar.height();
-    }
+    } // The `stickyOptions.parent` value should only be applied to inner elements, and not to top level containers.
 
-    if (this.$element[0].parentElement?.classList.contains('e-container')) {
-      stickyOptions.relativeTarget = 'document';
-    } else {
-      stickyOptions.relativeTarget = 'parent';
+
+    if (elementSettings.sticky_parent && !isParentContainer) {
+      // TODO: The e-container classes should be removed in the next update.
+      stickyOptions.parent = '.e-container, .e-container__inner, .e-con, .e-con-inner, .elementor-widget-wrap';
     }
 
     return stickyOptions;
@@ -1402,6 +1399,19 @@ var _default = elementorModules.frontend.handlers.Base.extend({
   onDestroy() {
     elementorModules.frontend.handlers.Base.prototype.onDestroy.apply(this, arguments);
     this.deactivate();
+  },
+
+  /**
+   *
+   * @param {HTMLElement|null|undefined} element
+   * @return {boolean} Is the passed element a container.
+   */
+  isContainerElement(element) {
+    const containerClasses = [// TODO: The e-container classes should be removed in the next update.
+    'e-container', 'e-container__inner', 'e-con', 'e-con-inner'];
+    return containerClasses.some(containerClass => {
+      return element?.classList.contains(containerClass);
+    });
   }
 
 });

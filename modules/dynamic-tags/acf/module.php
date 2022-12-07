@@ -2,8 +2,10 @@
 namespace ElementorPro\Modules\DynamicTags\ACF;
 
 use Elementor\Controls_Manager;
+use Elementor\Core\Base\Document;
 use Elementor\Core\DynamicTags\Base_Tag;
 use Elementor\Modules\DynamicTags;
+use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -128,9 +130,12 @@ class Module extends DynamicTags\Module {
 
 		if ( ! empty( $key ) ) {
 			list( $field_key, $meta_key ) = explode( ':', $key );
+			$document = Plugin::elementor()->documents->get_current();
 
 			if ( 'options' === $field_key ) {
 				$field = get_field_object( $meta_key, $field_key );
+			} elseif ( ! empty( $document ) && 'loop-item' == $document::get_type() ) {
+				$field = get_field_object( $field_key, get_the_ID() );
 			} else {
 				$field = get_field_object( $field_key, get_queried_object() );
 			}

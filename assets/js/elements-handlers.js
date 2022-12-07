@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.7.7 - 20-09-2022 */
+/*! elementor-pro - v3.9.0 - 06-12-2022 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["elements-handlers"],{
 
@@ -46,6 +46,8 @@ var _frontend16 = _interopRequireDefault(__webpack_require__(/*! modules/theme-e
 
 var _frontend17 = _interopRequireDefault(__webpack_require__(/*! modules/woocommerce/assets/js/frontend/frontend */ "../modules/woocommerce/assets/js/frontend/frontend.js"));
 
+var _frontend18 = _interopRequireDefault(__webpack_require__(/*! modules/loop-builder/assets/js/frontend/frontend */ "../modules/loop-builder/assets/js/frontend/frontend.js"));
+
 const extendDefaultHandlers = defaultHandlers => {
   const handlers = {
     animatedText: _frontend.default,
@@ -64,7 +66,8 @@ const extendDefaultHandlers = defaultHandlers => {
     themeBuilder: _frontend15.default,
     themeElements: _frontend16.default,
     woocommerce: _frontend17.default,
-    tableOfContents: _frontend14.default
+    tableOfContents: _frontend14.default,
+    loopBuilder: _frontend18.default
   };
   return { ...defaultHandlers,
     ...handlers
@@ -333,6 +336,34 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../modules/loop-builder/assets/js/frontend/frontend.js":
+/*!**************************************************************!*\
+  !*** ../modules/loop-builder/assets/js/frontend/frontend.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+class _default extends elementorModules.Module {
+  constructor() {
+    super();
+    ['post', 'product'].forEach(skinName => {
+      elementorFrontend.elementsHandler.attachHandler('loop-grid', () => __webpack_require__.e(/*! import() | load-more */ "load-more").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/load-more */ "../modules/loop-builder/assets/js/frontend/handlers/load-more.js")), skinName);
+      elementorFrontend.elementsHandler.attachHandler('loop-grid', () => __webpack_require__.e(/*! import() | loop */ "loop").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/loop-grid */ "../modules/loop-builder/assets/js/frontend/handlers/loop-grid.js")), skinName);
+    });
+  }
+
+}
+
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ "../modules/lottie/assets/js/frontend/frontend.js":
 /*!********************************************************!*\
   !*** ../modules/lottie/assets/js/frontend/frontend.js ***!
@@ -532,8 +563,6 @@ class _default extends elementorModules.frontend.Document {
               id = this.getSettings('id'),
               triggerPopupEvent = eventType => {
           const event = 'elementor/popup/' + eventType;
-          elementorFrontend.elements.$document.trigger(event, [id, this]); // TODO: Use `elementorFrontend.utils.events.dispatch` when it's in master.
-
           window.dispatchEvent(new CustomEvent(event, {
             detail: {
               id,
@@ -1118,6 +1147,110 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../modules/popup/assets/js/frontend/timing/times-utils.js":
+/*!*****************************************************************!*\
+  !*** ../modules/popup/assets/js/frontend/timing/times-utils.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+
+class TimesUtils {
+  constructor(args) {
+    this.uniqueId = args.uniqueId;
+    this.settings = args.settings;
+    this.storage = args.storage;
+  }
+
+  getTimeFramesInSecounds(timeFrame) {
+    const timeFrames = {
+      day: 86400,
+      // Day in seconds
+      week: 604800,
+      // Week in seconds
+      month: 2628288 // Month in seconds
+
+    };
+    return timeFrames[timeFrame];
+  }
+
+  setExpiration(name, value, timeFrame) {
+    const data = this.storage.get(name);
+
+    if (!data) {
+      const options = {
+        lifetimeInSeconds: this.getTimeFramesInSecounds(timeFrame)
+      };
+      this.storage.set(name, value, options);
+      return;
+    }
+
+    this.storage.set(name, value);
+  }
+
+  getImpressionsCount() {
+    const impressionCount = this.storage.get(this.uniqueId) ?? 0;
+    return parseInt(impressionCount);
+  }
+
+  incrementImpressionsCount() {
+    if (!this.settings.period) {
+      this.storage.set('times', (this.storage.get('times') ?? 0) + 1);
+    } else if ('session' !== this.settings.period) {
+      const impressionCount = this.getImpressionsCount();
+      this.setExpiration(this.uniqueId, impressionCount + 1, this.settings.period);
+    } else {
+      sessionStorage.setItem(this.uniqueId, parseInt(sessionStorage.getItem(this.uniqueId) ?? 0) + 1);
+    }
+  }
+
+  shouldCountOnOpen() {
+    if (this.settings.countOnOpen) {
+      this.incrementImpressionsCount();
+    }
+  }
+
+  shouldDisplayPerTimeFrame() {
+    const impressionCount = this.getImpressionsCount();
+
+    if (impressionCount < this.settings.showsLimit) {
+      this.shouldCountOnOpen();
+      return true;
+    }
+
+    return false;
+  }
+
+  shouldDisplayPerSession() {
+    const impressionCount = sessionStorage.getItem(this.uniqueId) ?? 0;
+
+    if (parseInt(impressionCount) < this.settings.showsLimit) {
+      this.shouldCountOnOpen();
+      return true;
+    }
+
+    return false;
+  }
+
+  shouldDisplayBackwordCompatible() {
+    let impressionCount = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
+    let showsLimit = arguments.length > 1 ? arguments[1] : undefined;
+    const shouldDisplay = parseInt(impressionCount) < parseInt(showsLimit);
+    this.shouldCountOnOpen();
+    return shouldDisplay;
+  }
+
+}
+
+exports["default"] = TimesUtils;
+
+/***/ }),
+
 /***/ "../modules/popup/assets/js/frontend/timing/times.js":
 /*!***********************************************************!*\
   !*** ../modules/popup/assets/js/frontend/timing/times.js ***!
@@ -1135,14 +1268,67 @@ exports["default"] = void 0;
 
 var _base = _interopRequireDefault(__webpack_require__(/*! ./base */ "../modules/popup/assets/js/frontend/timing/base.js"));
 
+var _timesUtils = _interopRequireDefault(__webpack_require__(/*! ./times-utils.js */ "../modules/popup/assets/js/frontend/timing/times-utils.js"));
+
 class _default extends _base.default {
+  constructor() {
+    super(...arguments);
+    this.uniqueId = `popup-${this.document.getSettings('id')}-impressions-count`;
+    const {
+      times_count: countOnOpen,
+      times_period: period,
+      times_times: showsLimit
+    } = this.getSettings();
+    this.settings = {
+      countOnOpen,
+      period,
+      showsLimit: parseInt(showsLimit)
+    };
+
+    if ('' === this.settings.period) {
+      this.settings.period = false;
+    }
+
+    if (['', 'close'].includes(this.settings.countOnOpen)) {
+      this.settings.countOnOpen = false;
+      this.onPopupHide();
+    } else {
+      this.settings.countOnOpen = true;
+    }
+
+    this.utils = new _timesUtils.default({
+      uniqueId: this.uniqueId,
+      settings: this.settings,
+      storage: elementorFrontend.storage
+    });
+  }
+
   getName() {
     return 'times';
   }
 
   check() {
-    const displayTimes = this.document.getStorage('times') || 0;
-    return this.getTimingSetting('times') > displayTimes;
+    if (!this.settings.period) {
+      const impressionCount = this.document.getStorage('times') || 0;
+      const showsLimit = this.getTimingSetting('times');
+      return this.utils.shouldDisplayBackwordCompatible(impressionCount, showsLimit);
+    }
+
+    if ('session' !== this.settings.period) {
+      if (!this.utils.shouldDisplayPerTimeFrame()) {
+        return false;
+      }
+    } else if (!this.utils.shouldDisplayPerSession()) {
+      return false;
+    }
+
+    return true;
+  }
+
+  onPopupHide() {
+    elementorFrontend.elements.$window.on('elementor/popup/hide', () => {
+      this.utils.incrementImpressionsCount();
+    });
   }
 
 }
@@ -1821,6 +2007,7 @@ class _default extends elementorModules.Module {
     elementorFrontend.elementsHandler.attachHandler('woocommerce-cart', () => __webpack_require__.e(/*! import() | woocommerce-cart */ "woocommerce-cart").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/cart */ "../modules/woocommerce/assets/js/frontend/handlers/cart.js")));
     elementorFrontend.elementsHandler.attachHandler('woocommerce-my-account', () => __webpack_require__.e(/*! import() | woocommerce-my-account */ "woocommerce-my-account").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/my-account */ "../modules/woocommerce/assets/js/frontend/handlers/my-account.js")));
     elementorFrontend.elementsHandler.attachHandler('woocommerce-notices', () => __webpack_require__.e(/*! import() | woocommerce-notices */ "woocommerce-notices").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/notices */ "../modules/woocommerce/assets/js/frontend/handlers/notices.js")));
+    elementorFrontend.elementsHandler.attachHandler('woocommerce-product-add-to-cart', () => __webpack_require__.e(/*! import() | product-add-to-cart */ "product-add-to-cart").then(__webpack_require__.bind(__webpack_require__, /*! ./handlers/product-add-to-cart */ "../modules/woocommerce/assets/js/frontend/handlers/product-add-to-cart.js")));
     /**
      * `wc-cart` script is enqueued in the Editor by the widget `get_script_depends()`. As a result WooCommerce
      * triggers its cart related event callbacks. One of the callbacks requires `.woocommerce-cart-form` to be in
