@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.9.0 - 06-12-2022 */
+/*! elementor-pro - v3.10.3 - 29-01-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -16,7 +16,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.BaseContext = void 0;
-
 class BaseContext extends React.Component {
   constructor(props) {
     super(props);
@@ -31,7 +30,6 @@ class BaseContext extends React.Component {
       resetActionState: this.resetActionState.bind(this)
     };
   }
-
   executeAction(name, handler) {
     this.updateActionState({
       current: name,
@@ -52,15 +50,14 @@ class BaseContext extends React.Component {
       return Promise.reject(error);
     });
   }
-
   updateActionState(data) {
     return this.setState(prev => ({
-      action: { ...prev.action,
+      action: {
+        ...prev.action,
         ...data
       }
     }));
   }
-
   resetActionState() {
     this.updateActionState({
       current: null,
@@ -69,9 +66,7 @@ class BaseContext extends React.Component {
       errorMeta: {}
     });
   }
-
 }
-
 exports.BaseContext = BaseContext;
 var _default = BaseContext;
 exports["default"] = _default;
@@ -90,26 +85,17 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Context = exports.ConditionsProvider = void 0;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _condition = _interopRequireDefault(__webpack_require__(/*! ./models/condition */ "../core/app/modules/site-editor/assets/js/context/models/condition.js"));
-
 var _conditionsConfig = _interopRequireDefault(__webpack_require__(/*! ./services/conditions-config */ "../core/app/modules/site-editor/assets/js/context/services/conditions-config.js"));
-
 var _baseContext = _interopRequireDefault(__webpack_require__(/*! ./base-context */ "../core/app/modules/site-editor/assets/js/context/base-context.js"));
-
 var _commands = __webpack_require__(/*! ../data/commands */ "../core/app/modules/site-editor/assets/js/data/commands/index.js");
-
 const Context = _react.default.createContext();
-
 exports.Context = Context;
-
 class ConditionsProvider extends _baseContext.default {
   static propTypes = {
     children: PropTypes.any.isRequired,
@@ -125,22 +111,23 @@ class ConditionsProvider extends _baseContext.default {
     SAVE: 'save',
     CHECK_CONFLICTS: 'check-conflicts'
   };
+
   /**
    * Holds the conditions config object.
    *
    * @type {ConditionsConfig}
    */
-
   conditionsConfig = null;
+
   /**
    * ConditionsProvider constructor.
    *
    * @param {any} props
    */
-
   constructor(props) {
     super(props);
-    this.state = { ...this.state,
+    this.state = {
+      ...this.state,
       conditions: {},
       updateConditionItemState: this.updateConditionItemState.bind(this),
       removeConditionItemInState: this.removeConditionItemInState.bind(this),
@@ -149,22 +136,20 @@ class ConditionsProvider extends _baseContext.default {
       saveConditions: this.saveConditions.bind(this)
     };
   }
+
   /**
    * Fetch the conditions config, then normalize the conditions and then setup titles for
    * the subIds.
    */
-
-
   componentDidMount() {
     this.executeAction(ConditionsProvider.actions.FETCH_CONFIG, () => _conditionsConfig.default.create()).then(conditionsConfig => this.conditionsConfig = conditionsConfig).then(this.normalizeConditionsState.bind(this)).then(this.setSubIdTitles.bind(this));
   }
+
   /**
    * Execute a request to save the template conditions.
    *
    * @return {any} -
    */
-
-
   saveConditions() {
     const conditions = Object.values(this.state.conditions).map(condition => condition.forDb());
     return this.executeAction(ConditionsProvider.actions.SAVE, () => $e.data.update(_commands.TemplatesConditions.signature, {
@@ -180,14 +165,13 @@ class ConditionsProvider extends _baseContext.default {
       });
     });
   }
+
   /**
    * Check for conflicts in the server and mark the condition if there
    * is a conflict.
    *
    * @param {any} condition
    */
-
-
   checkConflicts(condition) {
     return this.executeAction(ConditionsProvider.actions.CHECK_CONFLICTS, () => $e.data.get(_commands.TemplatesConditionsConflicts.signature, {
       post_id: this.props.currentTemplate.id,
@@ -196,14 +180,13 @@ class ConditionsProvider extends _baseContext.default {
       conflictErrors: Object.values(response.data)
     }, false));
   }
+
   /**
    * Fetching subId titles.
    *
    * @param {any} condition
    * @return {Promise<unknown>} -
    */
-
-
   fetchSubIdsTitles(condition) {
     return new Promise(resolve => {
       return elementorCommon.ajax.loadObjects({
@@ -213,24 +196,22 @@ class ConditionsProvider extends _baseContext.default {
           get_titles: condition.subIdAutocomplete,
           unique_id: elementorCommon.helpers.getUniqueId()
         },
-
         success(response) {
           resolve(response);
         }
-
       });
     });
   }
+
   /**
    * Get the conditions from the template and normalize it to data structure
    * that the components can work with.
    */
-
-
   normalizeConditionsState() {
     this.updateConditionsState(() => {
       return this.props.currentTemplate.conditions.reduce((current, condition) => {
-        const conditionObj = new _condition.default({ ...condition,
+        const conditionObj = new _condition.default({
+          ...condition,
           default: this.props.currentTemplate.defaultCondition,
           options: this.conditionsConfig.getOptions(),
           subOptions: this.conditionsConfig.getSubOptions(condition.name),
@@ -240,7 +221,8 @@ class ConditionsProvider extends _baseContext.default {
             label: condition.subId
           }] : []
         });
-        return { ...current,
+        return {
+          ...current,
           [conditionObj.id]: conditionObj
         };
       }, {});
@@ -248,18 +230,16 @@ class ConditionsProvider extends _baseContext.default {
       Object.values(this.state.conditions).forEach(condition => this.checkConflicts(condition));
     });
   }
+
   /**
    * Set titles to the subIds,
    * for the first render of the component.
    */
-
-
   setSubIdTitles() {
     return Object.values(this.state.conditions).forEach(condition => {
       if (!condition.subId) {
         return;
       }
-
       return this.fetchSubIdsTitles(condition).then(response => this.updateConditionItemState(condition.id, {
         subIdOptions: [{
           label: Object.values(response)[0],
@@ -268,6 +248,7 @@ class ConditionsProvider extends _baseContext.default {
       }, false));
     });
   }
+
   /**
    * Update state of specific condition item.
    *
@@ -275,25 +256,22 @@ class ConditionsProvider extends _baseContext.default {
    * @param {any}     args
    * @param {boolean} shouldCheckConflicts
    */
-
-
   updateConditionItemState(id, args) {
     let shouldCheckConflicts = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-
     if (args.name) {
       args.subOptions = this.conditionsConfig.getSubOptions(args.name);
     }
-
     if (args.sub || args.name) {
-      args.subIdAutocomplete = this.conditionsConfig.getSubIdAutocomplete(args.sub); // In case that the condition has been changed, it will set the options of the subId
-      // to empty array to let select2 autocomplete handle the options.
+      args.subIdAutocomplete = this.conditionsConfig.getSubIdAutocomplete(args.sub);
 
+      // In case that the condition has been changed, it will set the options of the subId
+      // to empty array to let select2 autocomplete handle the options.
       args.subIdOptions = [];
     }
-
     this.updateConditionsState(prev => {
       const condition = prev[id];
-      return { ...prev,
+      return {
+        ...prev,
         [id]: condition.clone().set(args)
       };
     }).then(() => {
@@ -302,39 +280,39 @@ class ConditionsProvider extends _baseContext.default {
       }
     });
   }
+
   /**
    * Remove a condition item from the state.
    *
    * @param {any} id
    */
-
-
   removeConditionItemInState(id) {
     this.updateConditionsState(prev => {
-      const newConditions = { ...prev
+      const newConditions = {
+        ...prev
       };
       delete newConditions[id];
       return newConditions;
     });
   }
+
   /**
    * Add a new condition item into the state.
    *
    * @param {boolean} shouldCheckConflicts
    */
-
-
   createConditionItemInState() {
     let shouldCheckConflicts = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : true;
     const defaultCondition = this.props.currentTemplate.defaultCondition,
-          newCondition = new _condition.default({
-      name: defaultCondition,
-      default: defaultCondition,
-      options: this.conditionsConfig.getOptions(),
-      subOptions: this.conditionsConfig.getSubOptions(defaultCondition),
-      subIdAutocomplete: this.conditionsConfig.getSubIdAutocomplete('')
-    });
-    this.updateConditionsState(prev => ({ ...prev,
+      newCondition = new _condition.default({
+        name: defaultCondition,
+        default: defaultCondition,
+        options: this.conditionsConfig.getOptions(),
+        subOptions: this.conditionsConfig.getSubOptions(defaultCondition),
+        subIdAutocomplete: this.conditionsConfig.getSubIdAutocomplete('')
+      });
+    this.updateConditionsState(prev => ({
+      ...prev,
       [newCondition.id]: newCondition
     })).then(() => {
       if (shouldCheckConflicts) {
@@ -342,55 +320,48 @@ class ConditionsProvider extends _baseContext.default {
       }
     });
   }
+
   /**
    * Find a condition item from the conditions state.
    *
    * @param {any} id
    * @return {Condition|null} -
    */
-
-
   findConditionItemInState(id) {
     return Object.values(this.state.conditions).find(c => c.id === id);
   }
+
   /**
    * Update the whole conditions state.
    *
    * @param {Function} callback
    * @return {Promise<any>} -
    */
-
-
   updateConditionsState(callback) {
     return new Promise(resolve => this.setState(prev => ({
       conditions: callback(prev.conditions)
     }), resolve));
   }
+
   /**
    * Renders the provider.
    *
    * @return {any} -
    */
-
-
   render() {
     if (this.state.action.current === ConditionsProvider.actions.FETCH_CONFIG) {
       if (this.state.error) {
         return /*#__PURE__*/_react.default.createElement("h3", null, __('Error:', 'elementor-pro'), " ", this.state.error);
       }
-
       if (this.state.loading) {
         return /*#__PURE__*/_react.default.createElement("h3", null, __('Loading', 'elementor-pro'), "...");
       }
     }
-
     return /*#__PURE__*/_react.default.createElement(Context.Provider, {
       value: this.state
     }, this.props.children);
   }
-
 }
-
 exports.ConditionsProvider = ConditionsProvider;
 var _default = ConditionsProvider;
 exports["default"] = _default;
@@ -410,7 +381,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class Condition {
   id = elementorCommon.helpers.getUniqueId();
   default = '';
@@ -423,53 +393,42 @@ class Condition {
   subIdAutocomplete = [];
   subIdOptions = [];
   conflictErrors = [];
-
   constructor(args) {
     this.set(args);
   }
-
   set(args) {
     Object.assign(this, args);
     return this;
   }
-
   clone() {
     return Object.assign(new Condition(), this);
   }
-
   remove(keys) {
     if (!Array.isArray(keys)) {
       keys = [keys];
     }
-
     keys.forEach(key => {
       delete this[key];
     });
     return this;
   }
-
   only(keys) {
     if (!Array.isArray(keys)) {
       keys = [keys];
     }
-
     const keysToRemove = Object.keys(this).filter(conditionKey => !keys.includes(conditionKey));
     this.remove(keysToRemove);
     return this;
   }
-
   toJson() {
     return JSON.stringify(this);
   }
-
   toString() {
     return this.forDb().filter(item => item).join('/');
   }
-
   forDb() {
     return [this.type, this.name, this.sub, this.subId];
   }
-
   forContext() {
     return {
       type: this.type,
@@ -478,9 +437,7 @@ class Condition {
       subId: this.subId
     };
   }
-
 }
-
 exports["default"] = Condition;
 
 /***/ }),
@@ -499,26 +456,21 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ConditionsConfig = void 0;
-
 var _commands = __webpack_require__(/*! ../../data/commands */ "../core/app/modules/site-editor/assets/js/data/commands/index.js");
-
 class ConditionsConfig {
   static instance;
   config = null;
-
   constructor(config) {
     this.config = config;
   }
+
   /**
    * @return {Promise<ConditionsConfig>} -
    */
-
-
   static create() {
     if (ConditionsConfig.instance) {
       return Promise.resolve(ConditionsConfig.instance);
     }
-
     return $e.data.get(_commands.ConditionsConfig.signature, {}, {
       refresh: true
     }).then(response => {
@@ -526,13 +478,12 @@ class ConditionsConfig {
       return ConditionsConfig.instance;
     });
   }
+
   /**
    * Get main options for condition name.
    *
    * @return {Array} -
    */
-
-
   getOptions() {
     return this.getSubOptions('general', true).map(_ref => {
       let {
@@ -545,6 +496,7 @@ class ConditionsConfig {
       };
     });
   }
+
   /**
    * Get the sub options for the select.
    *
@@ -552,16 +504,12 @@ class ConditionsConfig {
    * @param {boolean} isSubItem
    * @return {Array} -
    */
-
-
   getSubOptions(itemName) {
     let isSubItem = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     const config = this.config[itemName];
-
     if (!config) {
       return [];
     }
-
     return [{
       label: config.all_label,
       value: isSubItem ? itemName : ''
@@ -574,67 +522,54 @@ class ConditionsConfig {
       };
     })];
   }
+
   /**
    * Get the autocomplete property from the conditions config
    *
    * @param {string} sub
    * @return {{}|any} -
    */
-
-
   getSubIdAutocomplete(sub) {
     var _controls$;
-
     const config = this.config[sub];
-
     if (!config || !('object' === typeof config.controls)) {
       return {};
     }
-
     const controls = Object.values(config.controls);
-
     if (!(controls !== null && controls !== void 0 && (_controls$ = controls[0]) !== null && _controls$ !== void 0 && _controls$.autocomplete)) {
       return {};
     }
-
     return controls[0].autocomplete;
   }
+
   /**
    * Calculate instances from the conditions.
    *
    * @param {Array} conditions
    * @return {Object} -
    */
-
-
   calculateInstances(conditions) {
     let instances = conditions.reduce((current, condition) => {
       if ('exclude' === condition.type) {
         return current;
       }
-
       const key = condition.sub || condition.name,
-            config = this.config[key];
-
+        config = this.config[key];
       if (!config) {
         return current;
       }
-
       const instanceLabel = condition.subId ? `${config.label} #${condition.subId}` : config.all_label;
-      return { ...current,
+      return {
+        ...current,
         [key]: instanceLabel
       };
     }, {});
-
     if (0 === Object.keys(instances).length) {
       instances = [__('No instances', 'elementor-pro')];
     }
-
     return instances;
   }
-
 }
-
 exports.ConditionsConfig = ConditionsConfig;
 var _default = ConditionsConfig;
 exports["default"] = _default;
@@ -654,16 +589,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ConditionsConfig = void 0;
-
 class ConditionsConfig extends $e.modules.CommandData {
   static signature = 'site-editor/conditions-config';
-
   static getEndpointFormat() {
     return 'site-editor/conditions-config/{id}';
   }
-
 }
-
 exports.ConditionsConfig = ConditionsConfig;
 var _default = ConditionsConfig;
 exports["default"] = _default;
@@ -706,13 +637,9 @@ Object.defineProperty(exports, "TemplatesConditionsConflicts", ({
     return _templatesConditionsConflicts.TemplatesConditionsConflicts;
   }
 }));
-
 var _templates = __webpack_require__(/*! ./templates */ "../core/app/modules/site-editor/assets/js/data/commands/templates.js");
-
 var _conditionsConfig = __webpack_require__(/*! ./conditions-config */ "../core/app/modules/site-editor/assets/js/data/commands/conditions-config.js");
-
 var _templatesConditions = __webpack_require__(/*! ./templates-conditions */ "../core/app/modules/site-editor/assets/js/data/commands/templates-conditions.js");
-
 var _templatesConditionsConflicts = __webpack_require__(/*! ./templates-conditions-conflicts */ "../core/app/modules/site-editor/assets/js/data/commands/templates-conditions-conflicts.js");
 
 /***/ }),
@@ -730,16 +657,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.TemplatesConditionsConflicts = void 0;
-
 class TemplatesConditionsConflicts extends $e.modules.CommandData {
   static signature = 'site-editor/templates-conditions-conflicts';
-
   static getEndpointFormat() {
     return `${TemplatesConditionsConflicts.signature}/{id}`;
   }
-
 }
-
 exports.TemplatesConditionsConflicts = TemplatesConditionsConflicts;
 var _default = TemplatesConditionsConflicts;
 exports["default"] = _default;
@@ -759,16 +682,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.TemplatesConditions = void 0;
-
 class TemplatesConditions extends $e.modules.CommandData {
   static signature = 'site-editor/templates-conditions';
-
   static getEndpointFormat() {
     return 'site-editor/templates-conditions/{id}';
   }
-
 }
-
 exports.TemplatesConditions = TemplatesConditions;
 var _default = TemplatesConditions;
 exports["default"] = _default;
@@ -788,16 +707,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Templates = void 0;
-
 class Templates extends $e.modules.CommandData {
   static signature = 'site-editor/templates';
-
   static getEndpointFormat() {
     return 'site-editor/templates/{id}';
   }
-
 }
-
 exports.Templates = Templates;
 var _default = Templates;
 exports["default"] = _default;
@@ -817,26 +732,18 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var dataCommands = _interopRequireWildcard(__webpack_require__(/*! ./commands */ "../core/app/modules/site-editor/assets/js/data/commands/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class Component extends $e.modules.ComponentBase {
   static namespace = 'site-editor';
-
   getNamespace() {
     return this.constructor.namespace;
   }
-
   defaultData() {
     return this.importCommands(dataCommands);
   }
-
 }
-
 exports["default"] = Component;
 
 /***/ }),
@@ -853,21 +760,16 @@ exports["default"] = Component;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ConditionConflicts;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 function ConditionConflicts(props) {
   if (!props.conflicts.length) {
     return '';
   }
-
   const conflictLinks = props.conflicts.map(conflict => {
     return /*#__PURE__*/_react.default.createElement(_appUi.Button, {
       key: conflict.template_id,
@@ -881,7 +783,6 @@ function ConditionConflicts(props) {
     variant: "sm"
   }, __('Elementor recognized that you have set this location for other templates: ', 'elementor-pro'), " ", conflictLinks);
 }
-
 ConditionConflicts.propTypes = {
   conflicts: PropTypes.array.isRequired
 };
@@ -899,28 +800,22 @@ ConditionConflicts.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ConditionName;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 function ConditionName(props) {
   // Hide for template types that has another default, like single & archive.
   if ('general' !== props.default) {
     return '';
   }
-
   const onChange = e => props.updateConditions(props.id, {
     name: e.target.value,
     sub: '',
     subId: ''
   });
-
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "e-site-editor-conditions__input-wrapper"
   }, /*#__PURE__*/_react.default.createElement(_appUi.Select, {
@@ -929,7 +824,6 @@ function ConditionName(props) {
     onChange: onChange
   }));
 }
-
 ConditionName.propTypes = {
   updateConditions: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
@@ -955,16 +849,12 @@ ConditionName.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ConditionSubId;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 /**
  * Main component.
  *
@@ -974,15 +864,12 @@ var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
  */
 function ConditionSubId(props) {
   const settings = _react.default.useMemo(() => Object.keys(props.subIdAutocomplete).length ? getSettings(props.subIdAutocomplete) : null, [props.subIdAutocomplete]);
-
   if (!props.sub || !settings) {
     return '';
   }
-
   const onChange = e => props.updateConditions(props.id, {
     subId: e.target.value
   });
-
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "e-site-editor-conditions__input-wrapper"
   }, /*#__PURE__*/_react.default.createElement(_appUi.Select2, {
@@ -992,6 +879,7 @@ function ConditionSubId(props) {
     options: props.subIdOptions
   }));
 }
+
 /**
  * Get settings for the select2 base on the autocomplete settings,
  * that passes as a prop
@@ -999,8 +887,6 @@ function ConditionSubId(props) {
  * @param {any} autocomplete
  * @return {Object} -
  */
-
-
 function getSettings(autocomplete) {
   return {
     allowClear: false,
@@ -1017,25 +903,20 @@ function getSettings(autocomplete) {
           error: failure
         });
       },
-
       data(params) {
         return {
           q: params.term,
           page: params.page
         };
       },
-
       cache: true
     },
-
     escapeMarkup(markup) {
       return markup;
     },
-
     minimumInputLength: 1
   };
 }
-
 ConditionSubId.propTypes = {
   subIdAutocomplete: PropTypes.object,
   id: PropTypes.string.isRequired,
@@ -1062,26 +943,20 @@ ConditionSubId.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ConditionSub;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 function ConditionSub(props) {
   if ('general' === props.name || !props.subOptions.length) {
     return '';
   }
-
   const onChange = e => props.updateConditions(props.id, {
     sub: e.target.value,
     subId: ''
   });
-
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "e-site-editor-conditions__input-wrapper"
   }, /*#__PURE__*/_react.default.createElement(_appUi.Select, {
@@ -1090,7 +965,6 @@ function ConditionSub(props) {
     onChange: onChange
   }));
 }
-
 ConditionSub.propTypes = {
   updateConditions: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
@@ -1117,19 +991,14 @@ ConditionSub.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ConditionType;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 function ConditionType(props) {
   const wrapperRef = _react.default.createRef();
-
   const options = [{
     label: __('Include', 'elementor-pro'),
     value: 'include'
@@ -1137,17 +1006,14 @@ function ConditionType(props) {
     label: __('Exclude', 'elementor-pro'),
     value: 'exclude'
   }];
-
   const onChange = e => {
     props.updateConditions(props.id, {
       type: e.target.value
     });
   };
-
   _react.default.useEffect(() => {
     wrapperRef.current.setAttribute('data-elementor-condition-type', props.type);
   });
-
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "e-site-editor-conditions__input-wrapper e-site-editor-conditions__input-wrapper--condition-type",
     ref: wrapperRef
@@ -1157,7 +1023,6 @@ function ConditionType(props) {
     onChange: onChange
   }));
 }
-
 ConditionType.propTypes = {
   updateConditions: PropTypes.func.isRequired,
   id: PropTypes.string.isRequired,
@@ -1181,30 +1046,19 @@ ConditionType.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ConditionsRows;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
-
 var _conditions = __webpack_require__(/*! ../../context/conditions */ "../core/app/modules/site-editor/assets/js/context/conditions.js");
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 var _conditionType = _interopRequireDefault(__webpack_require__(/*! ./condition-type */ "../core/app/modules/site-editor/assets/js/pages/conditions/condition-type.js"));
-
 var _conditionName = _interopRequireDefault(__webpack_require__(/*! ./condition-name */ "../core/app/modules/site-editor/assets/js/pages/conditions/condition-name.js"));
-
 var _conditionSub = _interopRequireDefault(__webpack_require__(/*! ./condition-sub */ "../core/app/modules/site-editor/assets/js/pages/conditions/condition-sub.js"));
-
 var _conditionSubId = _interopRequireDefault(__webpack_require__(/*! ./condition-sub-id */ "../core/app/modules/site-editor/assets/js/pages/conditions/condition-sub-id.js"));
-
 var _conditionConflicts = _interopRequireDefault(__webpack_require__(/*! ./condition-conflicts */ "../core/app/modules/site-editor/assets/js/pages/conditions/condition-conflicts.js"));
-
 function ConditionsRows(props) {
   const {
     conditions,
@@ -1215,7 +1069,6 @@ function ConditionsRows(props) {
     action,
     resetActionState
   } = _react.default.useContext(_conditions.Context);
-
   const rows = Object.values(conditions).map(condition => /*#__PURE__*/_react.default.createElement("div", {
     key: condition.id
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -1272,7 +1125,6 @@ function ConditionsRows(props) {
     onClick: () => save().then(props.onAfterSave)
   })));
 }
-
 ConditionsRows.propTypes = {
   onAfterSave: PropTypes.func
 };
@@ -1291,124 +1143,117 @@ ConditionsRows.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ConditionsModal;
-
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 var _conditions = _interopRequireDefault(__webpack_require__(/*! ./conditions */ "../modules/custom-code/assets/js/admin/publish-metabox/conditions.js"));
-
 var _conditionsConfig = _interopRequireDefault(__webpack_require__(/*! elementor-pro-app-modules/site-editor/assets/js/context/services/conditions-config */ "../core/app/modules/site-editor/assets/js/context/services/conditions-config.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /**
  * Publish metabox conditions ( 'Edit' modal ).
  */
 function ConditionsModal() {
   const [showModal, setShowModal] = (0, _react.useState)(false),
-        [data, setData] = (0, _react.useState)({
-    conditions: null,
-    instances: null
-  }),
-        isSavedOnce = (0, _react.useRef)(false),
-        post = elementorProAdmin.customCode.post,
-        elements = (0, _react.useMemo)(() => {
-    return {
-      $form: jQuery('#post'),
-      $formConditions: jQuery('<input />'),
-      $publishButton: jQuery('#publish'),
-      title: {
-        $label: jQuery('#title-prompt-text'),
-        $input: jQuery('#title')
+    [data, setData] = (0, _react.useState)({
+      conditions: null,
+      instances: null
+    }),
+    isSavedOnce = (0, _react.useRef)(false),
+    post = elementorProAdmin.customCode.post,
+    elements = (0, _react.useMemo)(() => {
+      return {
+        $form: jQuery('#post'),
+        $formConditions: jQuery('<input />'),
+        $publishButton: jQuery('#publish'),
+        title: {
+          $label: jQuery('#title-prompt-text'),
+          $input: jQuery('#title')
+        }
+      };
+    }, []),
+    onPostSubmit = () => {
+      const {
+        title
+      } = elements;
+      if (!title.$input.attr('value').length) {
+        title.$label.addClass('screen-reader-text');
+        title.$input.attr('value', __('Elementor Custom-Code #', 'elementor-pro') + elementorProAdmin.customCode.post.ID);
       }
-    };
-  }, []),
-        onPostSubmit = () => {
-    const {
-      title
-    } = elements;
+    },
+    onPublishClick = e => {
+      if ('auto-draft' === post.post_status && !showModal && !isSavedOnce.current) {
+        e.preventDefault();
 
-    if (!title.$input.attr('value').length) {
-      title.$label.addClass('screen-reader-text');
-      title.$input.attr('value', __('Elementor Custom-Code #', 'elementor-pro') + elementorProAdmin.customCode.post.ID);
-    }
-  },
-        onPublishClick = e => {
-    if ('auto-draft' === post.post_status && !showModal && !isSavedOnce.current) {
-      e.preventDefault(); // Set default condition for new post.
-
-      const conditions = [{
-        name: 'general',
-        sub: '',
-        subId: '',
-        type: 'include'
-      }];
-      setData(prevState => ({ ...prevState,
-        conditions
-      }));
-      setShowModal(true);
-    }
-  },
-        onConditionsSaved = args => {
-    const conditions = args.conditions,
-          instances = Object.values(args.instances).join(','),
-          {
-      $form,
-      $formConditions,
-      $publishButton
-    } = elements;
-    isSavedOnce.current = true;
-    setData(prevState => ({ ...prevState,
-      conditions,
-      instances
-    })); // Temporary workaround for applying conditions for draft custom code post.
-
-    if ('auto-draft' === post.post_status || 'draft' === post.post_status) {
-      $formConditions.attr('type', 'hidden').attr('name', '_conditions').attr('value', JSON.stringify(conditions)).appendTo($form);
-    }
-
-    $publishButton.trigger('click');
-    setShowModal(false);
-  },
-        initData = async () => {
-    const conditionsConfig = await _conditionsConfig.default.create();
-    $e.data.get('site-editor/templates-conditions', {
-      id: post.ID
-    }, {
-      refresh: true
-    }).then(result => {
-      // Since the 'state' format is different from db one.
-      const conditions = Object.values(result.data).map(condition => ({
-        type: condition.type,
-        name: condition.name,
-        sub: condition.sub_name,
-        subId: condition.sub_id
-      })),
-            instances = Object.values(conditionsConfig.calculateInstances(conditions)).join(',');
-      setData(prevState => ({ ...prevState,
+        // Set default condition for new post.
+        const conditions = [{
+          name: 'general',
+          sub: '',
+          subId: '',
+          type: 'include'
+        }];
+        setData(prevState => ({
+          ...prevState,
+          conditions
+        }));
+        setShowModal(true);
+      }
+    },
+    onConditionsSaved = args => {
+      const conditions = args.conditions,
+        instances = Object.values(args.instances).join(','),
+        {
+          $form,
+          $formConditions,
+          $publishButton
+        } = elements;
+      isSavedOnce.current = true;
+      setData(prevState => ({
+        ...prevState,
         conditions,
         instances
       }));
-    });
-  },
-        bindEvents = () => {
-    elements.$publishButton.on('click', onPublishClick);
-    elements.$form.on('submit', onPostSubmit);
-  };
 
+      // Temporary workaround for applying conditions for draft custom code post.
+      if ('auto-draft' === post.post_status || 'draft' === post.post_status) {
+        $formConditions.attr('type', 'hidden').attr('name', '_conditions').attr('value', JSON.stringify(conditions)).appendTo($form);
+      }
+      $publishButton.trigger('click');
+      setShowModal(false);
+    },
+    initData = async () => {
+      const conditionsConfig = await _conditionsConfig.default.create();
+      $e.data.get('site-editor/templates-conditions', {
+        id: post.ID
+      }, {
+        refresh: true
+      }).then(result => {
+        // Since the 'state' format is different from db one.
+        const conditions = Object.values(result.data).map(condition => ({
+            type: condition.type,
+            name: condition.name,
+            sub: condition.sub_name,
+            subId: condition.sub_id
+          })),
+          instances = Object.values(conditionsConfig.calculateInstances(conditions)).join(',');
+        setData(prevState => ({
+          ...prevState,
+          conditions,
+          instances
+        }));
+      });
+    },
+    bindEvents = () => {
+      elements.$publishButton.on('click', onPublishClick);
+      elements.$form.on('submit', onPostSubmit);
+    };
   (0, _react.useEffect)(() => {
     initData();
     bindEvents();
   }, []);
-
   if (!post || !data.conditions) {
     return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_appUi.Text, {
       tag: "span"
@@ -1416,7 +1261,6 @@ function ConditionsModal() {
       className: "spinner"
     }));
   }
-
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_appUi.Text, {
     tag: "span",
     className: "post-conditions-display"
@@ -1440,10 +1284,8 @@ function ConditionsModal() {
     onAfterSave: () => {}
   })))));
 }
-
 ConditionsModal.propTypes = {
   children: PropTypes.object // Disable parent requirement.
-
 };
 
 /***/ }),
@@ -1460,31 +1302,25 @@ ConditionsModal.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Conditions;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _appUi = __webpack_require__(/*! @elementor/app-ui */ "@elementor/app-ui");
-
 var _conditions = _interopRequireDefault(__webpack_require__(/*! elementor-pro-app-modules/site-editor/assets/js/context/conditions */ "../core/app/modules/site-editor/assets/js/context/conditions.js"));
-
 var _conditionsRows = _interopRequireDefault(__webpack_require__(/*! elementor-pro-app-modules/site-editor/assets/js/pages/conditions/conditions-rows */ "../core/app/modules/site-editor/assets/js/pages/conditions/conditions-rows.js"));
-
 function Conditions(props) {
-  const currentTemplateProps = { ...props,
-    defaultCondition: 'general'
-  },
-        onConditionsSaved = (id, args) => {
-    $e.data.setCache($e.components.get('site-editor'), 'site-editor/templates-conditions', {
-      id
-    }, args.conditions);
-    props.onConditionsSaved(args);
-  };
-
+  const currentTemplateProps = {
+      ...props,
+      defaultCondition: 'general'
+    },
+    onConditionsSaved = (id, args) => {
+      $e.data.setCache($e.components.get('site-editor'), 'site-editor/templates-conditions', {
+        id
+      }, args.conditions);
+      props.onConditionsSaved(args);
+    };
   return /*#__PURE__*/_react.default.createElement("section", {
     className: "e-site-editor-conditions"
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -1506,7 +1342,6 @@ function Conditions(props) {
     onAfterSave: props.onAfterSave
   })));
 }
-
 Conditions.propTypes = {
   id: PropTypes.number,
   status: PropTypes.string.isRequired,
@@ -2667,19 +2502,16 @@ function _extends() {
   module.exports = _extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-
       for (var key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
         }
       }
     }
-
     return target;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   return _extends.apply(this, arguments);
 }
-
 module.exports = _extends, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -2695,7 +2527,6 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ })
@@ -2739,24 +2570,18 @@ var exports = __webpack_exports__;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _component = _interopRequireDefault(__webpack_require__(/*! elementor-pro-app-modules/site-editor/assets/js/data/component */ "../core/app/modules/site-editor/assets/js/data/component.js"));
-
 var _conditionsModal = _interopRequireDefault(__webpack_require__(/*! ./publish-metabox/conditions-modal */ "../modules/custom-code/assets/js/admin/publish-metabox/conditions-modal.js"));
-
 class CustomCode extends elementorModules.Module {
   constructor() {
     super();
     jQuery(this.initialize.bind(this));
   }
-
   initialize() {
     $e.components.register(new _component.default());
     ReactDOM.render( /*#__PURE__*/_react.default.createElement(_conditionsModal.default, null), document.querySelector('.post-conditions'));
@@ -2765,35 +2590,28 @@ class CustomCode extends elementorModules.Module {
     this.addLocationChangeHandler();
     this.setOptionsPlacementVisibility('elementor_body_end' === jQuery('#location').val());
   }
-
   addTipsyToFields() {
     jQuery('.elementor-field-label i[data-info]').tipsy({
       title() {
         return this.getAttribute('data-info');
       },
-
       gravity: () => 's'
     });
   }
-
   addDescription() {
     const description = '<p>' + __('Manage and create all of your custom code here.<br />Organize all of your custom code and incorporate code snippets in your site. Add tracking codes, meta titles, and other scripts. Set display conditions, locations, and priority all from one place.', 'elementor-pro') + '&nbsp;<a target="_blank" href="https://go.elementor.com/wp-dash-custom-code">' + __('Learn more', 'elementor-pro') + '</a>' + '</p>';
     jQuery(description).insertBefore('.wp-header-end');
   }
-
   addLocationChangeHandler() {
     jQuery('#location').on('change', e => {
       this.setOptionsPlacementVisibility('elementor_body_end' === e.target.value);
     });
   }
-
   setOptionsPlacementVisibility(state) {
     const $optionsPlacement = jQuery('.elementor-custom-code-options-placement');
     $optionsPlacement.toggleClass('show', state);
   }
-
 }
-
 exports["default"] = CustomCode;
 elementorProAdmin.customCode = new CustomCode();
 })();

@@ -1,6 +1,7 @@
 <?php
 namespace ElementorPro\Modules\ThemeBuilder\Documents;
 
+use ElementorPro\Core\Utils;
 use ElementorPro\Modules\ThemeBuilder\Module as ThemeBuilderModule;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -42,20 +43,18 @@ abstract class Archive_Single_Base extends Theme_Page_Document {
 	private function save_sub_type_condition() {
 		$conditions_manager = ThemeBuilderModule::instance()->get_conditions_manager();
 
-		if ( ! empty( $_REQUEST[ self::REMOTE_CATEGORY_META_KEY ] ) ) {
-			$sub_type = $_REQUEST[ self::REMOTE_CATEGORY_META_KEY ];
+		$sub_type = Utils::_unstable_get_super_global_value( $_REQUEST, self::REMOTE_CATEGORY_META_KEY ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-			if ( $conditions_manager->get_condition( $sub_type ) ) {
-				$this->update_meta( self::REMOTE_CATEGORY_META_KEY, $sub_type );
+		if ( ! empty( $sub_type ) && $conditions_manager->get_condition( $sub_type ) ) {
+			$this->update_meta( self::REMOTE_CATEGORY_META_KEY, $sub_type );
 
-				$conditions_manager->save_conditions( $this->post->ID, [
-					[
-						'include',
-						$this->get_property( 'condition_type' ),
-						$sub_type,
-					],
-				] );
-			}
+			$conditions_manager->save_conditions( $this->post->ID, [
+				[
+					'include',
+					$this->get_property( 'condition_type' ),
+					$sub_type,
+				],
+			] );
 		}
 	}
 }

@@ -82,6 +82,11 @@ class Plugin {
 	];
 
 	/**
+	 * @var \ElementorPro\License\Updater
+	 */
+	public $updater;
+
+	/**
 	 * Throw error on object clone
 	 *
 	 * The whole idea of the singleton design pattern is that there is a single

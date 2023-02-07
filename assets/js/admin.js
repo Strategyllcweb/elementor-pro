@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.9.0 - 06-12-2022 */
+/*! elementor-pro - v3.10.3 - 29-01-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -15,29 +15,23 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class Module extends elementorModules.Module {
   onInit() {
     this.assignRenewMenuItemAction();
   }
-
   assignRenewMenuItemAction() {
     window.addEventListener('DOMContentLoaded', () => {
       const link = document.querySelector('a[href="elementor_pro_renew_license_menu_link"]');
-
       if (!link) {
         return;
       }
-
       link.addEventListener('click', e => {
         e.preventDefault();
         window.open('https://go.elementor.com/wp-menu-renew/', '_blank');
       });
     });
   }
-
 }
-
 exports["default"] = Module;
 
 /***/ }),
@@ -52,16 +46,12 @@ exports["default"] = Module;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _elementorFontManager = _interopRequireDefault(__webpack_require__(/*! ./admin/elementor-font-manager */ "../modules/assets-manager/assets/js/admin/elementor-font-manager.js"));
-
 var _elementorCustomIcons = _interopRequireDefault(__webpack_require__(/*! ./admin/elementor-custom-icons */ "../modules/assets-manager/assets/js/admin/elementor-custom-icons.js"));
-
 module.exports = function () {
   const TypekitAdmin = __webpack_require__(/*! ./admin/typekit */ "../modules/assets-manager/assets/js/admin/typekit.js"),
-        CustomIcon = _elementorCustomIcons.default,
-        FontAwesomeProAdmin = (__webpack_require__(/*! ./admin/font-awesome-pro */ "../modules/assets-manager/assets/js/admin/font-awesome-pro.js")["default"]);
-
+    CustomIcon = _elementorCustomIcons.default,
+    FontAwesomeProAdmin = (__webpack_require__(/*! ./admin/font-awesome-pro */ "../modules/assets-manager/assets/js/admin/font-awesome-pro.js")["default"]);
   this.fontManager = new _elementorFontManager.default();
   this.typekit = new TypekitAdmin();
   this.fontAwesomePro = new FontAwesomeProAdmin();
@@ -83,7 +73,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class CustomAssetsBase extends elementorModules.ViewModule {
   showAlertDialog(id, message) {
     let onConfirm = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
@@ -92,60 +81,53 @@ class CustomAssetsBase extends elementorModules.ViewModule {
       id,
       message
     };
-
     if (onConfirm) {
       alertData.onConfirm = onConfirm;
     }
-
     if (onHide) {
       alertData.onHide = onHide;
-    } // Save the instance of the alert dialog to check for its visibility later
+    }
 
-
+    // Save the instance of the alert dialog to check for its visibility later
     if (!this.alertWidget) {
       this.alertWidget = elementorCommon.dialogsManager.createWidget('alert', alertData);
     }
-
     this.alertWidget.show();
   }
-
   onDialogDismiss() {
     // WP's publish button gets a disabled class on submit attempt
-    this.elements.$publishButton.removeClass('disabled'); // Prevent WP's publish spinner from appearing on publish attempt
+    this.elements.$publishButton.removeClass('disabled');
 
+    // Prevent WP's publish spinner from appearing on publish attempt
     this.elements.$publishButtonSpinner.removeClass('is-active');
   }
-
   handleSubmit(event) {
     // If we know there is a file already, return to continue submission normally
     if (this.fileWasUploaded) {
       return;
     }
-
     const hasValue = this.checkInputsForValues(); // Method exists in the child classes
-    // If the file input is not empty, continue the submission process
 
+    // If the file input is not empty, continue the submission process
     if (hasValue) {
       this.fileWasUploaded = true;
       this.elements.$postForm.trigger('submit');
       return;
     }
-
     event.preventDefault(); // Prevent new asset submission
-    // If no value was found, stop submission and display a notice modal
 
-    this.showAlertDialog('noData', this.getSettings('notice'), () => this.onDialogDismiss(), // OnConfirm
+    // If no value was found, stop submission and display a notice modal
+    this.showAlertDialog('noData', this.getSettings('notice'), () => this.onDialogDismiss(),
+    // OnConfirm
     () => this.onDialogDismiss() // OnHide
     );
+
     return false;
   }
-
   bindEvents() {
     this.elements.$postForm.on('submit', this.handleSubmit.bind(this));
   }
-
 }
-
 var _default = CustomAssetsBase;
 exports["default"] = _default;
 
@@ -162,16 +144,12 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _customAssetsBase = _interopRequireDefault(__webpack_require__(/*! ./custom-assets-base */ "../modules/assets-manager/assets/js/admin/custom-assets-base.js"));
-
 var _elementorProDropzone = _interopRequireDefault(__webpack_require__(/*! ./fields/elementor-pro-dropzone */ "../modules/assets-manager/assets/js/admin/fields/elementor-pro-dropzone.js"));
-
 class CustomIcons extends _customAssetsBase.default {
   getDefaultSettings() {
     return {
@@ -214,33 +192,27 @@ class CustomIcons extends _customAssetsBase.default {
       notice: __('Upload an icon set to publish.', 'elementor-pro')
     };
   }
-
   getDefaultElements() {
     const elements = {},
-          selectors = this.getSettings('selectors');
+      selectors = this.getSettings('selectors');
     jQuery.each(selectors, (element, selector) => {
       elements['$' + element] = jQuery(selector);
     });
     return elements;
   }
-
   bindEvents() {
     super.bindEvents();
-
     if ('' !== this.getData()) {
       this.bindOnTitleChange();
     }
   }
-
   bindOnTitleChange() {
     const {
-      $title
-    } = this.elements,
-          onTitleInput = event => this.onTitleInput(event);
-
+        $title
+      } = this.elements,
+      onTitleInput = event => this.onTitleInput(event);
     $title.on('input change', onTitleInput);
   }
-
   removeCloseHandle() {
     const {
       $metaboxContainer
@@ -249,12 +221,10 @@ class CustomIcons extends _customAssetsBase.default {
     $metaboxContainer.find('button').remove();
     $metaboxContainer.removeClass('closed').removeClass('postbox');
   }
-
   prepareIconName(icon) {
     const iconName = icon.replace('_', ' ').replace('-', ' ');
     return elementorCommon.helpers.upperCaseWords(iconName);
   }
-
   getCreatedOn() {
     const {
       $dayInput,
@@ -271,22 +241,18 @@ class CustomIcons extends _customAssetsBase.default {
       minute: $minuteInput.val()
     };
   }
-
   enqueueCSS(url) {
     if (!elementorCommon.elements.$document.find('link[href="' + url + '"]').length) {
       elementorCommon.elements.$document.find('link').last().after('<link href="' + url + '" rel="stylesheet" type="text/css">');
     }
   }
-
   setData(data) {
     this.elements.$dataInput.val(JSON.stringify(data));
   }
-
   getData() {
     const value = this.elements.$dataInput.val();
     return '' === value ? '' : JSON.parse(value);
   }
-
   renderIconList(config) {
     const iconTemplate = this.getSettings('templates.icon');
     return config.icons.map(icon => {
@@ -297,7 +263,6 @@ class CustomIcons extends _customAssetsBase.default {
       return elementorCommon.compileTemplate(iconTemplate, data);
     }).join('\n');
   }
-
   renderIcons(config) {
     const {
       $metaboxContainer,
@@ -317,23 +282,19 @@ class CustomIcons extends _customAssetsBase.default {
     $metabox.append('<ul>' + this.renderIconList(config) + '</ul>');
     $metaboxContainer.append(elementorCommon.compileTemplate(footer, this.getCreatedOn()));
   }
-
   onTitleInput(event) {
     const data = this.getData();
     data.label = event.target.value;
     this.setData(data);
   }
-
   checkInputsForValues() {
     // If creating new icon set - check the file input for a value
     // If editing an existing icon set - check the icon set config input for a value
     if ('' !== this.elements.$fileInput.val() || '' !== this.elements.$iconSetConfigInput.val()) {
       return true;
     }
-
     return false;
   }
-
   onSuccess(data) {
     // It is possible to add a `dropzoneElement` param to this method for implementing upload progress bar
     if (data.data.errors) {
@@ -345,15 +306,12 @@ class CustomIcons extends _customAssetsBase.default {
       });
       return this.showAlertDialog(id, message);
     }
-
     if (data.data.config.duplicate_prefix) {
       delete data.data.config.duplicatePrefix;
       return this.showAlertDialog('duplicate-prefix', this.getSettings('templates.duplicatePrefix'), () => this.saveInitialUpload(data.data.config));
     }
-
     this.saveInitialUpload(data.data.config);
   }
-
   saveInitialUpload(config) {
     this.setData(config);
     const {
@@ -362,41 +320,33 @@ class CustomIcons extends _customAssetsBase.default {
       $submitMetabox
     } = this.elements;
     $submitMetabox.show();
-
     if ('' === $title.val()) {
       $title.val(config.name);
     }
-
     this.fileWasUploaded = true; // Flag to prevent infinite loop in the handleSubmit() method
-
     $publishButton.trigger('click');
   }
-
   onInit() {
     var _this = this;
-
     const {
-      $body
-    } = elementorCommon.elements,
-          {
-      editPageClass,
-      editPhp
-    } = this.getSettings('classes');
-
+        $body
+      } = elementorCommon.elements,
+      {
+        editPageClass,
+        editPhp
+      } = this.getSettings('classes');
     if (!$body.hasClass(editPageClass) || $body.hasClass(editPhp)) {
       return;
     }
-
     super.onInit();
     this.removeCloseHandle();
     const dropzoneFieldClass = this.getSettings('fields.dropzone'),
-          dropzoneField = new dropzoneFieldClass(),
-          config = this.getData(),
-          {
-      $dropzone,
-      $metaboxContainer
-    } = this.elements;
-
+      dropzoneField = new dropzoneFieldClass(),
+      config = this.getData(),
+      {
+        $dropzone,
+        $metaboxContainer
+      } = this.elements;
     if ('' === config) {
       $dropzone.show('fast');
       dropzoneField.setSettings('onSuccess', function () {
@@ -405,12 +355,9 @@ class CustomIcons extends _customAssetsBase.default {
     } else {
       this.renderIcons(config);
     }
-
     $metaboxContainer.show('fast');
   }
-
 }
-
 var _default = CustomIcons;
 exports["default"] = _default;
 
@@ -427,18 +374,13 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _customAssetsBase = _interopRequireDefault(__webpack_require__(/*! ./custom-assets-base */ "../modules/assets-manager/assets/js/admin/custom-assets-base.js"));
-
 var _elementorProUpload = _interopRequireDefault(__webpack_require__(/*! ./fields/elementor-pro-upload */ "../modules/assets-manager/assets/js/admin/fields/elementor-pro-upload.js"));
-
 var _elementorProRepeater = _interopRequireDefault(__webpack_require__(/*! ./fields/elementor-pro-repeater */ "../modules/assets-manager/assets/js/admin/fields/elementor-pro-repeater.js"));
-
 class CustomFontsManager extends _customAssetsBase.default {
   getDefaultSettings() {
     return {
@@ -469,7 +411,6 @@ class CustomFontsManager extends _customAssetsBase.default {
       fontLabelTemplate: '<ul class="row-font-label">' + '<li class="row-font-weight">{{weight}}</li>' + '<li class="row-font-style">{{style}}</li>' + '<li class="row-font-preview">{{preview}}</li>' + '{{toolbar}}' + '</ul>'
     };
   }
-
   getDefaultElements() {
     const selectors = this.getSettings('selectors');
     return {
@@ -481,57 +422,47 @@ class CustomFontsManager extends _customAssetsBase.default {
       $title: jQuery(selectors.title)
     };
   }
-
   renderTemplate(tpl, data) {
     const re = /{{([^}}]+)?}}/g;
     let match;
-
     while (match = re.exec(tpl)) {
       // eslint-disable-line no-cond-assign
       tpl = tpl.replace(match[0], data[match[1]]);
     }
-
     return tpl;
   }
-
   ucFirst(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-
   getPreviewStyle($table) {
     const selectors = this.getSettings('selectors'),
-          fontFamily = this.elements.$title.val(),
-          style = $table.find('select' + selectors.styleInput).first().val(),
-          weight = $table.find('select' + selectors.weightInput).first().val();
+      fontFamily = this.elements.$title.val(),
+      style = $table.find('select' + selectors.styleInput).first().val(),
+      weight = $table.find('select' + selectors.weightInput).first().val();
     return {
       style: this.ucFirst(style),
       weight: this.ucFirst(weight),
       styleAttribute: 'font-family: ' + fontFamily + ' ;font-style: ' + style + '; font-weight: ' + weight + ';'
     };
   }
-
   updateRowLabel(event, $table) {
     const selectors = this.getSettings('selectors'),
-          fontLabelTemplate = this.getSettings('fontLabelTemplate'),
-          $block = $table.closest(selectors.repeaterBlock),
-          $deleteBtn = $block.find(selectors.removeRowBtn).first(),
-          $editBtn = $block.find(selectors.editRowBtn).first(),
-          $closeBtn = $block.find(selectors.closeRowBtn).first(),
-          $toolbar = $table.find(selectors.toolbar).last().clone(),
-          previewStyle = this.getPreviewStyle($table);
-
+      fontLabelTemplate = this.getSettings('fontLabelTemplate'),
+      $block = $table.closest(selectors.repeaterBlock),
+      $deleteBtn = $block.find(selectors.removeRowBtn).first(),
+      $editBtn = $block.find(selectors.editRowBtn).first(),
+      $closeBtn = $block.find(selectors.closeRowBtn).first(),
+      $toolbar = $table.find(selectors.toolbar).last().clone(),
+      previewStyle = this.getPreviewStyle($table);
     if ($editBtn.length > 0) {
       $editBtn.not(selectors.toolbar + ' ' + selectors.editRowBtn).remove();
     }
-
     if ($closeBtn.length > 0) {
       $closeBtn.not(selectors.toolbar + ' ' + selectors.closeRowBtn).remove();
     }
-
     if ($deleteBtn.length > 0) {
       $deleteBtn.not(selectors.toolbar + ' ' + selectors.removeRowBtn).remove();
     }
-
     const toolbarHtml = jQuery('<li class="row-font-actions">').append($toolbar)[0].outerHTML;
     return this.renderTemplate(fontLabelTemplate, {
       weight: '<span class="label">Weight:</span>' + previewStyle.weight,
@@ -540,82 +471,70 @@ class CustomFontsManager extends _customAssetsBase.default {
       toolbar: toolbarHtml
     });
   }
-
   onRepeaterToggleVisible(event, $btn, $table) {
     const selectors = this.getSettings('selectors'),
-          $previewElement = $table.find(selectors.inlinePreview),
-          previewStyle = this.getPreviewStyle($table);
+      $previewElement = $table.find(selectors.inlinePreview),
+      previewStyle = this.getPreviewStyle($table);
     $previewElement.attr('style', previewStyle.styleAttribute);
   }
-
   onRepeaterNewRow(event, $btn, $block) {
     const selectors = this.getSettings('selectors');
     $block.find(selectors.removeRowBtn).first().remove();
     $block.find(selectors.editRowBtn).first().remove();
     $block.find(selectors.closeRowBtn).first().remove();
   }
-
   maybeToggle(event) {
     event.preventDefault();
     const selectors = this.getSettings('selectors');
-
     if (jQuery(this).is(':visible') && !jQuery(event.target).hasClass(selectors.editRowBtn)) {
       jQuery(this).find(selectors.editRowBtn).trigger('click');
     }
   }
-
   onInputChange(event) {
     const $el = jQuery(event.target).next(),
-          fields = this.getSettings('fields');
+      fields = this.getSettings('fields');
     fields.upload.setFields($el);
     fields.upload.setLabels($el);
     fields.upload.replaceButtonClass($el);
   }
-
   bindEvents() {
     const selectors = this.getSettings('selectors');
     jQuery(document).on('repeaterComputedLabel', this.updateRowLabel.bind(this)).on('onRepeaterToggleVisible', this.onRepeaterToggleVisible.bind(this)).on('onRepeaterNewRow', this.onRepeaterNewRow.bind(this)).on('click', selectors.repeaterTitle, this.maybeToggle.bind(this)).on('input', selectors.fileUrlInput, this.onInputChange.bind(this));
     super.bindEvents();
   }
-
   checkInputsForValues() {
     const selectors = this.getSettings('selectors');
-    let hasValue = false; // Check the file inputs for a value
+    let hasValue = false;
 
+    // Check the file inputs for a value
     jQuery(selectors.fileUrlInput).each((index, element) => {
       if ('' !== jQuery(element).val()) {
         hasValue = true;
         return false; // If a value was found, break the loop
       }
     });
+
     return hasValue;
   }
-
   removeCloseHandle() {
     this.elements.$closeHandle.remove();
     this.elements.$customFontsMetaBox.removeClass('closed').removeClass('postbox');
   }
-
   titleRequired() {
     this.elements.$title.prop('required', true);
   }
-
   onInit() {
     const settings = this.getSettings();
-
     if (!jQuery('body').hasClass(settings.selectors.editPageClass)) {
       return;
     }
-
     super.onInit(...arguments);
     this.removeCloseHandle();
     this.titleRequired();
     settings.fields.upload.init();
     settings.fields.repeater.init();
   }
-
 }
-
 exports["default"] = CustomFontsManager;
 
 /***/ }),
@@ -633,7 +552,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class DropZoneField extends elementorModules.ViewModule {
   getDefaultSettings() {
     const baseSelector = '.elementor-dropzone-field';
@@ -658,7 +576,6 @@ class DropZoneField extends elementorModules.ViewModule {
       onError: null
     };
   }
-
   getDefaultElements() {
     const elements = {};
     const selectors = this.getSettings('selectors');
@@ -667,7 +584,6 @@ class DropZoneField extends elementorModules.ViewModule {
     });
     return elements;
   }
-
   bindEvents() {
     const {
       $dropZone,
@@ -691,37 +607,33 @@ class DropZoneField extends elementorModules.ViewModule {
       } else {
         this.setSettings('droppedFiles', event.originalEvent.dataTransfer.files);
       }
-
       this.handleUpload();
     });
   }
-
   handleUpload() {
     const droppedFiles = this.getSettings('droppedFiles');
-
     if (!droppedFiles) {
       return;
     }
-
     const {
-      $input,
-      $dropZone,
-      $postId,
-      $errorMsg
-    } = this.elements,
-          {
-      error,
-      success,
-      upload
-    } = this.getSettings('classes'),
-          {
-      onSuccess,
-      onError
-    } = this.getSettings(),
-          ajaxData = new FormData(),
-          fieldName = $input.attr('name'),
-          actionKey = 'pro_assets_manager_custom_icon_upload',
-          self = this;
+        $input,
+        $dropZone,
+        $postId,
+        $errorMsg
+      } = this.elements,
+      {
+        error,
+        success,
+        upload
+      } = this.getSettings('classes'),
+      {
+        onSuccess,
+        onError
+      } = this.getSettings(),
+      ajaxData = new FormData(),
+      fieldName = $input.attr('name'),
+      actionKey = 'pro_assets_manager_custom_icon_upload',
+      self = this;
     Object.entries(droppedFiles).forEach(file => {
       ajaxData.append(fieldName, file[1]);
     });
@@ -741,7 +653,6 @@ class DropZoneField extends elementorModules.ViewModule {
       contentType: false,
       processData: false,
       // TODO: Do something with upload progress
-
       /* xhr: () => {
       	const xhr = jQuery.ajaxSettings.xhr();
       	xhr.upload.onprogress = ( evt ) => {
@@ -757,14 +668,12 @@ class DropZoneField extends elementorModules.ViewModule {
       success: response => {
         const data = response.responses[actionKey];
         $dropZone.addClass(data.success ? success : error);
-
         if (data.success) {
           if (onSuccess) {
             onSuccess(data, self);
           }
         } else {
           $errorMsg.text(data.error);
-
           if (onError) {
             onError(self, arguments);
           }
@@ -777,14 +686,11 @@ class DropZoneField extends elementorModules.ViewModule {
       }
     });
   }
-
   onInit() {
     super.onInit();
     elementorCommon.elements.$document.trigger('onDropzoneLoaded', [this]);
   }
-
 }
-
 var _default = DropZoneField;
 exports["default"] = _default;
 
@@ -812,46 +718,38 @@ module.exports = {
     repeaterField: '.elementor-field-repeater'
   },
   counters: [],
-
   trigger(eventName, params) {
     jQuery(document).trigger(eventName, params);
   },
-
   triggerHandler(eventName, params) {
     return jQuery(document).triggerHandler(eventName, params);
   },
-
   countBlocks($btn) {
     return $btn.closest(this.selectors.repeaterField).find(this.selectors.block).length || 0;
   },
-
   add(btn) {
     var self = this,
-        $btn = jQuery(btn),
-        id = $btn.data('template-id'),
-        repeaterBlock;
-
+      $btn = jQuery(btn),
+      id = $btn.data('template-id'),
+      repeaterBlock;
     if (!Object.prototype.hasOwnProperty.call(self.counters, id)) {
       self.counters[id] = self.countBlocks($btn);
     }
-
     self.counters[id] += 1;
     repeaterBlock = jQuery('#' + id).html();
     repeaterBlock = self.replaceAll('__counter__', self.counters[id], repeaterBlock);
     $btn.before(repeaterBlock);
     self.trigger('onRepeaterNewRow', [$btn, $btn.prev()]);
   },
-
   remove(btn) {
     var self = this;
     jQuery(btn).closest(self.selectors.block).remove();
   },
-
   toggle(btn) {
     var self = this,
-        $btn = jQuery(btn),
-        $table = $btn.closest(self.selectors.block).find(self.selectors.table),
-        $toggleLabel = $btn.closest(self.selectors.block).find(self.selectors.repeaterLabel);
+      $btn = jQuery(btn),
+      $table = $btn.closest(self.selectors.block).find(self.selectors.table),
+      $toggleLabel = $btn.closest(self.selectors.block).find(self.selectors.repeaterLabel);
     $table.toggle(0, 'none', function () {
       if ($table.is(':visible')) {
         $table.closest(self.selectors.block).addClass('block-visible');
@@ -861,72 +759,66 @@ module.exports = {
         self.trigger('onRepeaterToggleHidden', [$btn, $table, $toggleLabel]);
       }
     });
-    $toggleLabel.toggle(); // Update row label
+    $toggleLabel.toggle();
 
+    // Update row label
     self.updateRowLabel(btn);
   },
-
   close(btn) {
     var self = this,
-        $btn = jQuery(btn),
-        $table = $btn.closest(self.selectors.block).find(self.selectors.table),
-        $toggleLabel = $btn.closest(self.selectors.block).find(self.selectors.repeaterLabel);
+      $btn = jQuery(btn),
+      $table = $btn.closest(self.selectors.block).find(self.selectors.table),
+      $toggleLabel = $btn.closest(self.selectors.block).find(self.selectors.repeaterLabel);
     $table.closest(self.selectors.block).removeClass('block-visible');
     $table.hide();
     self.trigger('onRepeaterToggleHidden', [$btn, $table, $toggleLabel]);
     $toggleLabel.show();
     self.updateRowLabel(btn);
   },
-
   updateRowLabel(btn) {
     var self = this,
-        $btn = jQuery(btn),
-        $table = $btn.closest(self.selectors.block).find(self.selectors.table),
-        $toggleLabel = $btn.closest(self.selectors.block).find(self.selectors.repeaterLabel);
-    var selector = $toggleLabel.data('selector'); // For some browsers, `attr` is undefined; for others,  `attr` is false.  Check for both.
-
+      $btn = jQuery(btn),
+      $table = $btn.closest(self.selectors.block).find(self.selectors.table),
+      $toggleLabel = $btn.closest(self.selectors.block).find(self.selectors.repeaterLabel);
+    var selector = $toggleLabel.data('selector');
+    // For some browsers, `attr` is undefined; for others,  `attr` is false.  Check for both.
     if (typeof selector !== typeof undefined && false !== selector) {
       var value = false,
-          std = $toggleLabel.data('default');
-
+        std = $toggleLabel.data('default');
       if ($table.find(selector).length) {
         value = $table.find(selector).val();
-      } // Filter hook
+      }
 
+      // Filter hook
+      var computedLabel = self.triggerHandler('repeaterComputedLabel', [$table, $toggleLabel, value]);
 
-      var computedLabel = self.triggerHandler('repeaterComputedLabel', [$table, $toggleLabel, value]); // For some browsers, `attr` is undefined; for others,  `attr` is false.  Check for both.
-
+      // For some browsers, `attr` is undefined; for others,  `attr` is false.  Check for both.
       if (undefined !== computedLabel && false !== computedLabel) {
         value = computedLabel;
-      } // Fallback to default row label
+      }
 
-
+      // Fallback to default row label
       if (undefined === value || false === value) {
         value = std;
       }
-
       $toggleLabel.html(value);
     }
   },
-
   replaceAll(search, replace, string) {
     return string.replace(new RegExp(search, 'g'), replace);
   },
-
   init() {
     var self = this;
     jQuery(document).on('click', this.selectors.add, function (event) {
       event.preventDefault();
       self.add(jQuery(this), event);
     }).on('click', this.selectors.remove, function (event) {
-      event.preventDefault(); // eslint-disable-next-line no-alert
-
+      event.preventDefault();
+      // eslint-disable-next-line no-alert
       var result = confirm(jQuery(this).data('confirm').toString());
-
       if (!result) {
         return;
       }
-
       self.remove(jQuery(this), event);
     }).on('click', this.selectors.toggle, function (event) {
       event.preventDefault();
@@ -942,7 +834,6 @@ module.exports = {
     });
     this.trigger('onRepeaterLoaded', [this]);
   }
-
 };
 
 /***/ }),
@@ -968,11 +859,9 @@ module.exports = {
     clearBtn: '.elementor-upload-clear-btn',
     inputURLField: '.elementor-field-file input[type="text"]'
   },
-
   hasValue() {
     return '' !== jQuery(this.fileUrl).val();
   },
-
   setLabels($el) {
     if (!this.hasValue()) {
       $el.val($el.data('upload_text'));
@@ -980,24 +869,21 @@ module.exports = {
       $el.val($el.data('remove_text'));
     }
   },
-
   setFields(el) {
     const self = this;
     self.fileUrl = jQuery(el).prev();
     self.fileId = jQuery(self.fileUrl).prev();
   },
-
   setUploadParams(ext, name) {
     const uploader = this.fileFrame[name].uploader.uploader;
     uploader.param('uploadType', ext);
     uploader.param('uploadTypeCaller', 'elementor-admin-font-upload');
     uploader.param('post_id', this.getPostId());
   },
-
   setUploadMimeType(frame, ext) {
     // Set {ext} as only allowed upload extensions
     const oldExtensions = _wpPluploadSettings.defaults.filters.mime_types[0].extensions,
-          self = this;
+      self = this;
     frame.on('ready', () => {
       _wpPluploadSettings.defaults.filters.mime_types[0].extensions = ext;
     });
@@ -1007,34 +893,30 @@ module.exports = {
       self.replaceButtonClass(self.$btn);
     });
   },
-
   replaceButtonClass(el) {
     if (this.hasValue()) {
       jQuery(el).removeClass(this.selectors.uploadBtnClass).addClass(this.selectors.clearBtnClass);
     } else {
       jQuery(el).removeClass(this.selectors.clearBtnClass).addClass(this.selectors.uploadBtnClass);
     }
-
     this.setLabels(el);
   },
-
   uploadFile(el) {
     const self = this,
-          $el = jQuery(el),
-          mime = $el.attr('data-mime_type') || '',
-          ext = $el.attr('data-ext') || false,
-          name = $el.attr('id'); // If the media frame already exists, reopen it.
-
+      $el = jQuery(el),
+      mime = $el.attr('data-mime_type') || '',
+      ext = $el.attr('data-ext') || false,
+      name = $el.attr('id');
+    // If the media frame already exists, reopen it.
     if ('undefined' !== typeof self.fileFrame[name]) {
       if (ext) {
         self.setUploadParams(ext, name);
       }
-
       self.fileFrame[name].open();
       return;
-    } // Create the media frame.
+    }
 
-
+    // Create the media frame.
     self.fileFrame[name] = wp.media({
       library: {
         type: [...mime.split(','), mime.split(',').join('')]
@@ -1044,12 +926,13 @@ module.exports = {
         text: $el.data('box_action')
       },
       multiple: false
-    }); // When an file is selected, run a callback.
+    });
 
+    // When an file is selected, run a callback.
     self.fileFrame[name].on('select', function () {
       // We set multiple to false so only get one image from the uploader
-      const attachment = self.fileFrame[name].state().get('selection').first().toJSON(); // Do something with attachment.id and/or attachment.url here
-
+      const attachment = self.fileFrame[name].state().get('selection').first().toJSON();
+      // Do something with attachment.id and/or attachment.url here
       jQuery(self.fileId).val(attachment.id);
       jQuery(self.fileUrl).val(attachment.url);
       self.replaceButtonClass(el);
@@ -1057,42 +940,35 @@ module.exports = {
     });
     self.fileFrame[name].on('open', () => {
       const selectedId = this.fileId.val();
-
       if (!selectedId) {
         return;
       }
-
       const selection = self.fileFrame[name].state().get('selection');
       selection.add(wp.media.attachment(selectedId));
     });
-    self.setUploadMimeType(self.fileFrame[name], ext); // Finally, open the modal
+    self.setUploadMimeType(self.fileFrame[name], ext);
 
+    // Finally, open the modal
     self.fileFrame[name].open();
-
     if (ext) {
       self.setUploadParams(ext, name);
     }
   },
-
   updatePreview(el) {
     const self = this,
-          $ul = jQuery(el).parent().find('ul'),
-          $li = jQuery('<li>'),
-          showUrlType = jQuery(el).data('preview_anchor') || 'full';
+      $ul = jQuery(el).parent().find('ul'),
+      $li = jQuery('<li>'),
+      showUrlType = jQuery(el).data('preview_anchor') || 'full';
     $ul.html('');
-
     if (self.hasValue() && 'none' !== showUrlType) {
       let anchor = jQuery(self.fileUrl).val();
-
       if ('full' !== showUrlType) {
         anchor = anchor.substring(anchor.lastIndexOf('/') + 1);
       }
-
       $li.html('<a href="' + jQuery(self.fileUrl).val() + '" download>' + anchor + '</a>');
       $ul.append($li);
     }
   },
-
   setup() {
     const self = this;
     jQuery(self.selectors.uploadBtn + ', ' + self.selectors.clearBtn).each(function () {
@@ -1102,33 +978,27 @@ module.exports = {
       self.replaceButtonClass(jQuery(this));
     });
   },
-
   getPostId() {
     return jQuery('#post_ID').val();
   },
-
   handleUploadClick(event) {
     event.preventDefault();
     const $element = jQuery(event.target);
-
     if ('text' === $element.attr('type')) {
       return $element.next().removeClass(this.selectors.clearBtnClass).addClass(this.selectors.uploadBtnClass).trigger('click');
     }
-
     this.$btn = $element;
     this.setFields($element);
     this.uploadFile($element);
   },
-
   init() {
     const self = this,
-          {
-      uploadBtn,
-      inputURLField,
-      clearBtn
-    } = this.selectors,
-          handleUpload = event => this.handleUploadClick(event);
-
+      {
+        uploadBtn,
+        inputURLField,
+        clearBtn
+      } = this.selectors,
+      handleUpload = event => this.handleUploadClick(event);
     jQuery(document).on('click', uploadBtn, handleUpload);
     jQuery(document).on('click', inputURLField, event => {
       if ('' !== event.target.value) {
@@ -1149,7 +1019,6 @@ module.exports = {
       self.setup();
     });
   }
-
 };
 
 /***/ }),
@@ -1167,7 +1036,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends elementorModules.ViewModule {
   getDefaultSettings() {
     return {
@@ -1177,7 +1045,6 @@ class _default extends elementorModules.ViewModule {
       }
     };
   }
-
   getDefaultElements() {
     const elements = {};
     const selectors = this.getSettings('selectors');
@@ -1186,7 +1053,6 @@ class _default extends elementorModules.ViewModule {
     });
     return elements;
   }
-
   bindEvents() {
     const {
       $button,
@@ -1200,17 +1066,14 @@ class _default extends elementorModules.ViewModule {
       this.setState('clear');
     });
   }
-
   setState(type) {
     const classes = ['loading', 'success', 'error'],
-          {
-      $button
-    } = this.elements;
+      {
+        $button
+      } = this.elements;
     let currentClass, classIndex;
-
     for (classIndex in classes) {
       currentClass = classes[classIndex];
-
       if (type === currentClass) {
         $button.addClass(currentClass);
       } else {
@@ -1218,17 +1081,14 @@ class _default extends elementorModules.ViewModule {
       }
     }
   }
-
   testKitUrl() {
     this.setState('loading');
     const self = this,
-          kitID = this.elements.$kitIdField.val();
-
+      kitID = this.elements.$kitIdField.val();
     if ('' === kitID) {
       this.setState('clear');
       return;
     }
-
     jQuery.ajax({
       url: 'https://kit.fontawesome.com/' + kitID + '.js',
       method: 'GET',
@@ -1241,9 +1101,7 @@ class _default extends elementorModules.ViewModule {
       }
     });
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -1259,7 +1117,6 @@ exports["default"] = _default;
 
 module.exports = function () {
   var self = this;
-
   self.cacheElements = function () {
     this.cache = {
       $button: jQuery('#elementor_pro_typekit_validate_button'),
@@ -1267,7 +1124,6 @@ module.exports = function () {
       $dataLabelSpan: jQuery('.elementor-pro-typekit-data')
     };
   };
-
   self.bindEvents = function () {
     this.cache.$button.on('click', function (event) {
       event.preventDefault();
@@ -1277,17 +1133,14 @@ module.exports = function () {
       self.setState('clear');
     });
   };
-
   self.fetchFonts = function () {
     this.setState('loading');
     this.cache.$dataLabelSpan.addClass('hidden');
     var kitID = this.cache.$kitIdField.val();
-
     if ('' === kitID) {
       this.setState('clear');
       return;
     }
-
     jQuery.post(ajaxurl, {
       action: 'elementor_pro_admin_fetch_fonts',
       kit_id: kitID,
@@ -1305,15 +1158,12 @@ module.exports = function () {
       self.setState();
     });
   };
-
   self.setState = function (type) {
     var classes = ['loading', 'success', 'error'],
-        currentClass,
-        classIndex;
-
+      currentClass,
+      classIndex;
     for (classIndex in classes) {
       currentClass = classes[classIndex];
-
       if (type === currentClass) {
         this.cache.$button.addClass(currentClass);
       } else {
@@ -1321,12 +1171,10 @@ module.exports = function () {
       }
     }
   };
-
   self.init = function () {
     this.cacheElements();
     this.bindEvents();
   };
-
   self.init();
 };
 
@@ -1343,7 +1191,6 @@ module.exports = function () {
 
 module.exports = function () {
   var ApiValidations = __webpack_require__(/*! ./admin/api-validations */ "../modules/forms/assets/js/admin/api-validations.js");
-
   this.dripButton = new ApiValidations('drip_api_token');
   this.getResponse = new ApiValidations('getresponse_api_key');
   this.convertKit = new ApiValidations('convertkit_api_key');
@@ -1365,7 +1212,6 @@ module.exports = function () {
 
 module.exports = function (key, fieldID) {
   var self = this;
-
   self.cacheElements = function () {
     this.cache = {
       $button: jQuery('#elementor_pro_' + key + '_button'),
@@ -1373,7 +1219,6 @@ module.exports = function (key, fieldID) {
       $apiUrlField: jQuery('#elementor_pro_' + fieldID)
     };
   };
-
   self.bindEvents = function () {
     this.cache.$button.on('click', function (event) {
       event.preventDefault();
@@ -1383,21 +1228,17 @@ module.exports = function (key, fieldID) {
       self.setState('clear');
     });
   };
-
   self.validateApi = function () {
     this.setState('loading');
     var apiKey = this.cache.$apiKeyField.val();
-
     if ('' === apiKey) {
       this.setState('clear');
       return;
     }
-
     if (this.cache.$apiUrlField.length && '' === this.cache.$apiUrlField.val()) {
       this.setState('clear');
       return;
     }
-
     jQuery.post(ajaxurl, {
       action: self.cache.$button.data('action'),
       api_key: apiKey,
@@ -1413,15 +1254,12 @@ module.exports = function (key, fieldID) {
       self.setState();
     });
   };
-
   self.setState = function (type) {
     var classes = ['loading', 'success', 'error'],
-        currentClass,
-        classIndex;
-
+      currentClass,
+      classIndex;
     for (classIndex in classes) {
       currentClass = classes[classIndex];
-
       if (type === currentClass) {
         this.cache.$button.addClass(currentClass);
       } else {
@@ -1429,12 +1267,10 @@ module.exports = function (key, fieldID) {
       }
     }
   };
-
   self.init = function () {
     this.cacheElements();
     this.bindEvents();
   };
-
   self.init();
 };
 
@@ -1451,7 +1287,6 @@ module.exports = function (key, fieldID) {
 
 module.exports = function () {
   var EditButton = __webpack_require__(/*! ./admin/edit-button */ "../modules/library/assets/js/admin/edit-button.js");
-
   this.editButton = new EditButton();
 };
 
@@ -1468,25 +1303,21 @@ module.exports = function () {
 
 module.exports = function () {
   var self = this;
-
   self.init = function () {
     jQuery(document).on('change', '.elementor-widget-template-select', function () {
       var $this = jQuery(this),
-          templateID = $this.val(),
-          $editButton = $this.parents('p').find('.elementor-edit-template'),
-          type = $this.find('[value="' + templateID + '"]').data('type');
-
+        templateID = $this.val(),
+        $editButton = $this.parents('p').find('.elementor-edit-template'),
+        type = $this.find('[value="' + templateID + '"]').data('type');
       if ('page' !== type) {
         // 'widget' is editable only from Elementor page
         $editButton.hide();
         return;
       }
-
       var editUrl = elementorAdmin.config.home_url + '?p=' + templateID + '&elementor';
       $editButton.prop('href', editUrl).show();
     });
   };
-
   self.init();
 };
 
@@ -1503,7 +1334,6 @@ module.exports = function () {
 
 module.exports = function () {
   const ApiValidations = __webpack_require__(/*! ./admin/api-validations */ "../modules/payments/assets/js/admin/api-validations.js");
-
   this.stripeTestSecretKey = new ApiValidations('stripe_test_secret_key');
   this.stripeLiveSecretKey = new ApiValidations('stripe_live_secret_key');
 };
@@ -1521,14 +1351,12 @@ module.exports = function () {
 
 module.exports = function (key) {
   var self = this;
-
   self.cacheElements = function () {
     this.cache = {
       $button: jQuery('#elementor_pro_' + key + '_button'),
       $apiKeyField: jQuery('#elementor_pro_' + key)
     };
   };
-
   self.bindEvents = function () {
     this.cache.$button.on('click', function (event) {
       event.preventDefault();
@@ -1538,16 +1366,13 @@ module.exports = function (key) {
       self.setState('clear');
     });
   };
-
   self.validateApi = function () {
     this.setState('loading');
     var apiKey = this.cache.$apiKeyField.val();
-
     if ('' === apiKey) {
       this.setState('clear');
       return;
     }
-
     jQuery.post(ajaxurl, {
       action: self.cache.$button.data('action'),
       secret_key: apiKey,
@@ -1562,15 +1387,12 @@ module.exports = function (key) {
       self.setState();
     });
   };
-
   self.setState = function (type) {
     var classes = ['loading', 'success', 'error'],
-        currentClass,
-        classIndex;
-
+      currentClass,
+      classIndex;
     for (classIndex in classes) {
       currentClass = classes[classIndex];
-
       if (type === currentClass) {
         this.cache.$button.addClass(currentClass);
       } else {
@@ -1578,12 +1400,10 @@ module.exports = function (key) {
       }
     }
   };
-
   self.init = function () {
     this.cacheElements();
     this.bindEvents();
   };
-
   self.init();
 };
 
@@ -1602,24 +1422,18 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends elementorModules.Module {
   constructor() {
     var _elementorModules$adm;
-
     super();
-
     if (!((_elementorModules$adm = elementorModules.admin) !== null && _elementorModules$adm !== void 0 && _elementorModules$adm.MenuHandler)) {
       return;
     }
-
     new elementorModules.admin.MenuHandler({
       path: 'edit.php?post_type=elementor_library&tabs_group=popup&elementor_library_type=popup'
     });
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -1635,7 +1449,6 @@ exports["default"] = _default;
 
 module.exports = function () {
   var AdvancedRoleManager = __webpack_require__(/*! ./admin/role-mananger */ "../modules/role-manager/assets/js/admin/role-mananger.js");
-
   this.advancedRoleManager = new AdvancedRoleManager();
 };
 
@@ -1652,40 +1465,33 @@ module.exports = function () {
 
 module.exports = function () {
   var self = this;
-
   self.cacheElements = function () {
     this.cache = {
       $checkBox: jQuery('input[name="elementor_exclude_user_roles[]"]'),
       $advanced: jQuery('#elementor_advanced_role_manager')
     };
   };
-
   self.bindEvents = function () {
     this.cache.$checkBox.on('change', function (event) {
       event.preventDefault();
       self.checkBoxUpdate(jQuery(this));
     });
   };
-
   self.checkBoxUpdate = function ($element) {
     var role = $element.val();
-
     if ($element.is(':checked')) {
       self.cache.$advanced.find('div.' + role).addClass('hidden');
     } else {
       self.cache.$advanced.find('div.' + role).removeClass('hidden');
     }
   };
-
   self.init = function () {
     if (!jQuery('body').hasClass('elementor_page_elementor-role-manager')) {
       return;
     }
-
     this.cacheElements();
     this.bindEvents();
   };
-
   self.init();
 };
 
@@ -1702,7 +1508,6 @@ module.exports = function () {
 
 module.exports = function () {
   var CreateTemplateDialog = __webpack_require__(/*! ./create-template-dialog */ "../modules/theme-builder/assets/js/admin/create-template-dialog.js");
-
   this.createTemplateDialog = new CreateTemplateDialog();
 };
 
@@ -1728,35 +1533,30 @@ module.exports = function () {
     $locationWrapper: null,
     $postTypeWrapper: null
   };
-
   var setElements = function () {
     jQuery.each(selectors, function (key, selector) {
       key = '$' + key;
       elements[key] = elementorNewTemplate.layout.getModal().getElements('content').find(selector);
     });
   };
-
   var setLocationFieldVisibility = function () {
     elements.$locationWrapper.toggle('section' === elements.$templateTypeInput.val());
     elements.$postTypeWrapper.toggle('single' === elements.$templateTypeInput.val());
   };
-
   var run = function () {
     setElements();
     setLocationFieldVisibility();
     elements.$templateTypeInput.on('change', setLocationFieldVisibility);
   };
-
   this.init = function () {
     if (!window.elementorNewTemplate) {
       return;
-    } // Make sure the modal has already been initialized
+    }
 
-
+    // Make sure the modal has already been initialized
     elementorNewTemplate.layout.getModal();
     run();
   };
-
   jQuery(setTimeout.bind(window, this.init));
 };
 
@@ -1784,7 +1584,6 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ })
@@ -1826,11 +1625,8 @@ var __webpack_exports__ = {};
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _admin = _interopRequireDefault(__webpack_require__(/*! modules/popup/assets/js/admin/admin */ "../modules/popup/assets/js/admin/admin.js"));
-
 var _admin2 = _interopRequireDefault(__webpack_require__(/*! ../../../../license/assets/js/admin */ "../license/assets/js/admin.js"));
-
 const modules = {
   widget_template_edit_button: __webpack_require__(/*! modules/library/assets/js/admin */ "../modules/library/assets/js/admin.js"),
   forms_integrations: __webpack_require__(/*! modules/forms/assets/js/admin */ "../modules/forms/assets/js/admin.js"),

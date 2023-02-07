@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.9.0 - 06-12-2022 */
+/*! elementor-pro - v3.10.3 - 29-01-2023 */
 .elementor-document-handle {
   display: none;
   align-items: center;
@@ -87,22 +87,23 @@
 .elementor-document-handle.elementor-document-save-back-handle .eicon-arrow-right {
   margin-left: 5px;
 }
-.elementor-widget-loop-grid .elementor-edit-area-active[data-editable-elementor-document] {
+.elementor-loop-container > div.elementor-edit-area-active:first-of-type {
   border: 1px solid #fcb92c;
 }
-.elementor-widget-loop-grid .elementor-edit-area-active .elementor-document-save-back-handle {
+
+div[class*=elementor-widget-loop] .elementor-edit-area-active[data-editable-elementor-document] {
+  border: 1px solid #fcb92c;
+}
+div[class*=elementor-widget-loop] .elementor-edit-area-active .elementor-document-save-back-handle {
   display: flex;
   line-height: initial;
   white-space: nowrap;
 }
-.elementor-widget-loop-grid #elementor-add-new-section {
+div[class*=elementor-widget-loop] #elementor-add-new-section {
   margin: 30px auto;
 }
-.elementor-widget-loop-grid .elementor-add-section-inner {
+div[class*=elementor-widget-loop] .elementor-add-section-inner {
   padding: 15px 0;
-}
-.elementor-loop-container > div.elementor-edit-area-active:first-of-type {
-  border: 1px solid #fcb92c;
 }
 
 .elementor-edit-area-active[data-elementor-type=loop-item] .elementor-add-template-button {
@@ -124,14 +125,14 @@
   min-height: 0;
 }
 
-.elementor-editor-active .elementor-widget-loop-grid .elementor:not([data-editable-elementor-document]):hover {
+.elementor-editor-active [class*=elementor-widget-loop] .elementor:not([data-editable-elementor-document]):hover {
   box-shadow: initial;
 }
 
-.elementor-editor-active .elementor-widget-loop-grid:hover [data-editable-elementor-document] {
+.elementor-editor-active [class*=elementor-widget-loop]:hover [data-editable-elementor-document] {
   box-shadow: 0 0 0 1px #fcb92c;
 }
-.elementor-editor-active .elementor-widget-loop-grid:hover .elementor-document-handle:not(.elementor-document-save-back-handle) {
+.elementor-editor-active [class*=elementor-widget-loop]:hover .elementor-document-handle:not(.elementor-document-save-back-handle) {
   display: flex;
   line-height: initial;
   white-space: nowrap;

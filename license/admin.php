@@ -4,6 +4,7 @@ namespace ElementorPro\License;
 use Elementor\Core\Admin\Admin_Notices;
 use Elementor\Settings;
 use Elementor\Utils;
+use ElementorPro\Core\Utils as Pro_Utils;
 use ElementorPro\Core\Connect\Apps\Activate;
 use ElementorPro\License\Notices\Trial_Expired_Notice;
 use ElementorPro\License\Notices\Trial_Period_Notice;
@@ -105,13 +106,13 @@ class Admin {
 	public function action_activate_license() {
 		check_admin_referer( 'elementor-pro-license' );
 
-		if ( empty( $_POST['elementor_pro_license_key'] ) ) {
+		$license_key = Pro_Utils::_unstable_get_super_global_value( $_POST, 'elementor_pro_license_key' );
+
+		if ( ! $license_key ) {
 			wp_die( esc_html__( 'Please enter your license key.', 'elementor-pro' ), esc_html__( 'Elementor Pro', 'elementor-pro' ), [
 				'back_link' => true,
 			] );
 		}
-
-		$license_key = trim( $_POST['elementor_pro_license_key'] );
 
 		$data = API::activate_license( $license_key );
 
@@ -131,7 +132,7 @@ class Admin {
 		self::set_license_key( $license_key );
 		API::set_license_data( $data );
 
-		$this->safe_redirect( $_POST['_wp_http_referer'] );
+		$this->safe_redirect( Pro_Utils::_unstable_get_super_global_value( $_POST, '_wp_http_referer' ) );
 	}
 
 	protected function safe_redirect( $url ) {
@@ -144,7 +145,7 @@ class Admin {
 
 		$this->deactivate();
 
-		$this->safe_redirect( $_POST['_wp_http_referer'] );
+		$this->safe_redirect( Pro_Utils::_unstable_get_super_global_value( $_POST, '_wp_http_referer' ) );
 	}
 
 	public function register_page() {
@@ -296,8 +297,10 @@ class Admin {
 			<span style="color: #008000; font-style: italic;"><?php echo esc_html__( 'Active', 'elementor-pro' ); ?></span>
 
 			<?php
-			if ( ! empty( $_GET['redirect-to-document'] ) ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-				$this->redirect_to_document( $_GET['redirect-to-document'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$redirect_to_document = Pro_Utils::_unstable_get_super_global_value( $_GET, 'redirect-to-document' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+			if ( ! empty( $redirect_to_document ) ) :
+				$this->redirect_to_document( $redirect_to_document );
 			endif;
 			?>
 		<?php else : ?>

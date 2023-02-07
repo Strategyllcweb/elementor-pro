@@ -2,6 +2,7 @@
 namespace ElementorPro\License;
 
 use Elementor\Core\Common\Modules\Connect\Module as ConnectModule;
+use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -242,7 +243,7 @@ class API {
 				return new \WP_Error( esc_html__( 'Another check is in progress.', 'elementor-pro' ) );
 			}
 
-			$updater = Admin::get_updater_instance();
+			$updater = Plugin::instance()->updater;
 
 			$translations = wp_get_installed_translations( 'plugins' );
 			$plugin_translations = [];
@@ -264,7 +265,7 @@ class API {
 
 			$info_data = self::remote_post( 'pro/info', $body_args );
 
-			if ( empty( $info_data['new_version'] ) ) {
+			if ( is_wp_error( $info_data ) || empty( $info_data['new_version'] ) ) {
 				return new \WP_Error( esc_html__( 'HTTP Error', 'elementor-pro' ) );
 			}
 
