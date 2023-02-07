@@ -3,6 +3,7 @@ namespace ElementorPro\Modules\Woocommerce\Widgets;
 
 use Elementor\Controls_Manager;
 use Elementor\Group_Control_Border;
+use ElementorPro\Core\Utils;
 use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -151,7 +152,8 @@ class Product_Images extends Base_Widget {
 
 		$settings = $this->get_settings_for_display();
 
-		$is_library_preview = isset( $_GET['elementor_library'] ) && isset( $_GET['preview_id'] );
+		$is_library_preview = Utils::_unstable_get_super_global_value( $_GET, 'elementor_library' )
+			&& Utils::_unstable_get_super_global_value( $_GET, 'preview_id' );
 
 		if ( $is_library_preview ) {
 			// We need to enqueue these scripts manually on the Library preview.

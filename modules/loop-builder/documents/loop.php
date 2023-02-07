@@ -26,6 +26,12 @@ class Loop extends Theme_Document {
 		'post-info',
 	];
 
+	const WIDGETS_TO_HIDE = [
+		'loop-grid',
+		'woocommerce-product-data-tabs',
+		'loop-carousel',
+	];
+
 	public static function get_type() {
 		return static::DOCUMENT_TYPE;
 	}
@@ -48,8 +54,12 @@ class Loop extends Theme_Document {
 			'content' => esc_html__( 'A Loop is a layout you can customize to display recurring dynamic content - like listings, posts, portfolios, products, , etc.', 'elementor-pro' ),
 			'tip' => esc_html__( 'Start by creating a master item. All the other instances in the grid will match this design. Then go back to the widget in the editor panel and assign both a template and a source of content. Your grid should populate automatically.', 'elementor-pro' ),
 			'docs' => 'https://go.elementor.com/app-theme-builder-loop',
-			'video_url' => '',
+			'video_url' => 'https://www.youtube.com/embed/zMvY9XaE1YY',
 		];
+	}
+
+	protected static function get_site_editor_thumbnail_url() {
+		return ELEMENTOR_PRO_MODULES_URL . 'loop-builder/assets/images/loop-item.svg';
 	}
 
 	public static function get_properties() {
@@ -95,7 +105,7 @@ class Loop extends Theme_Document {
 			'categories' => [ 'layout' ],
 		];
 
-		foreach ( [ 'loop-grid', 'woocommerce-product-data-tabs' ] as $widget_to_hide ) {
+		foreach ( static::WIDGETS_TO_HIDE as $widget_to_hide ) {
 			$config['panel']['widgets_settings'][ $widget_to_hide ] = [
 				'show_in_panel' => false,
 			];
@@ -231,7 +241,7 @@ class Loop extends Theme_Document {
 	 * @since 3.8.0
 	 */
 	public function get_content( $with_css = false ) {
-		$preview_mode = Plugin::elementor()->preview->is_preview_mode( $this->post->ID );
+		$preview_mode = Plugin::elementor()->preview->is_preview_mode();
 
 		add_filter( 'elementor/frontend/builder_content/before_print_css', [ $this, 'prevent_inline_css_printing' ] );
 

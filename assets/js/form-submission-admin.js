@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.9.0 - 06-12-2022 */
+/*! elementor-pro - v3.10.3 - 29-01-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -1274,30 +1274,19 @@ var shallowCompare = function shallowCompare(obj1, obj2) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = App;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
-
 var _noticesContext = __webpack_require__(/*! ./context/notices-context */ "../modules/forms/submissions/assets/js/admin/context/notices-context.js");
-
 var _settingsContext = __webpack_require__(/*! ./context/settings-context */ "../modules/forms/submissions/assets/js/admin/context/settings-context.js");
-
 var _notices = _interopRequireDefault(__webpack_require__(/*! ./components/notices */ "../modules/forms/submissions/assets/js/admin/components/notices.js"));
-
 var _item = _interopRequireDefault(__webpack_require__(/*! ./pages/item */ "../modules/forms/submissions/assets/js/admin/pages/item.js"));
-
 var _pages = _interopRequireDefault(__webpack_require__(/*! ./pages */ "../modules/forms/submissions/assets/js/admin/pages/index.js"));
-
 var _reachRouterHashHistory = __webpack_require__(/*! reach-router-hash-history */ "../node_modules/reach-router-hash-history/index.js");
-
 const history = (0, _router.createHistory)((0, _reachRouterHashHistory.createHashSource)());
-
 function App() {
   return /*#__PURE__*/_react.default.createElement("div", {
     id: "elementor-form-submissions"
@@ -1325,34 +1314,27 @@ function App() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.BulkActionSelect = BulkActionSelect;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
-
 const {
   useState,
   useCallback
 } = _react.default;
-
 function BulkActionSelect(props) {
   const [value, setValue] = useState(''),
-        applyAction = useCallback(e => {
-    e.preventDefault();
-    const action = props.actions.find(item => item.value === value);
-
-    if (!action) {
-      return;
-    }
-
-    action.onApply();
-    setValue('');
-  }, [value, props.actions]);
+    applyAction = useCallback(e => {
+      e.preventDefault();
+      const action = props.actions.find(item => item.value === value);
+      if (!action) {
+        return;
+      }
+      action.onApply();
+      setValue('');
+    }, [value, props.actions]);
   return /*#__PURE__*/_react.default.createElement("form", {
     className: `actions bulkactions ${props.className}`,
     onSubmit: applyAction
@@ -1377,7 +1359,6 @@ function BulkActionSelect(props) {
     value: __('Apply', 'elementor-pro')
   }));
 }
-
 BulkActionSelect.propTypes = {
   className: _propTypes.default.string,
   actions: _propTypes.default.arrayOf(_propTypes.default.shape({
@@ -1402,20 +1383,15 @@ BulkActionSelect.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Bulk;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
-
 const {
   useCallback
 } = _react.default;
-
 function Bulk(props) {
   const onChange = useCallback(e => {
     const value = e.target.checked ? [...props.allValues] : [];
@@ -1427,7 +1403,6 @@ function Bulk(props) {
     onChange: onChange
   });
 }
-
 Bulk.propTypes = {
   checkedGroup: _propTypes.default.array.isRequired,
   allValues: _propTypes.default.array.isRequired,
@@ -1446,22 +1421,16 @@ Bulk.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Checkbox;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _bulk = _interopRequireDefault(__webpack_require__(/*! ./bulk */ "../modules/forms/submissions/assets/js/admin/components/checkbox/bulk.js"));
-
 var _propTypes = _interopRequireDefault(__webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js"));
-
 const {
   useCallback
 } = _react.default;
-
 function Checkbox(props) {
   const onChange = useCallback(e => {
     const value = e.target.checked ? [...props.checkedGroup, props.value] : props.checkedGroup.filter(checkedItem => checkedItem !== props.value);
@@ -1473,7 +1442,6 @@ function Checkbox(props) {
     onChange: onChange
   });
 }
-
 Checkbox.propTypes = {
   checkedGroup: _propTypes.default.array.isRequired,
   value: _propTypes.default.number.isRequired,
@@ -1495,30 +1463,26 @@ Checkbox.Bulk = _bulk.default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = DateFilter;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 const {
   useState,
   useMemo,
   useCallback
 } = _react.default;
-
 function DateFilter(props) {
-  const [forceCustomSelect, setForceCustomSelect] = useState(false); // All the options of the select input
+  const [forceCustomSelect, setForceCustomSelect] = useState(false);
 
+  // All the options of the select input
   const options = useMemo(() => {
     const format = date => wp.date.date('Y-m-d', date),
-          now = new Date(),
-          yesterday = new Date(now),
-          last7Days = new Date(now),
-          last30Days = new Date(now);
-
+      now = new Date(),
+      yesterday = new Date(now),
+      last7Days = new Date(now),
+      last30Days = new Date(now);
     yesterday.setDate(yesterday.getDate() - 1);
     last7Days.setDate(last7Days.getDate() - 7);
     last30Days.setDate(last30Days.getDate() - 30);
@@ -1565,22 +1529,21 @@ function DateFilter(props) {
         after: null
       }
     }];
-  }, []); // Response to show the selected value of the select.
+  }, []);
 
+  // Response to show the selected value of the select.
   const selectedValue = useMemo(() => {
     if (forceCustomSelect) {
       return 'custom';
     }
-
     const selected = options.find(option => option.filter.after === props.value.after && option.filter.before === props.value.before);
-
     if (!selected) {
       return 'custom';
     }
-
     return selected.value;
-  }, [options, props.value, forceCustomSelect]); // On select changed.
+  }, [options, props.value, forceCustomSelect]);
 
+  // On select changed.
   const onSelectChanged = useCallback(_ref => {
     let {
       target: {
@@ -1590,13 +1553,13 @@ function DateFilter(props) {
     const selected = options.find(option => option.value === value);
     setForceCustomSelect('custom' === selected.value);
     props.onChange(selected.filter);
-  }, [options]); // On date inputs changed.
+  }, [options]);
 
+  // On date inputs changed.
   const onDateInputChanged = useCallback(value => {
     if (selectedValue !== 'custom') {
       return;
     }
-
     props.onChange(value);
   }, [selectedValue]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, props.label && /*#__PURE__*/_react.default.createElement("label", {
@@ -1645,7 +1608,6 @@ function DateFilter(props) {
     }
   })));
 }
-
 DateFilter.propTypes = {
   value: PropTypes.shape({
     after: PropTypes.string,
@@ -1677,16 +1639,12 @@ DateFilter.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ExportButton;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _useExport = __webpack_require__(/*! modules/forms/submissions/assets/js/admin/hooks/use-export */ "../modules/forms/submissions/assets/js/admin/hooks/use-export.js");
-
 const {
   useMemo
 } = _react.default;
@@ -1695,22 +1653,18 @@ const buttonContentOptions = {
   [_useExport.EXPORT_MODE_FILTERED]: __('Export Filtered to CSV', 'elementor-pro'),
   [_useExport.EXPORT_MODE_SELECTED]: __('Export Selected to CSV', 'elementor-pro')
 };
-
 function ExportButton(props) {
   const ProgressPercentage = useMemo(() => {
     if (!props.progress) {
       return 0;
     }
-
     const {
       count,
       success
     } = props.progress;
-
     if (0 === count || 0 === success) {
       return 0;
     }
-
     return Math.round(success / count * 100);
   }, [props.progress]);
   return /*#__PURE__*/_react.default.createElement("button", {
@@ -1721,7 +1675,6 @@ function ExportButton(props) {
     className: "eicon-loading eicon-animation-spin"
   }), " \xA0", /*#__PURE__*/_react.default.createElement("span", null, " ", ProgressPercentage, "% "), " \xA0", __('Click to Cancel', 'elementor-pro')) : buttonContentOptions[props.mode]);
 }
-
 ExportButton.propTypes = {
   onClick: PropTypes.func.isRequired,
   isLoading: PropTypes.bool,
@@ -1752,20 +1705,14 @@ ExportButton.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = FormActionsLog;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _postBox = _interopRequireDefault(__webpack_require__(/*! ./post-box */ "../modules/forms/submissions/assets/js/admin/components/post-box.js"));
-
 var _date = __webpack_require__(/*! ../utils/date */ "../modules/forms/submissions/assets/js/admin/utils/date.js");
-
 var _noticeMessages = _interopRequireDefault(__webpack_require__(/*! ../notice-messages */ "../modules/forms/submissions/assets/js/admin/notice-messages.js"));
-
 function FormActionsLog(props) {
   return /*#__PURE__*/_react.default.createElement(_postBox.default, {
     header: /*#__PURE__*/_react.default.createElement("h2", null, __('Actions Log', 'elementor-pro'))
@@ -1790,7 +1737,6 @@ function FormActionsLog(props) {
     }, actionLog.log || _noticeMessages.default.actionLogs[actionLog.status]()));
   }));
 }
-
 FormActionsLog.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.shape({
     status: PropTypes.oneOf(['success', 'failed']),
@@ -1813,37 +1759,29 @@ FormActionsLog.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Link;
-
 var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
-
 var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
-
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 function Link(props) {
   const ref = (0, _react.useRef)();
   (0, _react.useEffect)(() => {
     if (!ref.current) {
       return;
     }
-
     ref.current.setAttribute('href', `${location.href.split('#')[0]}#${props.to}`);
   }, [props.to, ref.current]);
   return /*#__PURE__*/_react.default.createElement(_router.Link, (0, _extends2.default)({}, props, {
     ref: ref
   }));
 }
-
-Link.propTypes = { ..._router.Link.propTypes
+Link.propTypes = {
+  ..._router.Link.propTypes
 };
 
 /***/ }),
@@ -1859,28 +1797,22 @@ Link.propTypes = { ..._router.Link.propTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = LinksFilter;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
 const {
   useCallback,
   useMemo
 } = _react.default;
-
 function LinksFilter(props) {
   const onChange = useCallback((e, value) => {
     e.preventDefault();
-
     if (!props.onChange) {
       return;
     }
-
     props.onChange(value);
   }, []);
   const options = useMemo(() => {
@@ -1901,7 +1833,6 @@ function LinksFilter(props) {
     }, " (", option.count, ")")), "\xA0", isLast ? '' : '|');
   }));
 }
-
 LinksFilter.propTypes = {
   options: PropTypes.arrayOf(PropTypes.shape({
     value: PropTypes.string,
@@ -1927,17 +1858,14 @@ LinksFilter.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Notice;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _noticesContext = __webpack_require__(/*! ../context/notices-context */ "../modules/forms/submissions/assets/js/admin/context/notices-context.js");
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 function Notice(props) {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: `notice notice-${props.model.type} ${props.model.dismissible ? 'is-dismissible' : ''}`
@@ -1955,7 +1883,6 @@ function Notice(props) {
     className: "screen-reader-text"
   }, __('Dismiss this notice.', 'elementor-pro'))));
 }
-
 Notice.propTypes = {
   model: PropTypes.shape({
     key: PropTypes.number.isRequired,
@@ -1979,18 +1906,13 @@ Notice.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Notices;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _noticesContext = __webpack_require__(/*! ../context/notices-context */ "../modules/forms/submissions/assets/js/admin/context/notices-context.js");
-
 var _notice = _interopRequireDefault(__webpack_require__(/*! ./notice */ "../modules/forms/submissions/assets/js/admin/components/notice.js"));
-
 function Notices() {
   const {
     notices,
@@ -2017,18 +1939,16 @@ function Notices() {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Pagination;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 const {
   useCallback,
   useMemo
 } = _react.default;
+
 /**
  * The characters » ‹, ›, » are flipped automatically in RTL.
  *
@@ -2038,7 +1958,6 @@ const {
  * @return {JSX.Element|string} -
  * @class
  */
-
 function Pagination(props) {
   const canNavigateBack = useMemo(() => 1 !== props.currentPage, [props.currentPage]);
   const canNavigateNext = useMemo(() => props.lastPage > props.currentPage, [props.currentPage, props.lastPage]);
@@ -2046,18 +1965,14 @@ function Pagination(props) {
   const NavigateNextElement = canNavigateNext ? 'a' : 'span';
   const navigate = useCallback((e, shouldNavigate, page) => {
     e.preventDefault();
-
     if (!shouldNavigate) {
       return;
     }
-
     props.onChange(page);
   }, [props.onChange]);
-
   if (!props.currentPage) {
     return '';
   }
-
   return /*#__PURE__*/_react.default.createElement("div", {
     className: `tablenav-pages ${props.lastPage <= 1 && 'one-page'}`
   }, /*#__PURE__*/_react.default.createElement("span", {
@@ -2094,7 +2009,6 @@ function Pagination(props) {
     onClick: e => navigate(e, canNavigateNext, props.lastPage)
   }, "\xBB")));
 }
-
 Pagination.propTypes = {
   currentPage: PropTypes.number,
   total: PropTypes.number,
@@ -2116,14 +2030,11 @@ Pagination.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = PostBox;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 function PostBox(props) {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "postbox"
@@ -2133,7 +2044,6 @@ function PostBox(props) {
     className: "inner"
   }, props.children));
 }
-
 PostBox.propTypes = {
   header: PropTypes.oneOfType([PropTypes.string, PropTypes.node, PropTypes.arrayOf(PropTypes.node)]),
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.arrayOf(PropTypes.node)])
@@ -2153,20 +2063,16 @@ PostBox.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = RefererFilter;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 const {
   useEffect,
   useRef,
   useState
 } = _react.default;
-
 function renderSelect2(el, onChange) {
   jQuery(el).select2({
     allowClear: true,
@@ -2174,7 +2080,6 @@ function renderSelect2(el, onChange) {
     dir: elementorCommon.config.isRTL ? 'rtl' : 'ltr',
     ajax: {
       delay: 400,
-
       transport(_ref, success, failure) {
         let {
           data: {
@@ -2187,13 +2092,11 @@ function renderSelect2(el, onChange) {
           refresh: true
         }).then(success).catch(failure);
       },
-
       data(params) {
         return {
           search: params.term
         };
       },
-
       processResults(_ref2) {
         let {
           data
@@ -2211,7 +2114,6 @@ function renderSelect2(el, onChange) {
           })
         };
       },
-
       cache: true
     },
     minimumInputLength: 3
@@ -2219,7 +2121,6 @@ function renderSelect2(el, onChange) {
     onChange(e.target.value);
   });
 }
-
 function RefererFilter(props) {
   const [options, setOptions] = useState([{
     value: '',
@@ -2228,7 +2129,6 @@ function RefererFilter(props) {
   const ref = useRef();
   useEffect(() => {
     let $select2 = null;
-
     if (props.value) {
       $e.data.get('form-submissions/referer', {
         value: props.value
@@ -2243,12 +2143,10 @@ function RefererFilter(props) {
     } else {
       $select2 = renderSelect2(ref.current, props.onChange);
     }
-
     return () => {
       if (!$select2) {
         return;
       }
-
       $select2.select2('destroy').off('select2:select select2:unselect');
     };
   }, []);
@@ -2270,7 +2168,6 @@ function RefererFilter(props) {
     }, " ", label, " ");
   })));
 }
-
 RefererFilter.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired
@@ -2292,19 +2189,15 @@ RefererFilter.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = ResourceFilter;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 const {
   useState,
   useEffect
 } = _react.default;
-
 function ResourceFilter(props) {
   const [localOptions, setLocalOptions] = useState([]);
   useEffect(() => {
@@ -2330,7 +2223,6 @@ function ResourceFilter(props) {
     }, " ", label, " ");
   })));
 }
-
 ResourceFilter.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -2364,21 +2256,20 @@ ResourceFilter.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = SearchBox;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 const {
   useState,
   useRef,
   useCallback
-} = _react.default; // In milliseconds
+} = _react.default;
 
+// In milliseconds
 const DEFAULT_DEBOUNCE_TIMEOUT = 600;
+
 /**
  * First render - nothing happens.
  * Second render - the query string value fills the search (should not trigger the debounce here in order to avoid onChange call)
@@ -2388,15 +2279,13 @@ const DEFAULT_DEBOUNCE_TIMEOUT = 600;
  * @return {JSX.Element} -
  * @class
  */
-
 function SearchBox(props) {
   const [localValue, setLocalValue] = useState(props.value || ''),
-        debounceHandler = useRef(null);
+    debounceHandler = useRef(null);
   const onChange = useCallback(e => {
     if (debounceHandler.current) {
       clearTimeout(debounceHandler.current);
     }
-
     const value = e.target.value;
     setLocalValue(value);
     debounceHandler.current = setTimeout(() => props.onChange(value), props.debounceTimeout);
@@ -2419,7 +2308,6 @@ function SearchBox(props) {
     placeholder: __('Search...', 'elementor-pro')
   }));
 }
-
 SearchBox.propTypes = {
   value: PropTypes.string,
   onChange: PropTypes.func.isRequired,
@@ -2446,26 +2334,21 @@ SearchBox.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = SubmissionRow;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _link = _interopRequireDefault(__webpack_require__(/*! ./link */ "../modules/forms/submissions/assets/js/admin/components/link.js"));
-
 var _wpTable = _interopRequireDefault(__webpack_require__(/*! ./wp-table */ "../modules/forms/submissions/assets/js/admin/components/wp-table/index.js"));
-
 var _date = __webpack_require__(/*! ../utils/date */ "../modules/forms/submissions/assets/js/admin/utils/date.js");
-
 const {
   useState
 } = _react.default;
-
 function SubmissionRow(props) {
+  var _props$item, _props$item$main;
   const [isMobileRowOpen, setIsMobileRowOpen] = useState(false);
+  const mainValue = ((_props$item = props.item) === null || _props$item === void 0 ? void 0 : (_props$item$main = _props$item.main) === null || _props$item$main === void 0 ? void 0 : _props$item$main.value) || __('Unknown', 'elementor-pro');
   return /*#__PURE__*/_react.default.createElement(_wpTable.default.Row, {
     className: isMobileRowOpen ? 'is-expanded' : '',
     style: {
@@ -2476,10 +2359,10 @@ function SubmissionRow(props) {
     className: "check-column"
   }, props.checkBoxComponent), /*#__PURE__*/_react.default.createElement(_wpTable.default.Cell, {
     className: "has-row-actions column-primary"
-  }, 'trash' === props.item.status ? props.item.main.value : /*#__PURE__*/_react.default.createElement(_link.default, {
+  }, 'trash' === props.item.status ? mainValue : /*#__PURE__*/_react.default.createElement(_link.default, {
     to: `/${props.item.id}`,
     "aria-label": "View"
-  }, props.item.main.value), props.rowActionComponent, /*#__PURE__*/_react.default.createElement("button", {
+  }, mainValue), props.rowActionComponent, /*#__PURE__*/_react.default.createElement("button", {
     type: "button",
     className: "toggle-row",
     onClick: () => setIsMobileRowOpen(prev => !prev)
@@ -2516,7 +2399,6 @@ function SubmissionRow(props) {
     colName: props.tableTitles.created_at.label
   }, (0, _date.formatToLocalDateTime)(props.item.created_at)));
 }
-
 SubmissionRow.propTypes = {
   // The resource item that the table present.
   item: PropTypes.object.isRequired,
@@ -2539,23 +2421,18 @@ SubmissionRow.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Acceptance;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 const {
   useState
 } = _react.default;
-
 function Acceptance(props) {
   const [localValue, setLocalValue] = useState(props.value),
-        id = props.field.id + '-' + props.value;
+    id = props.field.id + '-' + props.value;
   return /*#__PURE__*/_react.default.createElement("label", {
     className: "e-form-submissions-value-label",
     htmlFor: id
@@ -2572,8 +2449,8 @@ function Acceptance(props) {
     disabled: !props.isEditMode
   }));
 }
-
-Acceptance.propTypes = { ..._index.basePropTypes
+Acceptance.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -2588,28 +2465,21 @@ Acceptance.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Checkbox;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _useWatch = _interopRequireDefault(__webpack_require__(/*! ../../hooks/use-watch */ "../modules/forms/submissions/assets/js/admin/hooks/use-watch.js"));
-
 var _useFormFieldOptions = _interopRequireDefault(__webpack_require__(/*! ../../hooks/use-form-field-options */ "../modules/forms/submissions/assets/js/admin/hooks/use-form-field-options.js"));
-
 const {
   useState,
   useMemo
 } = _react.default;
-
 function Checkbox(props) {
   const value = useMemo(() => props.value.split(', '), [props.value]),
-        [localValue, setLocalValue] = useState(value);
+    [localValue, setLocalValue] = useState(value);
   (0, _useWatch.default)(() => props.onChange(localValue.join(', ')), [localValue]);
   const options = (0, _useFormFieldOptions.default)(props.field.options);
   return options.map(option => {
@@ -2631,7 +2501,6 @@ function Checkbox(props) {
           } else {
             prev = [...prev, option.value];
           }
-
           return prev;
         });
       },
@@ -2639,8 +2508,8 @@ function Checkbox(props) {
     }), option.label);
   });
 }
-
-Checkbox.propTypes = { ..._index.basePropTypes
+Checkbox.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -2655,20 +2524,14 @@ Checkbox.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Date;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _text = _interopRequireDefault(__webpack_require__(/*! ./text */ "../modules/forms/submissions/assets/js/admin/components/submission-value/text.js"));
-
 var _date = __webpack_require__(/*! ../../utils/date */ "../modules/forms/submissions/assets/js/admin/utils/date.js");
-
 function Date(props) {
   return /*#__PURE__*/_react.default.createElement(_text.default, {
     value: props.value,
@@ -2677,8 +2540,8 @@ function Date(props) {
     field: props.field
   }, props.value && (0, _date.formatToLocalDate)(props.value));
 }
-
-Date.propTypes = { ..._index.basePropTypes
+Date.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -2693,18 +2556,13 @@ Date.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Email;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _text = _interopRequireDefault(__webpack_require__(/*! ./text */ "../modules/forms/submissions/assets/js/admin/components/submission-value/text.js"));
-
 function Email(props) {
   return /*#__PURE__*/_react.default.createElement(_text.default, {
     value: props.value,
@@ -2715,8 +2573,8 @@ function Email(props) {
     href: `mailto:${props.value}`
   }, props.value));
 }
-
-Email.propTypes = { ..._index.basePropTypes
+Email.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -2732,39 +2590,24 @@ Email.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.basePropTypes = void 0;
 exports["default"] = SubmissionValue;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _text = _interopRequireDefault(__webpack_require__(/*! ./text */ "../modules/forms/submissions/assets/js/admin/components/submission-value/text.js"));
-
 var _email = _interopRequireDefault(__webpack_require__(/*! ./email */ "../modules/forms/submissions/assets/js/admin/components/submission-value/email.js"));
-
 var _tel = _interopRequireDefault(__webpack_require__(/*! ./tel */ "../modules/forms/submissions/assets/js/admin/components/submission-value/tel.js"));
-
 var _url = _interopRequireDefault(__webpack_require__(/*! ./url */ "../modules/forms/submissions/assets/js/admin/components/submission-value/url.js"));
-
 var _radio = _interopRequireDefault(__webpack_require__(/*! ./radio */ "../modules/forms/submissions/assets/js/admin/components/submission-value/radio.js"));
-
 var _select = _interopRequireDefault(__webpack_require__(/*! ./select */ "../modules/forms/submissions/assets/js/admin/components/submission-value/select.js"));
-
 var _checkbox = _interopRequireDefault(__webpack_require__(/*! ./checkbox */ "../modules/forms/submissions/assets/js/admin/components/submission-value/checkbox.js"));
-
 var _acceptance = _interopRequireDefault(__webpack_require__(/*! ./acceptance */ "../modules/forms/submissions/assets/js/admin/components/submission-value/acceptance.js"));
-
 var _upload = _interopRequireDefault(__webpack_require__(/*! ./upload */ "../modules/forms/submissions/assets/js/admin/components/submission-value/upload.js"));
-
 var _date = _interopRequireDefault(__webpack_require__(/*! ./date */ "../modules/forms/submissions/assets/js/admin/components/submission-value/date.js"));
-
 var _time = _interopRequireDefault(__webpack_require__(/*! ./time */ "../modules/forms/submissions/assets/js/admin/components/submission-value/time.js"));
-
 var _textarea = _interopRequireDefault(__webpack_require__(/*! ./textarea */ "../modules/forms/submissions/assets/js/admin/components/submission-value/textarea.js"));
-
 const {
   useMemo
 } = _react.default;
@@ -2784,7 +2627,8 @@ const components = Object.entries({
   Text: _text.default
 }).reduce((current, _ref) => {
   let [key, component] = _ref;
-  return { ...current,
+  return {
+    ...current,
     [key.toLowerCase()]: component
   };
 }, {});
@@ -2800,11 +2644,9 @@ const basePropTypes = {
   })
 };
 exports.basePropTypes = basePropTypes;
-
 function SubmissionValue(props) {
   const Component = useMemo(() => {
     var _props$field;
-
     const key = (_props$field = props.field) === null || _props$field === void 0 ? void 0 : _props$field.type;
     return Object.prototype.hasOwnProperty.call(components, key) ? components[key] : defaultComponent;
   }, [props.field, props.value]);
@@ -2815,8 +2657,8 @@ function SubmissionValue(props) {
     onChange: value => props.onChange(props.field.id, value)
   });
 }
-
-SubmissionValue.propTypes = { ...basePropTypes
+SubmissionValue.propTypes = {
+  ...basePropTypes
 };
 SubmissionValue.defaultProps = {
   isEditMode: false
@@ -2834,22 +2676,16 @@ SubmissionValue.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Radio;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _useFormFieldOptions = _interopRequireDefault(__webpack_require__(/*! ../../hooks/use-form-field-options */ "../modules/forms/submissions/assets/js/admin/hooks/use-form-field-options.js"));
-
 const {
   useState
 } = _react.default;
-
 function Radio(props) {
   const [localValue, setLocalValue] = useState(props.value);
   const options = (0, _useFormFieldOptions.default)(props.field.options);
@@ -2872,8 +2708,8 @@ function Radio(props) {
     }), option.label);
   });
 }
-
-Radio.propTypes = { ..._index.basePropTypes
+Radio.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -2888,22 +2724,16 @@ Radio.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Select;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _useFormFieldOptions = _interopRequireDefault(__webpack_require__(/*! ../../hooks/use-form-field-options */ "../modules/forms/submissions/assets/js/admin/hooks/use-form-field-options.js"));
-
 const {
   useState
 } = _react.default;
-
 function Select(props) {
   const value = props.field.is_multiple ? props.value.split(', ') : props.value;
   const [localValue, setLocalValue] = useState(value);
@@ -2922,8 +2752,8 @@ function Select(props) {
     key: option.value
   }, option.label)));
 }
-
-Select.propTypes = { ..._index.basePropTypes
+Select.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -2938,18 +2768,13 @@ Select.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Tel;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _text = _interopRequireDefault(__webpack_require__(/*! ./text */ "../modules/forms/submissions/assets/js/admin/components/submission-value/text.js"));
-
 function Tel(props) {
   return /*#__PURE__*/_react.default.createElement(_text.default, {
     value: props.value,
@@ -2960,8 +2785,8 @@ function Tel(props) {
     href: `tel:${props.value}`
   }, props.value));
 }
-
-Tel.propTypes = { ..._index.basePropTypes
+Tel.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -2977,16 +2802,12 @@ Tel.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Text;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 const {
   useState,
   useMemo
@@ -3001,12 +2822,10 @@ const availableInputTypes = {
   text: 'text'
 };
 const defaultInputType = availableInputTypes.text;
-
 function Text(props) {
   const [localValue, setLocalValue] = useState(props.value);
   const inputType = useMemo(() => {
     var _props$field;
-
     return Object.prototype.hasOwnProperty.call(availableInputTypes, (_props$field = props.field) === null || _props$field === void 0 ? void 0 : _props$field.type) ? availableInputTypes[props.field.type] : defaultInputType;
   }, [props.field]);
   return props.isEditMode ? /*#__PURE__*/_react.default.createElement("input", {
@@ -3023,7 +2842,6 @@ function Text(props) {
     }
   }) : props.children || props.value;
 }
-
 Text.propTypes = {
   children: PropTypes.oneOfType([PropTypes.node, PropTypes.string]),
   ..._index.basePropTypes
@@ -3041,20 +2859,15 @@ Text.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Textarea;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 const {
   useState
 } = _react.default;
-
 function Textarea(props) {
   const [localValue, setLocalValue] = useState(props.value);
   return props.isEditMode ? /*#__PURE__*/_react.default.createElement("textarea", {
@@ -3067,8 +2880,8 @@ function Textarea(props) {
     }
   }) : props.value;
 }
-
-Textarea.propTypes = { ..._index.basePropTypes
+Textarea.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -3083,20 +2896,14 @@ Textarea.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Time;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _text = _interopRequireDefault(__webpack_require__(/*! ./text */ "../modules/forms/submissions/assets/js/admin/components/submission-value/text.js"));
-
 var _date = __webpack_require__(/*! ../../utils/date */ "../modules/forms/submissions/assets/js/admin/utils/date.js");
-
 function Time(props) {
   return /*#__PURE__*/_react.default.createElement(_text.default, {
     value: props.value,
@@ -3105,8 +2912,8 @@ function Time(props) {
     field: props.field
   }, props.value && (0, _date.formatToLocalTime)(`2000-01-01 ${props.value}`));
 }
-
-Time.propTypes = { ..._index.basePropTypes
+Time.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -3121,16 +2928,12 @@ Time.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Upload;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 function Upload(props) {
   const value = props.value.split(' , ');
   return value.map(path => /*#__PURE__*/_react.default.createElement("div", {
@@ -3141,8 +2944,8 @@ function Upload(props) {
     rel: "noreferrer"
   }, path)));
 }
-
-Upload.propTypes = { ..._index.basePropTypes
+Upload.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -3157,18 +2960,13 @@ Upload.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Url;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _index = __webpack_require__(/*! ./index */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js");
-
 var _text = _interopRequireDefault(__webpack_require__(/*! ./text */ "../modules/forms/submissions/assets/js/admin/components/submission-value/text.js"));
-
 function Url(props) {
   return /*#__PURE__*/_react.default.createElement(_text.default, {
     value: props.value,
@@ -3181,8 +2979,8 @@ function Url(props) {
     rel: "noreferrer"
   }, props.value));
 }
-
-Url.propTypes = { ..._index.basePropTypes
+Url.propTypes = {
+  ..._index.basePropTypes
 };
 
 /***/ }),
@@ -3198,20 +2996,16 @@ Url.propTypes = { ..._index.basePropTypes
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Body;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 function Body(props) {
   return /*#__PURE__*/_react.default.createElement("tbody", {
     id: "the-list"
   }, props.children);
 }
-
 Body.propTypes = {
   children: PropTypes.any
 };
@@ -3229,14 +3023,11 @@ Body.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Cell;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 function Cell(props) {
   const Component = props.component;
   return /*#__PURE__*/_react.default.createElement(Component, {
@@ -3246,7 +3037,6 @@ function Cell(props) {
     colSpan: props.colSpan
   }, props.children);
 }
-
 Cell.propTypes = {
   component: PropTypes.string,
   children: PropTypes.any,
@@ -3273,18 +3063,14 @@ Cell.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Footer;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 function Footer(props) {
   return /*#__PURE__*/_react.default.createElement("tfoot", null, props.children);
 }
-
 Footer.propTypes = {
   children: PropTypes.any
 };
@@ -3302,18 +3088,14 @@ Footer.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Header;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 function Header(props) {
   return /*#__PURE__*/_react.default.createElement("thead", null, props.children);
 }
-
 Header.propTypes = {
   children: PropTypes.any
 };
@@ -3331,35 +3113,24 @@ Header.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = WpTable;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _header = _interopRequireDefault(__webpack_require__(/*! ./header */ "../modules/forms/submissions/assets/js/admin/components/wp-table/header.js"));
-
 var _body = _interopRequireDefault(__webpack_require__(/*! ./body */ "../modules/forms/submissions/assets/js/admin/components/wp-table/body.js"));
-
 var _footer = _interopRequireDefault(__webpack_require__(/*! ./footer */ "../modules/forms/submissions/assets/js/admin/components/wp-table/footer.js"));
-
 var _row = _interopRequireDefault(__webpack_require__(/*! ./row */ "../modules/forms/submissions/assets/js/admin/components/wp-table/row.js"));
-
 var _cell = _interopRequireDefault(__webpack_require__(/*! ./cell */ "../modules/forms/submissions/assets/js/admin/components/wp-table/cell.js"));
-
 var _orderableCell = _interopRequireDefault(__webpack_require__(/*! ./orderable-cell */ "../modules/forms/submissions/assets/js/admin/components/wp-table/orderable-cell.js"));
-
 var _rowActions = _interopRequireDefault(__webpack_require__(/*! ./row-actions */ "../modules/forms/submissions/assets/js/admin/components/wp-table/row-actions.js"));
-
 function WpTable(props) {
   return /*#__PURE__*/_react.default.createElement("table", {
     className: `wp-list-table widefat fixed table-view-list ${props.className}`,
     style: props.style
   }, props.children);
 }
-
 WpTable.propTypes = {
   children: PropTypes.any,
   style: PropTypes.object,
@@ -3389,17 +3160,14 @@ WpTable.RowActions = _rowActions.default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = OrderableCell;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _cell = _interopRequireDefault(__webpack_require__(/*! ./cell */ "../modules/forms/submissions/assets/js/admin/components/wp-table/cell.js"));
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 function OrderableCell(props) {
   const className = `${props.className} sortable ${props.order.current.by === props.order.key && `sorted ${props.order.current.direction}`}`;
   return /*#__PURE__*/_react.default.createElement(_cell.default, {
@@ -3416,8 +3184,8 @@ function OrderableCell(props) {
     className: "sorting-indicator"
   })));
 }
-
-OrderableCell.propTypes = { ..._cell.default.propTypes,
+OrderableCell.propTypes = {
+  ..._cell.default.propTypes,
   order: PropTypes.shape({
     key: PropTypes.string.isRequired,
     current: PropTypes.shape({
@@ -3427,7 +3195,8 @@ OrderableCell.propTypes = { ..._cell.default.propTypes,
     onChange: PropTypes.func.isRequired
   }).isRequired
 };
-OrderableCell.defaultProps = { ..._cell.default.defaultProps,
+OrderableCell.defaultProps = {
+  ..._cell.default.defaultProps,
   component: 'th'
 };
 
@@ -3444,16 +3213,12 @@ OrderableCell.defaultProps = { ..._cell.default.defaultProps,
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = RowActions;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
-
 function RowActions(props) {
   return /*#__PURE__*/_react.default.createElement("div", {
     className: "row-actions",
@@ -3476,7 +3241,6 @@ function RowActions(props) {
     }, action.props ? action.props(props.item) : {}), action.label), !isLastAction && /*#__PURE__*/_react.default.createElement("span", null, "\xA0|\xA0"));
   }));
 }
-
 RowActions.propTypes = {
   actions: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
@@ -3503,21 +3267,17 @@ RowActions.propTypes = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Row;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 function Row(props) {
   return /*#__PURE__*/_react.default.createElement("tr", {
     style: props.style,
     className: props.className
   }, props.children);
 }
-
 Row.propTypes = {
   children: PropTypes.any,
   style: PropTypes.object,
@@ -3541,16 +3301,13 @@ Row.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.NOTICE_TYPE_SUCCESS = exports.NOTICE_TYPE_ERROR = void 0;
 exports.NoticesProvider = NoticesProvider;
 exports.useNoticesContext = useNoticesContext;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 const {
   createContext,
   useState,
@@ -3564,15 +3321,16 @@ exports.NOTICE_TYPE_ERROR = NOTICE_TYPE_ERROR;
 const NoticesContext = createContext({
   notices: []
 });
+
 /**
  * Use Notifications context.
  *
  * @return {{}} -
  */
-
 function useNoticesContext() {
   return useContext(NoticesContext);
 }
+
 /**
  * Notification Provider.
  *
@@ -3580,15 +3338,15 @@ function useNoticesContext() {
  * @return {JSX.Element} -
  * @class
  */
-
-
 function NoticesProvider(props) {
-  const [notices, setNotices] = useState([]); // Dismiss notification (remove from view).
+  const [notices, setNotices] = useState([]);
 
+  // Dismiss notification (remove from view).
   const dismiss = useCallback(key => {
     setNotices(prev => prev.filter(notice => notice.key !== key));
-  }, []); // Add notification (show in view).
+  }, []);
 
+  // Add notification (show in view).
   const notify = useCallback(_ref => {
     let {
       message,
@@ -3596,11 +3354,9 @@ function NoticesProvider(props) {
       type,
       dismissible = true
     } = _ref;
-
     if (!message) {
       return;
     }
-
     const key = Date.now() + Math.random();
     setNotices(prev => [{
       key,
@@ -3609,19 +3365,20 @@ function NoticesProvider(props) {
       undoAction,
       dismissible
     }, ...prev]);
-
     if (props.dismissTimeout) {
       setTimeout(() => dismiss(key), props.dismissTimeout);
     }
-  }, []); // Notify an error message
+  }, []);
 
+  // Notify an error message
   const notifyError = useCallback(message => {
     notify({
       message,
       type: NOTICE_TYPE_ERROR
     });
-  }, [notify]); // Notify a success message
+  }, [notify]);
 
+  // Notify a success message
   const notifySuccess = useCallback((message, undoAction) => {
     notify({
       message,
@@ -3639,7 +3396,6 @@ function NoticesProvider(props) {
     }
   }, props.children);
 }
-
 NoticesProvider.propTypes = {
   children: PropTypes.any,
   dismissTimeout: PropTypes.number
@@ -3661,29 +3417,27 @@ NoticesProvider.defaultProps = {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.SettingsProvider = SettingsProvider;
 exports.useSettingsContext = useSettingsContext;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 const {
   createContext,
   useContext
 } = _react.default;
 const SettingsContext = createContext({});
+
 /**
  * Consume the context
  *
  * @return {{emptyTrashDays: number}} -
  */
-
 function useSettingsContext() {
   return useContext(SettingsContext);
 }
+
 /**
  * Settings Provider
  *
@@ -3691,14 +3445,11 @@ function useSettingsContext() {
  * @return {JSX.Element} -
  * @class
  */
-
-
 function SettingsProvider(props) {
   return /*#__PURE__*/_react.default.createElement(SettingsContext.Provider, {
     value: props.value
   }, props.children);
 }
-
 SettingsProvider.propTypes = {
   children: PropTypes.any,
   value: PropTypes.object.isRequired
@@ -3719,17 +3470,14 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.Export = void 0;
-
 class Export extends $e.modules.CommandData {
   static getEndpointFormat() {
     return 'form-submissions/export/{id}';
   }
-
-  onCatchApply() {// Do nothing. (override parent behavior)
+  onCatchApply() {
+    // Do nothing. (override parent behavior)
   }
-
 }
-
 exports.Export = Export;
 
 /***/ }),
@@ -3747,14 +3495,11 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.Index = void 0;
-
 class Index extends $e.modules.CommandData {
   static getEndpointFormat() {
     return 'forms/{id}';
   }
-
 }
-
 exports.Index = Index;
 
 /***/ }),
@@ -3790,20 +3535,14 @@ Object.defineProperty(exports, "Restore", ({
     return _restore.Restore;
   }
 }));
-
 var _restore = __webpack_require__(/*! ./restore */ "../modules/forms/submissions/assets/js/admin/data/commands/restore.js");
-
 var _export = __webpack_require__(/*! ./export */ "../modules/forms/submissions/assets/js/admin/data/commands/export.js");
-
 var _referer = __webpack_require__(/*! ./referer */ "../modules/forms/submissions/assets/js/admin/data/commands/referer.js");
-
 class Index extends $e.modules.CommandData {
   static getEndpointFormat() {
     return 'form-submissions/{id}';
   }
-
 }
-
 exports.Index = Index;
 
 /***/ }),
@@ -3821,14 +3560,11 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.Referer = void 0;
-
 class Referer extends $e.modules.CommandData {
   static getEndpointFormat() {
     return 'form-submissions/referer/{id}';
   }
-
 }
-
 exports.Referer = Referer;
 
 /***/ }),
@@ -3846,14 +3582,11 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.Restore = void 0;
-
 class Restore extends $e.modules.CommandData {
   static getEndpointFormat() {
     return 'form-submissions/restore/{id}';
   }
-
 }
-
 exports.Restore = Restore;
 
 /***/ }),
@@ -3871,24 +3604,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var dataCommands = _interopRequireWildcard(__webpack_require__(/*! ./commands */ "../modules/forms/submissions/assets/js/admin/data/commands/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class Component extends $e.modules.ComponentBase {
   getNamespace() {
     return 'form-submissions';
   }
-
   defaultData() {
     return this.importCommands(dataCommands);
   }
-
 }
-
 exports["default"] = Component;
 
 /***/ }),
@@ -3906,26 +3632,18 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var dataCommands = _interopRequireWildcard(__webpack_require__(/*! ./commands/forms-index */ "../modules/forms/submissions/assets/js/admin/data/commands/forms-index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class FormsComponent extends $e.modules.ComponentBase {
   static namespace = 'forms';
-
   getNamespace() {
     return this.constructor.namespace;
   }
-
   defaultData() {
     return this.importCommands(dataCommands);
   }
-
 }
-
 exports["default"] = FormsComponent;
 
 /***/ }),
@@ -3959,26 +3677,23 @@ const STATUS_SUCCESS = 'success';
 exports.STATUS_SUCCESS = STATUS_SUCCESS;
 const STATUS_ERROR = 'error';
 exports.STATUS_ERROR = STATUS_ERROR;
-
 function useDataAction(action) {
   let deps = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
   const abortControllerRef = useRef();
-  const [status, setStatus] = useState(STATUS_IDLE); // To avoid multiple declaration of the action callback, it memorize the argument that SHOULD
-  // trigger a new declaration of the action callback.
+  const [status, setStatus] = useState(STATUS_IDLE);
 
+  // To avoid multiple declaration of the action callback, it memorize the argument that SHOULD
+  // trigger a new declaration of the action callback.
   const calculatedDeps = useMemo(() => [...deps, status], [deps, status]);
   const wrappedAction = useCallback(function () {
     if (abortControllerRef.current) {
       abortControllerRef.current.abort();
     }
-
     abortControllerRef.current = new AbortController();
     setStatus(STATUS_LOADING);
-
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-
     return action(args, {
       abortController: abortControllerRef.current,
       status
@@ -4009,23 +3724,16 @@ function useDataAction(action) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.EXPORT_MODE_SELECTED = exports.EXPORT_MODE_FILTERED = exports.EXPORT_MODE_ALL = void 0;
 exports.useExport = useExport;
-
 var _useDataAction = _interopRequireWildcard(__webpack_require__(/*! ./use-data-action */ "../modules/forms/submissions/assets/js/admin/hooks/use-data-action.js"));
-
 var _downloadBlob = _interopRequireDefault(__webpack_require__(/*! ../utils/download-blob */ "../modules/forms/submissions/assets/js/admin/utils/download-blob.js"));
-
 var _noticesContext = __webpack_require__(/*! ../context/notices-context */ "../modules/forms/submissions/assets/js/admin/context/notices-context.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 const EXPORT_MODE_ALL = 'all';
 exports.EXPORT_MODE_ALL = EXPORT_MODE_ALL;
 const EXPORT_MODE_SELECTED = 'selected';
@@ -4044,15 +3752,16 @@ const defaultOptions = {
   checked: [],
   filter: {}
 };
+
 /**
  * Export functionality
  *
  * @param {any} hookOptions
  * @return {(any|{mode: (string), progress: {success: number, count: number}, status: string})[]} -
  */
-
 function useExport(hookOptions) {
-  const options = useMemo(() => ({ ...defaultOptions,
+  const options = useMemo(() => ({
+    ...defaultOptions,
     ...hookOptions
   }), [hookOptions]);
   const {
@@ -4066,16 +3775,13 @@ function useExport(hookOptions) {
     if (options.checked.length > 0) {
       return EXPORT_MODE_SELECTED;
     }
-
     const filter = Object.fromEntries(Object.entries(options.filter).filter(_ref => {
       let [, value] = _ref;
       return value;
     }));
-
     if (1 === Object.keys(filter).length && 'all' === filter.status) {
       return EXPORT_MODE_ALL;
     }
-
     return EXPORT_MODE_FILTERED;
   }, [options.checked, options.filter]);
   const [exportSubmissions, {
@@ -4086,14 +3792,12 @@ function useExport(hookOptions) {
       abortController,
       status
     } = _ref3;
-
     if (status === _useDataAction.STATUS_LOADING && abortController) {
       abortController.abort();
       return Promise.reject({
         message: 'Aborted'
       });
     }
-
     const numberOfRequests = Math.ceil(total / options.maxRowsPerRequest);
     let exportDataByForm = {};
     let promise = Promise.resolve();
@@ -4101,9 +3805,9 @@ function useExport(hookOptions) {
       count: numberOfRequests,
       success: 0
     });
-
     for (let i = 1; i <= numberOfRequests; i++) {
-      promise = promise.then(() => $e.data.get('form-submissions/export', { ...query,
+      promise = promise.then(() => $e.data.get('form-submissions/export', {
+        ...query,
         per_page: options.maxRowsPerRequest,
         page: i
       }, {
@@ -4112,12 +3816,12 @@ function useExport(hookOptions) {
       })).then(result => {
         const shouldSaveHeaders = 1 === i;
         exportDataByForm = mergeFormExportData(result.data.data, exportDataByForm, shouldSaveHeaders);
-        setProgress(prev => ({ ...prev,
+        setProgress(prev => ({
+          ...prev,
           success: i
         }));
       });
     }
-
     return promise.then(() => downloadExportsResults(Object.values(exportDataByForm))).catch(error => notifyError(error.message));
   }, [options.maxRowsPerRequest]);
   return [exportSubmissions, {
@@ -4126,6 +3830,7 @@ function useExport(hookOptions) {
     status: exportStatus
   }];
 }
+
 /**
  * Merge data from one response into the current data from all the other responses.
  *
@@ -4134,42 +3839,39 @@ function useExport(hookOptions) {
  * @param {boolean} shouldSaveHeaders
  * @return {any} -
  */
-
-
 function mergeFormExportData(response, current, shouldSaveHeaders) {
   response.forEach(formResult => {
     var _current$formResult$i;
-
     // The first row of each csv response is the headers row. When it merges all csv responses, it deletes
     // the headers for each response except from the first one, the result will be only one row headers in the final csv.
     if (!shouldSaveHeaders) {
       delete formResult.content[0];
     }
-
-    current = { ...current,
-      [formResult.id]: { ...formResult,
+    current = {
+      ...current,
+      [formResult.id]: {
+        ...formResult,
         content: (((_current$formResult$i = current[formResult.id]) === null || _current$formResult$i === void 0 ? void 0 : _current$formResult$i.content) || '') + formResult.content.join('\n')
       }
     };
   });
   return current;
 }
+
 /**
  * Merge all the promises result into one csv and download it.
  *
  * @param {Array} dataResults
  */
-
-
 function downloadExportsResults(dataResults) {
   const currentDate = wp.date.date('Y-m-d');
-  const files = dataResults.map(item => transformFormResultIntoBlob(item, currentDate)); // If there is only one form file, just download it as csv instead of compressing it into a zip file.
+  const files = dataResults.map(item => transformFormResultIntoBlob(item, currentDate));
 
+  // If there is only one form file, just download it as csv instead of compressing it into a zip file.
   if (1 === files.length) {
     (0, _downloadBlob.default)(files[0].blob, files[0].filename);
     return;
   }
-
   __webpack_require__.e(/*! import() | jszip.vendor */ "jszip.vendor").then(__webpack_require__.t.bind(__webpack_require__, /*! jszip */ "../node_modules/jszip/dist/jszip.min.js", 23)).then(_ref4 => {
     let {
       default: JSZip
@@ -4189,6 +3891,7 @@ function downloadExportsResults(dataResults) {
     (0, _downloadBlob.default)(zipBlob, ZIP_NAME_FORMAT.replace('{DATE}', currentDate));
   });
 }
+
 /**
  * Transform the merged result from the server into a blob.
  *
@@ -4196,12 +3899,11 @@ function downloadExportsResults(dataResults) {
  * @param {Date} currentDate
  * @return {{filename: string, blob: Blob}} -
  */
-
-
 function transformFormResultIntoBlob(formResult, currentDate) {
   return {
     filename: EXPORT_FILE_NAME_FORMAT.replace('{FORM_LABEL}', formResult.form_label).replace('{DATE}', currentDate).concat(`.${formResult.extension}`),
-    blob: new Blob([// UTF-8 BOM to support microsoft excel
+    blob: new Blob([
+    // UTF-8 BOM to support microsoft excel
     // ref: https://stackoverflow.com/questions/31959487/utf-8-encoidng-issue-when-exporting-csv-file-javascript
     '\ufeff', formResult.content], {
       type: formResult.mimetype
@@ -4228,6 +3930,7 @@ exports["default"] = useFormFieldOptions;
 const {
   useMemo
 } = React;
+
 /**
  * The options that received from the API is an array of strings,
  * each string can be a regular value e.g: 'red' or 'blue'
@@ -4236,7 +3939,6 @@ const {
  *
  * @param {Array} options
  */
-
 function useFormFieldOptions(options) {
   return useMemo(() => {
     return options.map(rawOption => {
@@ -4265,9 +3967,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = useMethodsReducer;
-
 __webpack_require__(/*! core-js/modules/es.error.cause.js */ "../node_modules/core-js/modules/es.error.cause.js");
-
 /**
  * Creates a more convenient way to use `useReducer`.
  * Inspired by useMethods package
@@ -4285,11 +3985,11 @@ function useMethodsReducer(methods, initialState) {
     if (!Object.prototype.hasOwnProperty.call(methods, action.type)) {
       throw Error(`The action type ${action.type} is not exists`);
     }
-
     return methods[action.type](currentState, action.payload);
   }, initialState, init);
   return [state, generateActions(methods, dispatch), dispatch];
 }
+
 /**
  * Bind all the actions to the dispatcher.
  *
@@ -4297,11 +3997,10 @@ function useMethodsReducer(methods, initialState) {
  * @param {Function} dispatch
  * @return {{}} -
  */
-
-
 function generateActions(methods, dispatch) {
   return Object.keys(methods).reduce((current, type) => {
-    return { ...current,
+    return {
+      ...current,
       [type]: payload => dispatch({
         type,
         payload
@@ -4323,29 +4022,24 @@ function generateActions(methods, dispatch) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = useRestDataList;
-
 var _useMethodsReducer = _interopRequireDefault(__webpack_require__(/*! ./use-methods-reducer */ "../modules/forms/submissions/assets/js/admin/hooks/use-methods-reducer.js"));
-
 var _useRouterQueryString = _interopRequireDefault(__webpack_require__(/*! ./use-router-query-string */ "../modules/forms/submissions/assets/js/admin/hooks/use-router-query-string.js"));
-
 var _useDataAction = _interopRequireDefault(__webpack_require__(/*! ./use-data-action */ "../modules/forms/submissions/assets/js/admin/hooks/use-data-action.js"));
-
 const {
   useState,
   useEffect,
   useMemo
 } = React;
+
 /**
  * Default options for the use function
  *
  * @type {{useRouterQueryString: boolean, allowedFilters: Array}}
  */
-
 const defaultOptions = {
   allowedFilters: [],
   useRouterQueryString: false,
@@ -4355,6 +4049,7 @@ const defaultOptions = {
 };
 const defaultQueryArgs = ['order', 'order_by', 'page', 'per_page'];
 let currentFlatQuery = {};
+
 /**
  * Main function
  *
@@ -4362,36 +4057,38 @@ let currentFlatQuery = {};
  * @param {Object} options
  * @return {{fetchData: any, data: any, meta: any, query: any, actions: {setOrder: any, setFilter: any, setPage: any}}} -
  */
-
 function useRestDataList(command) {
   let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  options = { ...defaultOptions,
+  options = {
+    ...defaultOptions,
     ...options
   };
   const queryArgs = [...defaultQueryArgs, ...options.allowedFilters],
-        [{
-    data,
-    meta
-  }, setFetchResult] = useState({
-    data: [],
-    meta: {}
-  }),
-        {
-    query,
-    flatQuery,
-    actions: {
-      setFilter,
-      setPage,
-      setOrder,
-      setInitial
-    }
-  } = useQuery(),
-        [routerQueryString, setRouterQueryString] = (0, _useRouterQueryString.default)(queryArgs); // There is a weird bug, when calling the fetch data function from another function
+    [{
+      data,
+      meta
+    }, setFetchResult] = useState({
+      data: [],
+      meta: {}
+    }),
+    {
+      query,
+      flatQuery,
+      actions: {
+        setFilter,
+        setPage,
+        setOrder,
+        setInitial
+      }
+    } = useQuery(),
+    [routerQueryString, setRouterQueryString] = (0, _useRouterQueryString.default)(queryArgs);
+
+  // There is a weird bug, when calling the fetch data function from another function
   // the flatQuery inside the function is an old version of the flatQuery and not the updated one.
   // this cause a wrong request to the server that retrieve a wrong result.
+  currentFlatQuery = flatQuery;
 
-  currentFlatQuery = flatQuery; // The fetch data action.
-
+  // The fetch data action.
   const [fetchData, {
     status: fetchDataStatus
   }] = (0, _useDataAction.default)((args, _ref) => {
@@ -4421,17 +4118,16 @@ function useRestDataList(command) {
         direction: queryStringResult.order || 'desc'
       }
     });
-  }, []); // This effect runs every time the query object changes, and it fetch the data from the server.
+  }, []);
 
+  // This effect runs every time the query object changes, and it fetch the data from the server.
   useEffect(() => {
     if (!query.ready) {
       return;
     }
-
     if (options.useRouterQueryString) {
       setRouterQueryString(flatQuery);
     }
-
     fetchData();
   }, [flatQuery]);
   return {
@@ -4450,32 +4146,37 @@ function useRestDataList(command) {
     }
   };
 }
+
 /**
  * A reducer for the query of the rest list fetch.
  *
  * @return {{perPage: any, page: number}|{filter: any, page: number}|{ready: boolean}|{page: any}|(any|{})|Array|{sort: any}} -
  */
-
-
 function useQuery() {
   const [query, actions] = (0, _useMethodsReducer.default)({
-    setFilter: (state, filter) => ({ ...state,
+    setFilter: (state, filter) => ({
+      ...state,
       page: 1,
-      filter: { ...state.filter,
+      filter: {
+        ...state.filter,
         ...filter
       }
     }),
-    setPage: (state, page) => ({ ...state,
+    setPage: (state, page) => ({
+      ...state,
       page
     }),
-    setPerPage: (state, perPage) => ({ ...state,
+    setPerPage: (state, perPage) => ({
+      ...state,
       page: 1,
       perPage
     }),
-    setOrder: (state, order) => ({ ...state,
+    setOrder: (state, order) => ({
+      ...state,
       order
     }),
-    setInitial: (state, payload) => ({ ...state,
+    setInitial: (state, payload) => ({
+      ...state,
       ...payload,
       ready: true
     })
@@ -4490,20 +4191,19 @@ function useQuery() {
     }
   });
   const flatQuery = useMemo(() => {
-    return Object.fromEntries(Object.entries({ ...query.filter,
+    return Object.fromEntries(Object.entries({
+      ...query.filter,
       page: query.page,
       per_page: query.perPage,
       order: query.order.direction,
       order_by: query.order.by
     }).filter(_ref2 => {
       let [, value] = _ref2;
-
       // Removes all the falsy values from the flatQuery. In JS empty array is not a falsy value
       // so there is a special case that checks array and removes it from the flatQuery if it is an empty array.
       if (Array.isArray(value) && 0 === value.length) {
         return false;
       }
-
       return !!value;
     }));
   }, [query]);
@@ -4530,51 +4230,48 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = useRouterQueryString;
-
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
-
 const {
   useEffect,
   useState
 } = React;
+
 /**
  * Manage the router query string base on "hash" history.
  *
  * @param {string[]} queryArgs
  * @return {Array<any, any>} -
  */
-
 function useRouterQueryString() {
   let queryArgs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   const location = (0, _router.useLocation)(),
-        [isLocationRead, setIsLocationRead] = useState(false),
-        [query, setQuery] = useState(false); // Read the query string (only at first render)
+    [isLocationRead, setIsLocationRead] = useState(false),
+    [query, setQuery] = useState(false);
 
+  // Read the query string (only at first render)
   useEffect(() => {
     if (!(location !== null && location !== void 0 && location.pathname) || isLocationRead) {
       return;
     }
-
     const parsedQueryString = queryArgs.reduce((current, arg) => {
       const value = wp.url.getQueryArg(location.pathname, arg);
-
       if (undefined === value) {
         return current;
       }
-
-      return { ...current,
+      return {
+        ...current,
         [arg]: value
       };
     }, {});
     setQuery(parsedQueryString);
     setIsLocationRead(true);
-  }, [location]); // Update the query string based on the query.
+  }, [location]);
 
+  // Update the query string based on the query.
   useEffect(() => {
     if (!query) {
       return;
     }
-
     const basePath = location.pathname.split('?')[0] || '/';
     history.pushState(undefined, undefined, `#${wp.url.addQueryArgs(basePath, query)}`);
   }, [query]);
@@ -4601,7 +4298,6 @@ const {
   useEffect,
   useRef
 } = React;
-
 function useWatch(callback, deps) {
   const isFirstRender = useRef(true);
   useEffect(() => {
@@ -4609,7 +4305,6 @@ function useWatch(callback, deps) {
       isFirstRender.current = false;
       return;
     }
-
     callback();
   }, deps);
 }
@@ -4630,11 +4325,8 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _i18n = __webpack_require__(/*! @wordpress/i18n */ "@wordpress/i18n");
-
 const generalError = () => __('Something went wrong, please try again later.', 'elementor-pro');
-
 var _default = {
   trashed: {
     success: function () {
@@ -4692,56 +4384,32 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Index;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
-
 var _checkbox = _interopRequireDefault(__webpack_require__(/*! ../components/checkbox */ "../modules/forms/submissions/assets/js/admin/components/checkbox/index.js"));
-
 var _dateFilter = _interopRequireDefault(__webpack_require__(/*! ../components/date-filter */ "../modules/forms/submissions/assets/js/admin/components/date-filter.js"));
-
 var _exportButton = _interopRequireDefault(__webpack_require__(/*! ../components/export-button */ "../modules/forms/submissions/assets/js/admin/components/export-button.js"));
-
 var _link = _interopRequireDefault(__webpack_require__(/*! ../components/link */ "../modules/forms/submissions/assets/js/admin/components/link.js"));
-
 var _linksFilter = _interopRequireDefault(__webpack_require__(/*! ../components/links-filter */ "../modules/forms/submissions/assets/js/admin/components/links-filter.js"));
-
 var _noticeMessages = _interopRequireDefault(__webpack_require__(/*! ../notice-messages */ "../modules/forms/submissions/assets/js/admin/notice-messages.js"));
-
 var _pagination = _interopRequireDefault(__webpack_require__(/*! ../components/pagination */ "../modules/forms/submissions/assets/js/admin/components/pagination.js"));
-
 var _refererFilter = _interopRequireDefault(__webpack_require__(/*! ../components/referer-filter */ "../modules/forms/submissions/assets/js/admin/components/referer-filter.js"));
-
 var _resourceFilter = _interopRequireDefault(__webpack_require__(/*! ../components/resource-filter */ "../modules/forms/submissions/assets/js/admin/components/resource-filter.js"));
-
 var _searchBox = _interopRequireDefault(__webpack_require__(/*! ../components/search-box */ "../modules/forms/submissions/assets/js/admin/components/search-box.js"));
-
 var _submissionRow = _interopRequireDefault(__webpack_require__(/*! ../components/submission-row */ "../modules/forms/submissions/assets/js/admin/components/submission-row.js"));
-
 var _useDataAction = _interopRequireWildcard(__webpack_require__(/*! ../hooks/use-data-action */ "../modules/forms/submissions/assets/js/admin/hooks/use-data-action.js"));
-
 var _useRestDataList = _interopRequireDefault(__webpack_require__(/*! ../hooks/use-rest-data-list */ "../modules/forms/submissions/assets/js/admin/hooks/use-rest-data-list.js"));
-
 var _wpTable = _interopRequireDefault(__webpack_require__(/*! ../components/wp-table */ "../modules/forms/submissions/assets/js/admin/components/wp-table/index.js"));
-
 var _bulkActionSelect = __webpack_require__(/*! ../components/bulk-action-select */ "../modules/forms/submissions/assets/js/admin/components/bulk-action-select.js");
-
 var _useExport = __webpack_require__(/*! ../hooks/use-export */ "../modules/forms/submissions/assets/js/admin/hooks/use-export.js");
-
 var _noticesContext = __webpack_require__(/*! ../context/notices-context */ "../modules/forms/submissions/assets/js/admin/context/notices-context.js");
-
 var _settingsContext = __webpack_require__(/*! ../context/settings-context */ "../modules/forms/submissions/assets/js/admin/context/settings-context.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 const {
   useMemo,
   useState
@@ -4760,10 +4428,8 @@ const STATUSES = [{
   value: 'trash',
   label: __('Trash', 'elementor-pro')
 }];
-
 function Index() {
   var _meta$pagination2;
-
   const {
     notifyError,
     notifySuccess
@@ -4806,11 +4472,9 @@ function Index() {
     let {
       abortController
     } = _ref2;
-
     if (!validateRestAction(query)) {
       return Promise.reject();
     }
-
     const messages = _noticeMessages.default[isRead ? 'markedAsRead' : 'markedAsUnread'];
     return $e.data.update('form-submissions/index', {
       is_read: isRead
@@ -4818,7 +4482,6 @@ function Index() {
       signal: abortController.signal
     }).then(result => {
       var _result$data$meta;
-
       return notifySuccess(messages.success(((_result$data$meta = result.data.meta) === null || _result$data$meta === void 0 ? void 0 : _result$data$meta.affected) || 1));
     }).then(fetchData).catch(() => notifyError(messages.error()));
   });
@@ -4827,16 +4490,13 @@ function Index() {
     let {
       abortController
     } = _ref4;
-
     if (!validateRestAction(query)) {
       return Promise.reject();
     }
-
     return $e.data.update('form-submissions/restore', {}, query, {
       signal: abortController.signal
     }).then(result => {
       var _result$data$meta2;
-
       return notifySuccess(_noticeMessages.default.restored.success(((_result$data$meta2 = result.data.meta) === null || _result$data$meta2 === void 0 ? void 0 : _result$data$meta2.affected) || 1));
     }).then(fetchData).catch(() => notifyError(_noticeMessages.default.restored.error()));
   });
@@ -4845,17 +4505,14 @@ function Index() {
     let {
       abortController
     } = _ref6;
-
     if (!validateRestAction(query)) {
       return Promise.reject();
     }
-
     const messages = _noticeMessages.default[query.force ? 'deleted' : 'trashed'];
     return $e.data.delete('form-submissions/index', query, {
       signal: abortController.signal
     }).then(result => {
       var _result$data$meta3;
-
       return notifySuccess(messages.success(((_result$data$meta3 = result.data.meta) === null || _result$data$meta3 === void 0 ? void 0 : _result$data$meta3.affected) || 1), query.force ? null : () => restoreItems(query));
     }).then(fetchData).catch(() => notifyError(messages.error()));
   });
@@ -4973,7 +4630,6 @@ function Index() {
       className: 'column-date'
     }
   }), []);
-
   const headerFooterRow = /*#__PURE__*/_react.default.createElement(_wpTable.default.Row, null, /*#__PURE__*/_react.default.createElement(_wpTable.default.Cell, {
     className: "manage-column bulk-checkbox-column"
   }, /*#__PURE__*/_react.default.createElement(_checkbox.default.Bulk, {
@@ -4986,7 +4642,6 @@ function Index() {
       component: 'th',
       className: `manage-column ${tableTitle.className || ''}`
     };
-
     if (ORDERABLE_CELLS.includes(key)) {
       return /*#__PURE__*/_react.default.createElement(_wpTable.default.OrderableCell, (0, _extends2.default)({}, cellProps, {
         key: key,
@@ -4997,21 +4652,19 @@ function Index() {
         }
       }), tableTitle.label);
     }
-
     return /*#__PURE__*/_react.default.createElement(_wpTable.default.Cell, (0, _extends2.default)({
       key: key
     }, cellProps), tableTitle.label);
   }));
-
   const exportButton = /*#__PURE__*/_react.default.createElement("div", {
     className: "alignright"
   }, /*#__PURE__*/_react.default.createElement(_exportButton.default, {
     onClick: () => {
       var _meta$pagination;
-
       exportSubmissions(_useExport.EXPORT_MODE_SELECTED === exportOptions.mode ? {
         ids: checked
-      } : { ...flatQuery
+      } : {
+        ...flatQuery
       }, checked.length || ((_meta$pagination = meta.pagination) === null || _meta$pagination === void 0 ? void 0 : _meta$pagination.total));
     },
     isLoading: _useDataAction.STATUS_LOADING === exportOptions.status,
@@ -5019,7 +4672,6 @@ function Index() {
     mode: exportOptions.mode,
     disabled: !((_meta$pagination2 = meta.pagination) !== null && _meta$pagination2 !== void 0 && _meta$pagination2.total) && _useDataAction.STATUS_LOADING !== exportOptions.status
   }));
-
   const tablePagination = meta.pagination && /*#__PURE__*/_react.default.createElement(_pagination.default, {
     total: meta.pagination.total,
     currentPage: meta.pagination.current_page,
@@ -5027,7 +4679,6 @@ function Index() {
     perPage: meta.pagination.per_page,
     onChange: value => setPage(value)
   });
-
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement(_searchBox.default, {
     key: 'search',
     value: filter.search,
@@ -5038,7 +4689,6 @@ function Index() {
   }), /*#__PURE__*/_react.default.createElement(_linksFilter.default, {
     options: STATUSES.map(_ref8 => {
       var _meta$count, _meta$count2;
-
       let {
         value,
         label
@@ -5096,7 +4746,8 @@ function Index() {
         after,
         before
       } = _ref9;
-      setFilter({ ...(after !== undefined ? {
+      setFilter({
+        ...(after !== undefined ? {
           after
         } : {}),
         ...(before !== undefined ? {
@@ -5136,7 +4787,6 @@ function Index() {
     className: "alignleft"
   }), exportButton, tablePagination)));
 }
-
 function validateRestAction(query) {
   return query.id || query.ids && query.ids.length > 0;
 }
@@ -5155,73 +4805,58 @@ function validateRestAction(query) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = Item;
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _wpTable = _interopRequireDefault(__webpack_require__(/*! ../components/wp-table */ "../modules/forms/submissions/assets/js/admin/components/wp-table/index.js"));
-
 var _router = __webpack_require__(/*! @reach/router */ "../node_modules/@reach/router/es/index.js");
-
 var _noticesContext = __webpack_require__(/*! ../context/notices-context */ "../modules/forms/submissions/assets/js/admin/context/notices-context.js");
-
 var _postBox = _interopRequireDefault(__webpack_require__(/*! ../components/post-box */ "../modules/forms/submissions/assets/js/admin/components/post-box.js"));
-
 var _formActionsLog = _interopRequireDefault(__webpack_require__(/*! ../components/form-actions-log */ "../modules/forms/submissions/assets/js/admin/components/form-actions-log.js"));
-
 var _noticeMessages = _interopRequireDefault(__webpack_require__(/*! ../notice-messages */ "../modules/forms/submissions/assets/js/admin/notice-messages.js"));
-
 var _useDataAction = _interopRequireWildcard(__webpack_require__(/*! ../hooks/use-data-action */ "../modules/forms/submissions/assets/js/admin/hooks/use-data-action.js"));
-
 var _date = __webpack_require__(/*! ../utils/date */ "../modules/forms/submissions/assets/js/admin/utils/date.js");
-
 var _submissionValue = _interopRequireDefault(__webpack_require__(/*! ../components/submission-value */ "../modules/forms/submissions/assets/js/admin/components/submission-value/index.js"));
-
 var _settingsContext = __webpack_require__(/*! ../context/settings-context */ "../modules/forms/submissions/assets/js/admin/context/settings-context.js");
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
+
 const {
   useEffect,
   useState,
   useMemo
 } = _react.default;
-
 function Item(props) {
-  var _data$form2;
-
+  var _data$form2, _data$values;
   const [{
-    data
-  }, setFetchResult] = useState({
-    data: {},
-    meta: {}
-  }),
-        [error, setError] = useState(null),
-        [isEditMode, setIsEditMode] = useState(false),
-        [formData, setFormData] = useState({}),
-        navigate = (0, _router.useNavigate)(),
-        {
-    notifySuccess,
-    notifyError
-  } = (0, _noticesContext.useNoticesContext)(),
-        {
-    isTrashEnabled
-  } = (0, _settingsContext.useSettingsContext)();
+      data
+    }, setFetchResult] = useState({
+      data: {},
+      meta: {}
+    }),
+    [error, setError] = useState(null),
+    [isEditMode, setIsEditMode] = useState(false),
+    [formData, setFormData] = useState({}),
+    navigate = (0, _router.useNavigate)(),
+    {
+      notifySuccess,
+      notifyError
+    } = (0, _noticesContext.useNoticesContext)(),
+    {
+      isTrashEnabled
+    } = (0, _settingsContext.useSettingsContext)();
   const fields = useMemo(() => {
     var _data$form;
-
-    return (_data$form = data.form) === null || _data$form === void 0 ? void 0 : _data$form.fields.reduce((current, field) => ({ ...current,
+    return (_data$form = data.form) === null || _data$form === void 0 ? void 0 : _data$form.fields.reduce((current, field) => ({
+      ...current,
       [field.id]: field
     }), {});
-  }, [(_data$form2 = data.form) === null || _data$form2 === void 0 ? void 0 : _data$form2.fields]); // Fetch a single submission on first render
+  }, [(_data$form2 = data.form) === null || _data$form2 === void 0 ? void 0 : _data$form2.fields]);
 
+  // Fetch a single submission on first render
   useEffect(() => {
     $e.data.get('form-submissions/index', {
       id: props.id
@@ -5233,17 +4868,18 @@ function Item(props) {
     }).then(resultData => {
       if (resultData.data.is_read) {
         return;
-      } // Mark the submission as read if is not read already
+      }
 
-
+      // Mark the submission as read if is not read already
       $e.data.update('form-submissions/index', {
         is_read: true
       }, {
         id: props.id
       });
     }).catch(e => setError(e));
-  }, []); // Move submission to trash
+  }, []);
 
+  // Move submission to trash
   const [deleteItem] = (0, _useDataAction.default)((_ref, _ref2) => {
     let [query = {}] = _ref;
     let {
@@ -5256,8 +4892,9 @@ function Item(props) {
     }, {
       signal: abortController.signal
     }).then(() => notifySuccess(messages.success(1))).then(() => navigate('/')).catch(() => notifyError(messages.error()));
-  }, [props.id]); // Update field values.
+  }, [props.id]);
 
+  // Update field values.
   const [update, {
     status: updateStatus
   }] = (0, _useDataAction.default)(_ref3 => {
@@ -5271,15 +4908,12 @@ function Item(props) {
       setFormData({});
     }).then(() => notifySuccess(_noticeMessages.default.updated.success(1))).catch(() => notifyError(_noticeMessages.default.updated.error()));
   }, [props.id]);
-
   if (!Object.keys(data).length) {
     if (error) {
       return /*#__PURE__*/_react.default.createElement("p", null, " ", error.message || __('Not Found', 'elementor-pro'), " ");
     }
-
     return __('Loading...', 'elementor-pro');
   }
-
   return /*#__PURE__*/_react.default.createElement("div", {
     id: "poststuff"
   }, /*#__PURE__*/_react.default.createElement("form", {
@@ -5287,11 +4921,9 @@ function Item(props) {
     className: "metabox-holder columns-2",
     onSubmit: e => {
       e.preventDefault();
-
       if (!isEditMode || updateStatus === _useDataAction.STATUS_LOADING) {
         return;
       }
-
       update(formData);
     }
   }, /*#__PURE__*/_react.default.createElement("div", {
@@ -5304,11 +4936,9 @@ function Item(props) {
     }, /*#__PURE__*/_react.default.createElement("h2", null, __('Submission', 'elementor-pro'), " #", data.id), /*#__PURE__*/_react.default.createElement("button", {
       onClick: e => {
         e.preventDefault();
-
         if (updateStatus === _useDataAction.STATUS_LOADING) {
           return;
         }
-
         setIsEditMode(prev => !prev);
       },
       className: "button button-secondary",
@@ -5317,9 +4947,8 @@ function Item(props) {
     }, isEditMode ? __('Cancel', 'elementor-pro') : __('Edit', 'elementor-pro')))
   }, /*#__PURE__*/_react.default.createElement(_wpTable.default, {
     className: "e-form-submissions-item-table"
-  }, /*#__PURE__*/_react.default.createElement(_wpTable.default.Body, null, data.values.map(value => {
+  }, /*#__PURE__*/_react.default.createElement(_wpTable.default.Body, null, ((_data$values = data.values) === null || _data$values === void 0 ? void 0 : _data$values.length) > 0 ? data.values.map(value => {
     var _fields$value$key;
-
     return /*#__PURE__*/_react.default.createElement(_wpTable.default.Row, {
       key: value.id
     }, /*#__PURE__*/_react.default.createElement(_wpTable.default.Cell, null, (fields === null || fields === void 0 ? void 0 : (_fields$value$key = fields[value.key]) === null || _fields$value$key === void 0 ? void 0 : _fields$value$key.label) || value.key), /*#__PURE__*/_react.default.createElement(_wpTable.default.Cell, null, /*#__PURE__*/_react.default.createElement(_submissionValue.default, {
@@ -5329,11 +4958,14 @@ function Item(props) {
         type: 'text'
       },
       isEditMode: isEditMode,
-      onChange: (id, fieldValue) => setFormData(prev => ({ ...prev,
+      onChange: (id, fieldValue) => setFormData(prev => ({
+        ...prev,
         [id]: fieldValue
       }))
     })));
-  }))))), data.form_actions_log && /*#__PURE__*/_react.default.createElement(_formActionsLog.default, {
+  }) : /*#__PURE__*/_react.default.createElement(_wpTable.default.Row, null, /*#__PURE__*/_react.default.createElement(_wpTable.default.Cell, {
+    colSpan: "2"
+  }, __('No data', 'elementor-pro'))))))), data.form_actions_log && /*#__PURE__*/_react.default.createElement(_formActionsLog.default, {
     actions: data.form_actions_log
   })), /*#__PURE__*/_react.default.createElement("div", {
     className: "postbox-container",
@@ -5395,7 +5027,6 @@ function Item(props) {
     className: "clear"
   }));
 }
-
 Item.propTypes = {
   id: PropTypes.string
 };
@@ -5418,15 +5049,12 @@ exports.formatToLocalDate = formatToLocalDate;
 exports.formatToLocalDateTime = formatToLocalDateTime;
 exports.formatToLocalTime = formatToLocalTime;
 const momentLocale = moment.localeData();
-
 function formatToLocalDate(dateString) {
   return wp.date.format(momentLocale.longDateFormat('LL'), dateString);
 }
-
 function formatToLocalTime(dateString) {
   return wp.date.format(momentLocale.longDateFormat('LT'), dateString);
 }
-
 function formatToLocalDateTime(dateString) {
   return `${formatToLocalDate(dateString)} ${formatToLocalTime(dateString)}`;
 }
@@ -5446,7 +5074,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = downloadBlob;
-
 /**
  * A util function to make sure the user download the blob data.
  *
@@ -5458,11 +5085,9 @@ function downloadBlob(blob) {
   const link = document.createElement('a');
   link.setAttribute('href', URL.createObjectURL(blob));
   link.style.visibility = 'hidden';
-
   if (filename) {
     link.setAttribute('download', filename);
   }
-
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
@@ -5577,10 +5202,10 @@ module.exports = {
   \********************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "../node_modules/core-js/internals/function-uncurry-this-raw.js");
 
-var toString = uncurryThis({}.toString);
-var stringSlice = uncurryThis(''.slice);
+var toString = uncurryThisRaw({}.toString);
+var stringSlice = uncurryThisRaw(''.slice);
 
 module.exports = function (it) {
   return stringSlice(toString(it), 8, -1);
@@ -5623,30 +5248,6 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     : CORRECT_ARGUMENTS ? classofRaw(O)
     // ES3 arguments fallback
     : (result = classofRaw(O)) == 'Object' && isCallable(O.callee) ? 'Arguments' : result;
-};
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/clear-error-stack.js":
-/*!**************************************************************!*\
-  !*** ../node_modules/core-js/internals/clear-error-stack.js ***!
-  \**************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
-
-var $Error = Error;
-var replace = uncurryThis(''.replace);
-
-var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
-var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
-var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
-
-module.exports = function (stack, dropEntries) {
-  if (IS_V8_OR_CHAKRA_STACK && typeof stack == 'string' && !$Error.prepareStackTrace) {
-    while (dropEntries--) stack = replace(stack, V8_OR_CHAKRA_STACK_ENTRY, '');
-  } return stack;
 };
 
 
@@ -5761,7 +5362,7 @@ module.exports = function (O, key, value, options) {
 
 var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
 
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
 
 module.exports = function (key, value) {
@@ -5785,9 +5386,28 @@ var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-
 
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 });
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/document-all.js":
+/*!*********************************************************!*\
+  !*** ../node_modules/core-js/internals/document-all.js ***!
+  \*********************************************************/
+/***/ ((module) => {
+
+var documentAll = typeof document == 'object' && document.all;
+
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
+
+module.exports = {
+  all: documentAll,
+  IS_HTMLDDA: IS_HTMLDDA
+};
 
 
 /***/ }),
@@ -5882,6 +5502,30 @@ module.exports = [
 
 /***/ }),
 
+/***/ "../node_modules/core-js/internals/error-stack-clear.js":
+/*!**************************************************************!*\
+  !*** ../node_modules/core-js/internals/error-stack-clear.js ***!
+  \**************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
+
+var $Error = Error;
+var replace = uncurryThis(''.replace);
+
+var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
+var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
+var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
+
+module.exports = function (stack, dropEntries) {
+  if (IS_V8_OR_CHAKRA_STACK && typeof stack == 'string' && !$Error.prepareStackTrace) {
+    while (dropEntries--) stack = replace(stack, V8_OR_CHAKRA_STACK_ENTRY, '');
+  } return stack;
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/internals/error-stack-installable.js":
 /*!********************************************************************!*\
   !*** ../node_modules/core-js/internals/error-stack-installable.js ***!
@@ -5894,7 +5538,7 @@ var createPropertyDescriptor = __webpack_require__(/*! ../internals/create-prope
 module.exports = !fails(function () {
   var error = Error('a');
   if (!('stack' in error)) return true;
-  // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+  // eslint-disable-next-line es/no-object-defineproperty -- safe
   Object.defineProperty(error, 'stack', createPropertyDescriptor(1, 7));
   return error.stack !== 7;
 });
@@ -5995,7 +5639,7 @@ var FunctionPrototype = Function.prototype;
 var apply = FunctionPrototype.apply;
 var call = FunctionPrototype.call;
 
-// eslint-disable-next-line es-x/no-reflect -- safe
+// eslint-disable-next-line es/no-reflect -- safe
 module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function () {
   return call.apply(apply, arguments);
 });
@@ -6012,7 +5656,7 @@ module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? c
 var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-js/internals/fails.js");
 
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-function-prototype-bind -- safe
+  // eslint-disable-next-line es/no-function-prototype-bind -- safe
   var test = (function () { /* empty */ }).bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
@@ -6048,7 +5692,7 @@ var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "../node_m
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
 
 var FunctionPrototype = Function.prototype;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
@@ -6065,25 +5709,41 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../node_modules/core-js/internals/function-uncurry-this-raw.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/core-js/internals/function-uncurry-this-raw.js ***!
+  \**********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "../node_modules/core-js/internals/function-bind-native.js");
+
+var FunctionPrototype = Function.prototype;
+var call = FunctionPrototype.call;
+var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
+
+module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
+  return function () {
+    return call.apply(fn, arguments);
+  };
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/internals/function-uncurry-this.js":
 /*!******************************************************************!*\
   !*** ../node_modules/core-js/internals/function-uncurry-this.js ***!
   \******************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "../node_modules/core-js/internals/function-bind-native.js");
+var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "../node_modules/core-js/internals/classof-raw.js");
+var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "../node_modules/core-js/internals/function-uncurry-this-raw.js");
 
-var FunctionPrototype = Function.prototype;
-var bind = FunctionPrototype.bind;
-var call = FunctionPrototype.call;
-var uncurryThis = NATIVE_BIND && bind.bind(call, call);
-
-module.exports = NATIVE_BIND ? function (fn) {
-  return fn && uncurryThis(fn);
-} : function (fn) {
-  return fn && function () {
-    return call.apply(fn, arguments);
-  };
+module.exports = function (fn) {
+  // Nashorn bug:
+  //   https://github.com/zloirock/core-js/issues/1128
+  //   https://github.com/zloirock/core-js/issues/1130
+  if (classofRaw(fn) === 'Function') return uncurryThisRaw(fn);
 };
 
 
@@ -6116,12 +5776,13 @@ module.exports = function (namespace, method) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
+var isNullOrUndefined = __webpack_require__(/*! ../internals/is-null-or-undefined */ "../node_modules/core-js/internals/is-null-or-undefined.js");
 
 // `GetMethod` abstract operation
 // https://tc39.es/ecma262/#sec-getmethod
 module.exports = function (V, P) {
   var func = V[P];
-  return func == null ? undefined : aCallable(func);
+  return isNullOrUndefined(func) ? undefined : aCallable(func);
 };
 
 
@@ -6139,7 +5800,7 @@ var check = function (it) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 module.exports =
-  // eslint-disable-next-line es-x/no-global-this -- safe
+  // eslint-disable-next-line es/no-global-this -- safe
   check(typeof globalThis == 'object' && globalThis) ||
   check(typeof window == 'object' && window) ||
   // eslint-disable-next-line no-restricted-globals -- safe
@@ -6164,7 +5825,7 @@ var hasOwnProperty = uncurryThis({}.hasOwnProperty);
 
 // `HasOwnProperty` abstract operation
 // https://tc39.es/ecma262/#sec-hasownproperty
-// eslint-disable-next-line es-x/no-object-hasown -- safe
+// eslint-disable-next-line es/no-object-hasown -- safe
 module.exports = Object.hasOwn || function hasOwn(it, key) {
   return hasOwnProperty(toObject(it), key);
 };
@@ -6195,7 +5856,7 @@ var createElement = __webpack_require__(/*! ../internals/document-create-element
 
 // Thanks to IE8 for its funny defineProperty
 module.exports = !DESCRIPTORS && !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
   }).a != 7;
@@ -6307,9 +5968,8 @@ module.exports = function (O, options) {
   \***********************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var NATIVE_WEAK_MAP = __webpack_require__(/*! ../internals/native-weak-map */ "../node_modules/core-js/internals/native-weak-map.js");
+var NATIVE_WEAK_MAP = __webpack_require__(/*! ../internals/weak-map-basic-detection */ "../node_modules/core-js/internals/weak-map-basic-detection.js");
 var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
 var isObject = __webpack_require__(/*! ../internals/is-object */ "../node_modules/core-js/internals/is-object.js");
 var createNonEnumerableProperty = __webpack_require__(/*! ../internals/create-non-enumerable-property */ "../node_modules/core-js/internals/create-non-enumerable-property.js");
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
@@ -6337,26 +5997,28 @@ var getterFor = function (TYPE) {
 
 if (NATIVE_WEAK_MAP || shared.state) {
   var store = shared.state || (shared.state = new WeakMap());
-  var wmget = uncurryThis(store.get);
-  var wmhas = uncurryThis(store.has);
-  var wmset = uncurryThis(store.set);
+  /* eslint-disable no-self-assign -- prototype methods protection */
+  store.get = store.get;
+  store.has = store.has;
+  store.set = store.set;
+  /* eslint-enable no-self-assign -- prototype methods protection */
   set = function (it, metadata) {
-    if (wmhas(store, it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
-    wmset(store, it, metadata);
+    store.set(it, metadata);
     return metadata;
   };
   get = function (it) {
-    return wmget(store, it) || {};
+    return store.get(it) || {};
   };
   has = function (it) {
-    return wmhas(store, it);
+    return store.has(it);
   };
 } else {
   var STATE = sharedKey('state');
   hiddenKeys[STATE] = true;
   set = function (it, metadata) {
-    if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (hasOwn(it, STATE)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     createNonEnumerableProperty(it, STATE, metadata);
     return metadata;
@@ -6384,11 +6046,17 @@ module.exports = {
 /*!********************************************************!*\
   !*** ../node_modules/core-js/internals/is-callable.js ***!
   \********************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var $documentAll = __webpack_require__(/*! ../internals/document-all */ "../node_modules/core-js/internals/document-all.js");
+
+var documentAll = $documentAll.all;
 
 // `IsCallable` abstract operation
 // https://tc39.es/ecma262/#sec-iscallable
-module.exports = function (argument) {
+module.exports = $documentAll.IS_HTMLDDA ? function (argument) {
+  return typeof argument == 'function' || argument === documentAll;
+} : function (argument) {
   return typeof argument == 'function';
 };
 
@@ -6427,6 +6095,21 @@ module.exports = isForced;
 
 /***/ }),
 
+/***/ "../node_modules/core-js/internals/is-null-or-undefined.js":
+/*!*****************************************************************!*\
+  !*** ../node_modules/core-js/internals/is-null-or-undefined.js ***!
+  \*****************************************************************/
+/***/ ((module) => {
+
+// we can't use just `it == null` since of `document.all` special case
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
+module.exports = function (it) {
+  return it === null || it === undefined;
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/internals/is-object.js":
 /*!******************************************************!*\
   !*** ../node_modules/core-js/internals/is-object.js ***!
@@ -6434,8 +6117,13 @@ module.exports = isForced;
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../node_modules/core-js/internals/is-callable.js");
+var $documentAll = __webpack_require__(/*! ../internals/document-all */ "../node_modules/core-js/internals/document-all.js");
 
-module.exports = function (it) {
+var documentAll = $documentAll.all;
+
+module.exports = $documentAll.IS_HTMLDDA ? function (it) {
+  return typeof it == 'object' ? it !== null : isCallable(it) || it === documentAll;
+} : function (it) {
   return typeof it == 'object' ? it !== null : isCallable(it);
 };
 
@@ -6509,7 +6197,7 @@ var InternalStateModule = __webpack_require__(/*! ../internals/internal-state */
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
@@ -6563,51 +6251,11 @@ var floor = Math.floor;
 
 // `Math.trunc` method
 // https://tc39.es/ecma262/#sec-math.trunc
-// eslint-disable-next-line es-x/no-math-trunc -- safe
+// eslint-disable-next-line es/no-math-trunc -- safe
 module.exports = Math.trunc || function trunc(x) {
   var n = +x;
   return (n > 0 ? floor : ceil)(n);
 };
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/native-symbol.js":
-/*!**********************************************************!*\
-  !*** ../node_modules/core-js/internals/native-symbol.js ***!
-  \**********************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-/* eslint-disable es-x/no-symbol -- required for testing */
-var V8_VERSION = __webpack_require__(/*! ../internals/engine-v8-version */ "../node_modules/core-js/internals/engine-v8-version.js");
-var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-js/internals/fails.js");
-
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- required for testing
-module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
-  var symbol = Symbol();
-  // Chrome 38 Symbol has incorrect toString conversion
-  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
-  return !String(symbol) || !(Object(symbol) instanceof Symbol) ||
-    // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
-    !Symbol.sham && V8_VERSION && V8_VERSION < 41;
-});
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/native-weak-map.js":
-/*!************************************************************!*\
-  !*** ../node_modules/core-js/internals/native-weak-map.js ***!
-  \************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
-var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../node_modules/core-js/internals/is-callable.js");
-var inspectSource = __webpack_require__(/*! ../internals/inspect-source */ "../node_modules/core-js/internals/inspect-source.js");
-
-var WeakMap = global.WeakMap;
-
-module.exports = isCallable(WeakMap) && /native code/.test(inspectSource(WeakMap));
 
 
 /***/ }),
@@ -6640,9 +6288,9 @@ var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_module
 var toPropertyKey = __webpack_require__(/*! ../internals/to-property-key */ "../node_modules/core-js/internals/to-property-key.js");
 
 var $TypeError = TypeError;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var $defineProperty = Object.defineProperty;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 var ENUMERABLE = 'enumerable';
 var CONFIGURABLE = 'configurable';
@@ -6695,7 +6343,7 @@ var toPropertyKey = __webpack_require__(/*! ../internals/to-property-key */ "../
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
 var IE8_DOM_DEFINE = __webpack_require__(/*! ../internals/ie8-dom-define */ "../node_modules/core-js/internals/ie8-dom-define.js");
 
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // `Object.getOwnPropertyDescriptor` method
@@ -6725,7 +6373,7 @@ var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 // `Object.getOwnPropertyNames` method
 // https://tc39.es/ecma262/#sec-object.getownpropertynames
-// eslint-disable-next-line es-x/no-object-getownpropertynames -- safe
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
@@ -6739,7 +6387,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   \****************************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- safe
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 exports.f = Object.getOwnPropertySymbols;
 
 
@@ -6797,7 +6445,7 @@ module.exports = function (object, names) {
 "use strict";
 
 var $propertyIsEnumerable = {}.propertyIsEnumerable;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Nashorn ~ JDK8 bug
@@ -6827,13 +6475,13 @@ var aPossiblePrototype = __webpack_require__(/*! ../internals/a-possible-prototy
 // `Object.setPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.setprototypeof
 // Works with __proto__ only. Old v8 can't work with null proto objects.
-// eslint-disable-next-line es-x/no-object-setprototypeof -- safe
+// eslint-disable-next-line es/no-object-setprototypeof -- safe
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   var CORRECT_SETTER = false;
   var test = {};
   var setter;
   try {
-    // eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
     setter = uncurryThis(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set);
     setter(test, []);
     CORRECT_SETTER = test instanceof Array;
@@ -6922,14 +6570,16 @@ module.exports = function (Target, Source, key) {
 /*!*********************************************************************!*\
   !*** ../node_modules/core-js/internals/require-object-coercible.js ***!
   \*********************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var isNullOrUndefined = __webpack_require__(/*! ../internals/is-null-or-undefined */ "../node_modules/core-js/internals/is-null-or-undefined.js");
 
 var $TypeError = TypeError;
 
 // `RequireObjectCoercible` abstract operation
 // https://tc39.es/ecma262/#sec-requireobjectcoercible
 module.exports = function (it) {
-  if (it == undefined) throw $TypeError("Can't call method on " + it);
+  if (isNullOrUndefined(it)) throw $TypeError("Can't call method on " + it);
   return it;
 };
 
@@ -6983,11 +6633,34 @@ var store = __webpack_require__(/*! ../internals/shared-store */ "../node_module
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.23.4',
+  version: '3.26.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.23.4/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
+});
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/symbol-constructor-detection.js":
+/*!*************************************************************************!*\
+  !*** ../node_modules/core-js/internals/symbol-constructor-detection.js ***!
+  \*************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/* eslint-disable es/no-symbol -- required for testing */
+var V8_VERSION = __webpack_require__(/*! ../internals/engine-v8-version */ "../node_modules/core-js/internals/engine-v8-version.js");
+var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-js/internals/fails.js");
+
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
+module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
+  var symbol = Symbol();
+  // Chrome 38 Symbol has incorrect toString conversion
+  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
+  return !String(symbol) || !(Object(symbol) instanceof Symbol) ||
+    // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
+    !Symbol.sham && V8_VERSION && V8_VERSION < 41;
 });
 
 
@@ -7223,8 +6896,8 @@ module.exports = function (key) {
   \**************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-/* eslint-disable es-x/no-symbol -- required for testing */
-var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/native-symbol */ "../node_modules/core-js/internals/native-symbol.js");
+/* eslint-disable es/no-symbol -- required for testing */
+var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/symbol-constructor-detection */ "../node_modules/core-js/internals/symbol-constructor-detection.js");
 
 module.exports = NATIVE_SYMBOL
   && !Symbol.sham
@@ -7245,12 +6918,28 @@ var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-
 // V8 ~ Chrome 36-
 // https://bugs.chromium.org/p/v8/issues/detail?id=3334
 module.exports = DESCRIPTORS && fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(function () { /* empty */ }, 'prototype', {
     value: 42,
     writable: false
   }).prototype != 42;
 });
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/weak-map-basic-detection.js":
+/*!*********************************************************************!*\
+  !*** ../node_modules/core-js/internals/weak-map-basic-detection.js ***!
+  \*********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
+var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../node_modules/core-js/internals/is-callable.js");
+
+var WeakMap = global.WeakMap;
+
+module.exports = isCallable(WeakMap) && /native code/.test(String(WeakMap));
 
 
 /***/ }),
@@ -7265,7 +6954,7 @@ var global = __webpack_require__(/*! ../internals/global */ "../node_modules/cor
 var shared = __webpack_require__(/*! ../internals/shared */ "../node_modules/core-js/internals/shared.js");
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
 var uid = __webpack_require__(/*! ../internals/uid */ "../node_modules/core-js/internals/uid.js");
-var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/native-symbol */ "../node_modules/core-js/internals/native-symbol.js");
+var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/symbol-constructor-detection */ "../node_modules/core-js/internals/symbol-constructor-detection.js");
 var USE_SYMBOL_AS_UID = __webpack_require__(/*! ../internals/use-symbol-as-uid */ "../node_modules/core-js/internals/use-symbol-as-uid.js");
 
 var WellKnownSymbolsStore = shared('wks');
@@ -7307,7 +6996,7 @@ var proxyAccessor = __webpack_require__(/*! ../internals/proxy-accessor */ "../n
 var inheritIfRequired = __webpack_require__(/*! ../internals/inherit-if-required */ "../node_modules/core-js/internals/inherit-if-required.js");
 var normalizeStringArgument = __webpack_require__(/*! ../internals/normalize-string-argument */ "../node_modules/core-js/internals/normalize-string-argument.js");
 var installErrorCause = __webpack_require__(/*! ../internals/install-error-cause */ "../node_modules/core-js/internals/install-error-cause.js");
-var clearErrorStack = __webpack_require__(/*! ../internals/clear-error-stack */ "../node_modules/core-js/internals/clear-error-stack.js");
+var clearErrorStack = __webpack_require__(/*! ../internals/error-stack-clear */ "../node_modules/core-js/internals/error-stack-clear.js");
 var ERROR_STACK_INSTALLABLE = __webpack_require__(/*! ../internals/error-stack-installable */ "../node_modules/core-js/internals/error-stack-installable.js");
 var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "../node_modules/core-js/internals/descriptors.js");
 var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "../node_modules/core-js/internals/is-pure.js");
@@ -9211,19 +8900,16 @@ function _extends() {
   module.exports = _extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-
       for (var key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
         }
       }
     }
-
     return target;
   }, module.exports.__esModule = true, module.exports["default"] = module.exports;
   return _extends.apply(this, arguments);
 }
-
 module.exports = _extends, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
@@ -9239,7 +8925,6 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ })
@@ -9346,7 +9031,7 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "jszip.vendor") return "" + chunkId + ".2d31998ec05c74562278.bundle.js";
+/******/ 			if (chunkId === "jszip.vendor") return "" + chunkId + ".a3c65615c1de5560962d.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
@@ -9406,8 +9091,7 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /******/ 				script.parentNode && script.parentNode.removeChild(script);
 /******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
 /******/ 				if(prev) return prev(event);
-/******/ 			}
-/******/ 			;
+/******/ 			};
 /******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
 /******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
 /******/ 			script.onload = onScriptComplete.bind(null, script.onload);
@@ -9547,15 +9231,10 @@ var __webpack_exports__ = {};
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _react = _interopRequireDefault(__webpack_require__(/*! react */ "react"));
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./data/component */ "../modules/forms/submissions/assets/js/admin/data/component.js"));
-
 var _formsComponent = _interopRequireDefault(__webpack_require__(/*! ./data/forms-component */ "../modules/forms/submissions/assets/js/admin/data/forms-component.js"));
-
 var _app = _interopRequireDefault(__webpack_require__(/*! ./app */ "../modules/forms/submissions/assets/js/admin/app.js"));
-
 $e.components.register(new _component.default());
 $e.components.register(new _formsComponent.default());
 const AppWrapper = elementorCommon.config.isDebug ? _react.default.StrictMode : _react.default.Fragment;

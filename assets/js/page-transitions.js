@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.9.0 - 06-12-2022 */
+/*! elementor-pro - v3.10.3 - 29-01-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -26,9 +26,7 @@ Object.defineProperty(exports, "Preloader", ({
     return _preloader.Preloader;
   }
 }));
-
 var _pageTransition = __webpack_require__(/*! ./page-transition/page-transition */ "../modules/page-transitions/assets/js/frontend/components/page-transition/page-transition.js");
-
 var _preloader = __webpack_require__(/*! ./preloader/preloader */ "../modules/page-transitions/assets/js/frontend/components/preloader/preloader.js");
 
 /***/ }),
@@ -57,18 +55,18 @@ var _default = {
   notSameOrigin: a => !a.href.startsWith(window.location.origin),
   hasFragment: a => !!a.href.match(urlFragmentPattern),
   // Internal page links, popups, etc.
+
   // Disable for popup links / menu toggles, only when they are closed (to allow opening).
   isPopup: a => 'true' === a.getAttribute('aria-haspopup') && 'false' === a.getAttribute('aria-expanded'),
   // Disable in WooCommerce links.
   isWoocommerce: a => {
     var _a$parentElement;
-
     const isAddToCart = a.href.match(/\?add-to-cart=/),
-          isRemoveFromCart = a.href.match(/\?remove_item=/),
-          isRestoreToCart = a.href.match(/\?undo_item=/),
-          isWoocommercePagination = a.href.match(/\?product-page=/),
-          isWoocommerceLogout = a.href.match(/\?elementor_wc_logout=/),
-          isWoocommerceTab = (_a$parentElement = a.parentElement) === null || _a$parentElement === void 0 ? void 0 : _a$parentElement.classList.contains('woocommerce-MyAccount-navigation-link');
+      isRemoveFromCart = a.href.match(/\?remove_item=/),
+      isRestoreToCart = a.href.match(/\?undo_item=/),
+      isWoocommercePagination = a.href.match(/\?product-page=/),
+      isWoocommerceLogout = a.href.match(/\?elementor_wc_logout=/),
+      isWoocommerceTab = (_a$parentElement = a.parentElement) === null || _a$parentElement === void 0 ? void 0 : _a$parentElement.classList.contains('woocommerce-MyAccount-navigation-link');
     return isAddToCart || isRemoveFromCart || isRestoreToCart || isWoocommercePagination || isWoocommerceLogout || isWoocommerceTab;
   },
   // Custom regex filter from attributes.
@@ -88,16 +86,12 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PageTransition = void 0;
-
 var _pageTransitionComponent = _interopRequireDefault(__webpack_require__(/*! ./page-transition.component.scss */ "../modules/page-transitions/assets/js/frontend/components/page-transition/page-transition.component.scss"));
-
 var _filters = _interopRequireDefault(__webpack_require__(/*! ./filters */ "../modules/page-transitions/assets/js/frontend/components/page-transition/filters.js"));
-
 class PageTransition extends HTMLElement {
   /**
    * Initialize the Page Transitions element.
@@ -110,13 +104,12 @@ class PageTransition extends HTMLElement {
     this.elements = this.getElements();
     this.bindEvents();
   }
+
   /**
    * Get a list of classes that are used in the code.
    *
    * @return {Object} - List of classes.
    */
-
-
   getClasses() {
     return {
       preloader: 'e-page-transition--preloader',
@@ -126,132 +119,121 @@ class PageTransition extends HTMLElement {
       preview: 'e-page-transition--preview'
     };
   }
+
   /**
    * Get the Page Transition CSS.
    *
    * @return {string} - CSS code.
    */
-
-
   getStyle() {
     return `<style>${_pageTransitionComponent.default.toString()}</style>`;
   }
+
   /**
    * A list of attributes to observe for changes.
    *
    * @return {string[]} - Attributes to observe.
    */
-
-
   static get observedAttributes() {
     return ['preloader-type', 'preloader-icon', 'preloader-image-url', 'preloader-animation-type', 'disabled'];
   }
+
   /**
    * Get the Page Transitions elements.
    *
    * @return {Object} - Elements.
    */
-
-
   getElements() {
     const triggers = this.getAttribute('triggers'),
-          selector = triggers || 'a:not( [data-elementor-open-lightbox="yes"] )';
+      selector = triggers || 'a:not( [data-elementor-open-lightbox="yes"] )';
     return {
       links: document.querySelectorAll(selector)
     };
   }
+
   /**
    * Determine if a link should trigger a Page Transition effect.
    *
    * @param {HTMLAnchorElement} a - The anchor element to check.
    * @return {boolean} - Whether the given link should activate the Page Transition.
    */
-
-
   shouldPageTriggerTransition(a) {
     return Object.values(_filters.default).every(shouldDisable => !shouldDisable(a, this.getAttribute('exclude')));
   }
+
   /**
    * Hide the loader on page show.
    *
    * @return {void}
    */
-
-
   onPageShow() {
     // To disable animation on back / forward click.
     if (this.classList.contains(this.classes.exiting)) {
       this.classList.add(this.classes.entered);
       this.classList.remove(this.classes.exiting);
-    } // Animate the loader on page load.
+    }
 
-
+    // Animate the loader on page load.
     this.animateState('entering').then(() => {
       this.classList.add(this.classes.entered);
     });
   }
+
   /**
    * Trigger the Page Transition on link click.
    *
    * @param {MouseEvent} e - The click Event.
    * @return {void}
    */
-
-
   onLinkClick(e) {
     if (!this.shouldPageTriggerTransition(e.currentTarget)) {
       return;
     }
-
     e.preventDefault();
     const href = e.currentTarget.href;
     this.classList.remove(this.classes.entered);
     this.animateState('exiting', this.getPreloaderDelay()).then(() => {
-      this.classList.add(this.classes.exiting); // Redirect the user to the clicked href only after the Page Transition has entered.
+      this.classList.add(this.classes.exiting);
 
+      // Redirect the user to the clicked href only after the Page Transition has entered.
       location.href = href;
     });
   }
+
   /**
    * Prerender a webpage using `rel=prerender`.
    *
    * @param {string} href
    * @return {void}
    */
-
-
   prerender(href) {
     if (document.querySelector(`link[href="${href}"]`)) {
       return;
     }
-
     const link = document.createElement('link');
     link.setAttribute('rel', 'prerender');
     link.setAttribute('href', href);
     document.head.appendChild(link);
   }
+
   /**
    * Trigger a `prerender` on link mouse enter.
    *
    * @param {MouseEvent} e
    * @return {void}
    */
-
-
   onLinkMouseEnter(e) {
     if (!this.shouldPageTriggerTransition(e.currentTarget)) {
       return;
     }
-
     this.prerender(e.currentTarget.href);
   }
+
   /**
    * Bind events to the window & links.
    *
    * @return {void}
    */
-
-
   bindEvents() {
     window.addEventListener('pageshow', this.onPageShow.bind(this));
     window.addEventListener('DOMContentLoaded', () => {
@@ -263,6 +245,7 @@ class PageTransition extends HTMLElement {
       });
     });
   }
+
   /**
    * Escape HTML special chars to prevent XSS.
    *
@@ -270,8 +253,6 @@ class PageTransition extends HTMLElement {
    *
    * @return {string} escaped string
    */
-
-
   escapeHTML(str) {
     const specialChars = {
       '&': '&amp;',
@@ -282,86 +263,75 @@ class PageTransition extends HTMLElement {
     };
     return str.replace(/[&<>'"]/g, tag => specialChars[tag] || tag);
   }
+
   /**
    * Retrieve an icon loader HTML markup.
    *
    * @return {string} - HTML markup.
    */
-
-
   getIconLoader() {
     const icon = this.getAttribute('preloader-icon') || '';
     return `
 			<i class="${this.escapeHTML(icon)} ${this.classes.preloader}"></i>
 		`;
   }
+
   /**
    * Retrieve an image loader HTML markup.
    *
    * @return {string} - HTML markup.
    */
-
-
   getImageLoader() {
     const url = this.getAttribute('preloader-image-url') || '';
     return `
 			<img class="${this.classes.preloader}" src="${this.escapeHTML(url)}" />
 		`;
   }
+
   /**
    * Retrieve a custom loader HTML markup.
    *
    * @return {string} - HTML markup.
    */
-
-
   getAnimationLoader() {
     const type = this.getAttribute('preloader-animation-type');
-
     if (!type) {
       return '';
     }
-
     return `
 			<e-preloader type="${type}"></e-preloader>
 		`;
   }
+
   /**
    * Render the Page Transition element.
    *
    * @return {void}
    */
-
-
   render() {
     // Don't render when the Page Transition is disabled.
     if (this.hasAttribute('disabled')) {
       this.innerHTML = '';
       return;
     }
-
     const loaderType = this.getAttribute('preloader-type');
-
     switch (loaderType) {
       case 'icon':
         this.innerHTML = this.getIconLoader();
         break;
-
       case 'image':
         this.innerHTML = this.getImageLoader();
         break;
-
       case 'animation':
         this.innerHTML = this.getAnimationLoader();
         break;
-
       default:
         this.innerHTML = '';
         break;
     }
-
     this.innerHTML += this.getStyle();
   }
+
   /**
    * Get a CSS variable value from the current element's context.
    *
@@ -369,12 +339,11 @@ class PageTransition extends HTMLElement {
    * @param {string} prefix   - Variable prefix, defaults to `e-page-transition`.
    * @return {string} - CSS variable value.
    */
-
-
   getCssVar(variable) {
     let prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'e-page-transition-';
     return window.getComputedStyle(this).getPropertyValue(`--${prefix}${variable}`);
   }
+
   /**
    * Get the animation duration as an integer in order to be used inside a `setTimeout`.
    *
@@ -382,11 +351,10 @@ class PageTransition extends HTMLElement {
    *
    * @return {number} - Animation duration.
    */
-
-
   getAnimationDuration() {
     return parseInt(this.getCssVar('animation-duration')) || 0;
   }
+
   /**
    * Get the preloader delay.
    *
@@ -394,18 +362,15 @@ class PageTransition extends HTMLElement {
    *
    * @return {number} - Preloader delay.
    */
-
-
   getPreloaderDelay() {
     return parseInt(this.getCssVar('delay', 'e-preloader-')) || 0;
   }
+
   /**
    * Start the animate sequence of the Page Transition (enter && exit).
    *
    * @return {Promise} - Animation sequence Promise.
    */
-
-
   animate() {
     // Don't animate if there is already an animation in progress.
     if (this.isAnimating) {
@@ -413,9 +378,9 @@ class PageTransition extends HTMLElement {
         reject('Animation is already in progress.');
       });
     }
+    this.isAnimating = true;
 
-    this.isAnimating = true; // Delay the exit animation so the user will be able to see the loader for a second.
-
+    // Delay the exit animation so the user will be able to see the loader for a second.
     const delay = this.getPreloaderDelay() + 1500;
     this.classList.remove(this.classes.entered);
     return new Promise(resolve => {
@@ -432,6 +397,7 @@ class PageTransition extends HTMLElement {
       });
     });
   }
+
   /**
    * Animate a state of the Page Transition (enter || exit).
    *
@@ -439,24 +405,21 @@ class PageTransition extends HTMLElement {
    * @param {number}                 delay - Delay (in ms) before resolving the Promise.
    * @return {Promise} - Animation sequence Promise.
    */
-
-
   animateState(state) {
     var _this$classes;
-
     let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
     const className = (_this$classes = this.classes) === null || _this$classes === void 0 ? void 0 : _this$classes[state];
-
     if (!className) {
       return new Promise((resolve, reject) => {
         reject(state);
       });
-    } // Remove and add the class again to force the animation, since it's using `animation-fill-mode: forwards`.
+    }
 
-
+    // Remove and add the class again to force the animation, since it's using `animation-fill-mode: forwards`.
     this.classList.remove(className);
-    this.classList.add(className); // Return a Promise for animations chaining.
+    this.classList.add(className);
 
+    // Return a Promise for animations chaining.
     const animationDuration = this.getAnimationDuration();
     return new Promise(resolve => {
       setTimeout(() => {
@@ -465,29 +428,25 @@ class PageTransition extends HTMLElement {
       }, animationDuration + delay);
     });
   }
+
   /**
    * Listen to attribute changes and re-render the element.
    *
    * @return {void}
    */
-
-
   attributeChangedCallback() {
     this.render();
   }
+
   /**
    * Render the element when attached to the document.
    *
    * @return {void}
    */
-
-
   connectedCallback() {
     this.render();
   }
-
 }
-
 exports.PageTransition = PageTransition;
 var _default = PageTransition;
 exports["default"] = _default;
@@ -504,14 +463,11 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Preloader = void 0;
-
 var _preloaderComponent = _interopRequireDefault(__webpack_require__(/*! ./preloader.component.scss */ "../modules/page-transitions/assets/js/frontend/components/preloader/preloader.component.scss"));
-
 class Preloader extends HTMLElement {
   /**
    * A list of attributes to observe for changes.
@@ -521,42 +477,37 @@ class Preloader extends HTMLElement {
   static get observedAttributes() {
     return ['type'];
   }
+
   /**
    * Listen to attribute changes and re-render the element.
    *
    * @return {void}
    */
-
-
   attributeChangedCallback() {
     this.render();
   }
+
   /**
    * Get the Preloader CSS.
    *
    * @return {string} - CSS code.
    */
-
-
   getStyle() {
     return `<style>${_preloaderComponent.default.toString()}</style>`;
   }
+
   /**
    * Render the Preloader element.
    *
    * @return {void}
    */
-
-
   render() {
     const type = this.getAttribute('type'),
-          dotsTypes = ['bouncing-dots', 'pulsing-dots'];
+      dotsTypes = ['bouncing-dots', 'pulsing-dots'];
     this.innerHTML = '';
-
     if (!type) {
       return;
     }
-
     if (dotsTypes.includes(type)) {
       this.innerHTML += `
 				<i></i>
@@ -565,22 +516,18 @@ class Preloader extends HTMLElement {
 				<i></i>
 			`;
     }
-
     this.innerHTML += this.getStyle();
   }
+
   /**
    * Render the element when attached to the document.
    *
    * @return {void}
    */
-
-
   connectedCallback() {
     this.render();
   }
-
 }
-
 exports.Preloader = Preloader;
 var _default = Preloader;
 exports["default"] = _default;
@@ -722,7 +669,6 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ })
@@ -809,9 +755,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _components = __webpack_require__(/*! ./components */ "../modules/page-transitions/assets/js/frontend/components/index.js");
-
 class PageTransitionsFrontend {
   /**
    * Initialize the module.
@@ -822,9 +766,7 @@ class PageTransitionsFrontend {
     customElements.define('e-preloader', _components.Preloader);
     customElements.define('e-page-transition', _components.PageTransition);
   }
-
 }
-
 exports["default"] = PageTransitionsFrontend;
 new PageTransitionsFrontend();
 })();

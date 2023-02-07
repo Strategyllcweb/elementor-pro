@@ -21,19 +21,30 @@ class Module extends Module_Base {
 	 */
 	const TEMPLATE_LIBRARY_TYPE_SLUG = 'loop-item';
 	const EXPERIMENT_NAME = 'loop';
+	const LOOP_CAROUSEL_EXPERIMENT_NAME = 'loop-carousel';
 	const LOOP_BASE_SKIN_ID = 'base';
 	const LOOP_POST_SKIN_ID = 'post';
+	const LOOP_CAROUSEL_BASE_SKIN_ID = 'carousel-base';
+	const LOOP_CAROUSEL_POST_SKIN_ID = 'carousel-post';
 	const CONTAINER_EXPERIMENT = 'container';
 	const QUERY_ID = 'query';
+	const LOOP_WIDGETS = [
+		'loop-grid',
+		'loop-carousel',
+	];
 
 	public function get_name() {
 		return 'loop-builder';
 	}
 
 	protected function get_widgets() {
-		return [
-			'Loop_Grid',
-		];
+		$widgets = [ 'Loop_Grid' ];
+
+		if ( Plugin::elementor()->experiments->is_feature_active( static::LOOP_CAROUSEL_EXPERIMENT_NAME ) ) {
+			$widgets[] = 'Loop_Carousel';
+		}
+
+		return $widgets;
 	}
 
 	public function __construct() {
@@ -59,6 +70,8 @@ class Module extends Module_Base {
 			add_filter( 'template_include', [ $this, 'filter_template_to_canvas_view' ], 999 );
 			add_filter( 'body_class', [ $this, 'filter_body_class' ] );
 		}
+
+		$this->initialize_loop_carousel_experiment();
 	}
 
 	public function filter_template_to_canvas_view() {
@@ -96,6 +109,25 @@ class Module extends Module_Base {
 				'default_active' => true,
 				'minimum_installation_version' => '3.8.0',
 			],
+		];
+	}
+
+	public static function get_loop_carousel_experimental_data() {
+		return [
+			'name' => static::LOOP_CAROUSEL_EXPERIMENT_NAME,
+			'tag' => esc_html__( 'Feature', 'elementor-pro' ),
+			'title' => esc_html__( 'Loop Carousel', 'elementor-pro' ),
+			'default' => Manager::STATE_INACTIVE,
+			'hidden' => true,
+			'new_site' => [
+				'default_active' => true,
+				'minimum_installation_version' => '3.11.0',
+			],
+			'release_status' => Manager::RELEASE_STATUS_BETA,
+			'description' => esc_html__(
+				'Create powerful & repeating templates and populate each one with dynamic content like text or images. Great for listings, posts, portfolios and more!',
+				'elementor-pro'
+			),
 		];
 	}
 
@@ -159,6 +191,17 @@ class Module extends Module_Base {
 				'template-type' => self::TEMPLATE_LIBRARY_TYPE_SLUG,
 			],
 		] );
+	}
+
+	/**
+	 * Add the loop carousel experiment.
+	 *
+	 * @return bool - Whether the experiment is on or off.
+	 */
+	private function initialize_loop_carousel_experiment() {
+		$experiments_manager = Plugin::elementor()->experiments;
+
+		$experiments_manager->add_feature( self::get_loop_carousel_experimental_data() );
 	}
 
 	public function get_source_type_from_post_meta( $post_id ) {

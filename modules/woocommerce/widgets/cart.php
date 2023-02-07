@@ -2513,7 +2513,7 @@ class Cart extends Base_Widget {
 	 * WooCommerce Get Cart Url
 	 *
 	 * Used with the `woocommerce_get_cart_url`. This sets the url to the current page, so links like the `remove_url`
-	 * wre set to the current page, and not the existing WooCommerce cart endpoint.
+	 * are set to the current page, and not the existing WooCommerce cart endpoint.
 	 *
 	 * @since 3.7.0
 	 *
@@ -2579,7 +2579,6 @@ class Cart extends Base_Widget {
 
 		if ( $this->has_empty_cart_template() ) {
 			remove_action( 'woocommerce_cart_is_empty', 'wc_empty_cart_message', 10 );
-			add_action( 'woocommerce_cart_is_empty', [ $this, 'display_empty_cart_template' ], 10 );
 		}
 
 		// Remove cross-sells in cart.
@@ -2607,6 +2606,7 @@ class Cart extends Base_Widget {
 		remove_action( 'woocommerce_after_cart_contents', [ $this, 'enable_cart_coupon' ] );
 		remove_action( 'woocommerce_get_cart_url', [ $this, 'woocommerce_get_cart_url' ] );
 		add_action( 'woocommerce_cart_collaterals', 'woocommerce_cross_sell_display' );
+
 		if ( $this->has_empty_cart_template() ) {
 			add_action( 'woocommerce_cart_is_empty', 'wc_empty_cart_message', 10 );
 		}

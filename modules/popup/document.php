@@ -36,6 +36,7 @@ class Document extends Theme_Section_Document {
 		$properties['location'] = 'popup';
 		$properties['support_kit'] = true;
 		$properties['support_site_editor'] = false;
+		$properties['support_lazyload'] = false;
 
 		return $properties;
 	}

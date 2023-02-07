@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.9.0 - 06-12-2022 */
+/*! elementor-pro - v3.10.3 - 29-01-2023 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -13,37 +13,29 @@
 
 module.exports = elementorModules.editor.utils.Module.extend({
   elementType: null,
-
   __construct(elementType) {
     this.elementType = elementType;
     this.addEditorListener();
   },
-
   updateOptions(name, options) {
     const controlView = this.getEditorControlView(name);
-
     if (controlView) {
       this.getEditorControlModel(name).set('options', options);
       controlView.render();
     }
   },
-
   addEditorListener() {
     var self = this;
-
     if (self.onElementChange) {
       var eventName = 'change';
-
       if ('global' !== self.elementType) {
         eventName += ':' + self.elementType;
       }
-
       elementor.channels.editor.on(eventName, function (controlView, elementView) {
         self.onElementChange(controlView.model.get('name'), controlView, elementView);
       });
     }
   },
-
   /**
    * Add a spinner to a control inside its control title.
    *
@@ -52,17 +44,16 @@ module.exports = elementorModules.editor.utils.Module.extend({
    * @return {void}
    */
   addControlSpinner(controlName) {
-    const $el = this.getEditorControlView(controlName).$el; // Exit if there is a spinner already.
+    const $el = this.getEditorControlView(controlName).$el;
 
+    // Exit if there is a spinner already.
     if ($el.find('.elementor-control-spinner').length) {
       return;
     }
-
     const $input = $el.find(':input');
     $input.attr('disabled', true);
     $el.find('.elementor-control-title').after('<span class="elementor-control-spinner"><i class="eicon-spinner eicon-animation-spin"></i>&nbsp;</span>');
   },
-
   /**
    * Remove a spinner from a control.
    *
@@ -75,7 +66,6 @@ module.exports = elementorModules.editor.utils.Module.extend({
     $controlEl.find(':input').attr('disabled', false);
     $controlEl.find('.elementor-control-spinner').remove();
   },
-
   /**
    * Add an error message under the control.
    *
@@ -87,17 +77,17 @@ module.exports = elementorModules.editor.utils.Module.extend({
    */
   addControlError(controlName, error) {
     let location = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '.elementor-control-content';
-    const $el = this.getEditorControlView(controlName).$el; // Remove any existing error in order to override it.
+    const $el = this.getEditorControlView(controlName).$el;
 
+    // Remove any existing error in order to override it.
     if ($el.find('.e-control-error').length) {
       $el.find('.e-control-error').remove();
-    } // Select only the first elements to prevent cases where the error is added to many elements.
+    }
+
+    // Select only the first elements to prevent cases where the error is added to many elements.
     // (usually in repeater controls).
-
-
     $el.find(location).first().after(`<span class="elementor-control-field-description e-control-error">${error}</span>`);
   },
-
   /**
    * Remove the control error message.
    *
@@ -109,7 +99,6 @@ module.exports = elementorModules.editor.utils.Module.extend({
     const $el = this.getEditorControlView(controlName).$el;
     $el.find('.e-control-error').remove();
   },
-
   /**
    * Remove any indicators that are related to the control. (e.g. spinner, error, etc.)
    *
@@ -121,18 +110,15 @@ module.exports = elementorModules.editor.utils.Module.extend({
     this.removeControlSpinner(controlName);
     this.removeControlError(controlName);
   },
-
   addSectionListener(section, callback) {
     const self = this;
     elementor.channels.editor.on('section:activated', function (sectionName, editor) {
       var model = editor.getOption('editedElementView').getEditModel(),
-          currentElementType = model.get('elType'),
-          _arguments = arguments;
-
+        currentElementType = model.get('elType'),
+        _arguments = arguments;
       if ('widget' === currentElementType) {
         currentElementType = model.get('widgetType');
       }
-
       if (self.elementType === currentElementType && section === sectionName) {
         setTimeout(function () {
           callback.apply(self, _arguments);
@@ -140,7 +126,6 @@ module.exports = elementorModules.editor.utils.Module.extend({
       }
     });
   }
-
 });
 
 /***/ }),
@@ -157,26 +142,21 @@ module.exports = elementorModules.editor.utils.Module.extend({
 module.exports = elementorModules.editor.views.ControlsStack.extend({
   activeTab: 'content',
   activeSection: 'settings',
-
   initialize() {
     this.collection = new Backbone.Collection(_.values(this.options.controls));
   },
-
   filter(model) {
     if ('section' === model.get('type')) {
       return true;
     }
-
     var section = model.get('section');
     return !section || section === this.activeSection;
   },
-
   childViewOptions() {
     return {
       elementSettingsModel: this.model
     };
   }
-
 });
 
 /***/ }),
@@ -194,16 +174,17 @@ module.exports = elementorModules.editor.views.ControlsStack.extend({
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.SAVE_CONTEXT = exports.EDIT_CONTEXT = void 0;
 exports.createElement = createElement;
 exports["default"] = addDocumentHandle;
-
 __webpack_require__(/*! core-js/modules/es.error.cause.js */ "../node_modules/core-js/modules/es.error.cause.js");
-
 const EDIT_HANDLE_CLASS_NAME = 'elementor-document-handle';
 const EDIT_MODE_CLASS_NAME = 'elementor-edit-mode';
 const EDIT_CONTEXT = 'edit';
+exports.EDIT_CONTEXT = EDIT_CONTEXT;
 const SAVE_HANDLE_CLASS_NAME = 'elementor-document-save-back-handle';
 const SAVE_CONTEXT = 'save';
+
 /**
  * @param {Object}        handleTarget
  * @param {HTMLElement}   handleTarget.element
@@ -211,8 +192,9 @@ const SAVE_CONTEXT = 'save';
  * @param {string}        handleTarget.title
  * @param {string}        context              - Edit/Save
  * @param {Function|null} onCloseDocument      - Callback to run when outgoing document is closed.
+ * @param {string}        selector
  */
-
+exports.SAVE_CONTEXT = SAVE_CONTEXT;
 function addDocumentHandle(_ref) {
   let {
     element,
@@ -221,47 +203,43 @@ function addDocumentHandle(_ref) {
   } = _ref;
   let context = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : EDIT_CONTEXT;
   let onCloseDocument = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
+  let selector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
   if (EDIT_CONTEXT === context) {
     if (!id || !element) {
       throw Error('`id` and `element` are required.');
     }
-
     if (isCurrentlyEditing(element) || hasHandle(element)) {
       return;
     }
   }
-
   const handleElement = createHandleElement({
     title,
-    onClick: () => onDocumentClick(id, context, onCloseDocument)
+    onClick: () => onDocumentClick(id, context, onCloseDocument, selector)
   }, context);
   element.prepend(handleElement);
-
   if (EDIT_CONTEXT === context) {
     element.dataset.editableElementorDocument = id;
   }
 }
+
 /**
  * @param {HTMLElement} element
  *
  * @return {boolean} Whether the element is currently being edited.
  */
-
-
 function isCurrentlyEditing(element) {
   return element.classList.contains(EDIT_MODE_CLASS_NAME);
 }
+
 /**
  * @param {HTMLElement} element
  *
  * @return {boolean} Whether the element has a handle.
  */
-
-
 function hasHandle(element) {
   return !!element.querySelector(`:scope > .${EDIT_HANDLE_CLASS_NAME}`);
 }
+
 /**
  * @param {Object}   handleProperties
  * @param {string}   handleProperties.title
@@ -270,8 +248,6 @@ function hasHandle(element) {
  *
  * @return {HTMLElement} The newly generated Handle element
  */
-
-
 function createHandleElement(_ref2, context) {
   let {
     title,
@@ -292,16 +268,14 @@ function createHandleElement(_ref2, context) {
   element.addEventListener('click', onClick);
   return element;
 }
-
 function getHandleIcon(context) {
   let icon = 'eicon-edit';
-
   if (SAVE_CONTEXT === context) {
     icon = elementorFrontend.config.is_rtl ? 'eicon-arrow-right' : 'eicon-arrow-left';
   }
-
   return icon;
 }
+
 /**
  * Util for creating HTML element.
  *
@@ -312,8 +286,6 @@ function getHandleIcon(context) {
  *
  * @return {HTMLElement} Generated Element
  */
-
-
 function createElement(_ref3) {
   let {
     tag,
@@ -325,23 +297,23 @@ function createElement(_ref3) {
   children.forEach(child => element.appendChild(child));
   return element;
 }
+
 /**
  * @param {string|number} id
  * @param {string}        context
  * @param {Function|null} onCloseDocument
- *
+ * @param {string}        selector
  * @return {Promise<void>}
  */
-
-
 async function onDocumentClick(id, context) {
   let onCloseDocument = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-
+  let selector = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
   if (EDIT_CONTEXT === context) {
     window.top.$e.internal('panel/state-loading');
     await window.top.$e.run('editor/documents/switch', {
       id: parseInt(id),
-      onClose: onCloseDocument
+      onClose: onCloseDocument,
+      selector
     });
     window.top.$e.internal('panel/state-ready');
   } else {
@@ -349,7 +321,8 @@ async function onDocumentClick(id, context) {
     elementorCommon.api.run('editor/documents/switch', {
       id: elementor.config.initial_document.id,
       mode: 'save',
-      shouldScroll: false
+      shouldScroll: false,
+      selector
     }).finally(() => elementorCommon.api.internal('panel/state-ready'));
   }
 }
@@ -369,16 +342,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ConditionsConfig = void 0;
-
 class ConditionsConfig extends $e.modules.CommandData {
   static signature = 'site-editor/conditions-config';
-
   static getEndpointFormat() {
     return 'site-editor/conditions-config/{id}';
   }
-
 }
-
 exports.ConditionsConfig = ConditionsConfig;
 var _default = ConditionsConfig;
 exports["default"] = _default;
@@ -421,13 +390,9 @@ Object.defineProperty(exports, "TemplatesConditionsConflicts", ({
     return _templatesConditionsConflicts.TemplatesConditionsConflicts;
   }
 }));
-
 var _templates = __webpack_require__(/*! ./templates */ "../core/app/modules/site-editor/assets/js/data/commands/templates.js");
-
 var _conditionsConfig = __webpack_require__(/*! ./conditions-config */ "../core/app/modules/site-editor/assets/js/data/commands/conditions-config.js");
-
 var _templatesConditions = __webpack_require__(/*! ./templates-conditions */ "../core/app/modules/site-editor/assets/js/data/commands/templates-conditions.js");
-
 var _templatesConditionsConflicts = __webpack_require__(/*! ./templates-conditions-conflicts */ "../core/app/modules/site-editor/assets/js/data/commands/templates-conditions-conflicts.js");
 
 /***/ }),
@@ -445,16 +410,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.TemplatesConditionsConflicts = void 0;
-
 class TemplatesConditionsConflicts extends $e.modules.CommandData {
   static signature = 'site-editor/templates-conditions-conflicts';
-
   static getEndpointFormat() {
     return `${TemplatesConditionsConflicts.signature}/{id}`;
   }
-
 }
-
 exports.TemplatesConditionsConflicts = TemplatesConditionsConflicts;
 var _default = TemplatesConditionsConflicts;
 exports["default"] = _default;
@@ -474,16 +435,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.TemplatesConditions = void 0;
-
 class TemplatesConditions extends $e.modules.CommandData {
   static signature = 'site-editor/templates-conditions';
-
   static getEndpointFormat() {
     return 'site-editor/templates-conditions/{id}';
   }
-
 }
-
 exports.TemplatesConditions = TemplatesConditions;
 var _default = TemplatesConditions;
 exports["default"] = _default;
@@ -503,16 +460,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Templates = void 0;
-
 class Templates extends $e.modules.CommandData {
   static signature = 'site-editor/templates';
-
   static getEndpointFormat() {
     return 'site-editor/templates/{id}';
   }
-
 }
-
 exports.Templates = Templates;
 var _default = Templates;
 exports["default"] = _default;
@@ -532,26 +485,18 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var dataCommands = _interopRequireWildcard(__webpack_require__(/*! ./commands */ "../core/app/modules/site-editor/assets/js/data/commands/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class Component extends $e.modules.ComponentBase {
   static namespace = 'site-editor';
-
   getNamespace() {
     return this.constructor.namespace;
   }
-
   defaultData() {
     return this.importCommands(dataCommands);
   }
-
 }
-
 exports["default"] = Component;
 
 /***/ }),
@@ -566,28 +511,21 @@ exports["default"] = Component;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./data/component */ "../core/app/modules/site-editor/assets/js/data/component.js"));
-
 var _commands = __webpack_require__(/*! ./data/commands */ "../core/app/modules/site-editor/assets/js/data/commands/index.js");
-
 class Module extends elementorModules.editor.utils.Module {
   onElementorInit() {
     const config = elementor.documents.getCurrent().config;
-
     if (config.support_site_editor) {
       $e.components.register(new _component.default());
       $e.data.deleteCache($e.components.get(_component.default.namespace), _commands.Templates.signature);
     }
   }
-
 }
-
 exports["default"] = Module;
 
 /***/ }),
@@ -604,12 +542,10 @@ exports["default"] = Module;
 module.exports = elementorModules.editor.utils.Module.extend({
   onElementorInit() {
     var FontsManager = __webpack_require__(/*! ./font-manager */ "../modules/assets-manager/assets/js/editor/font-manager.js");
-
     this.assets = {
       font: new FontsManager()
     };
   }
-
 });
 
 /***/ }),
@@ -626,23 +562,18 @@ module.exports = elementorModules.editor.utils.Module.extend({
 module.exports = elementorModules.Module.extend({
   _enqueuedFonts: [],
   _enqueuedTypekit: false,
-
   onFontChange(fontType, font) {
     if ('custom' !== fontType && 'typekit' !== fontType) {
       return;
     }
-
     if (-1 !== this._enqueuedFonts.indexOf(font)) {
       return;
     }
-
     if ('typekit' === fontType && this._enqueuedTypekit) {
       return;
     }
-
     this.getCustomFont(fontType, font);
   },
-
   getCustomFont(fontType, font) {
     elementorPro.ajax.addRequest('assets_manager_panel_action_data', {
       unique_id: 'font_' + fontType + font,
@@ -651,30 +582,23 @@ module.exports = elementorModules.Module.extend({
         type: fontType,
         font
       },
-
       success(data) {
         if (data.font_face) {
           elementor.$previewContents.find('style').last().after('<style type="text/css">' + data.font_face + '</style>');
         }
-
         if (data.font_url) {
           elementor.$previewContents.find('link').last().after('<link href="' + data.font_url + '" rel="stylesheet" type="text/css">');
         }
       }
-
     });
-
     this._enqueuedFonts.push(font);
-
     if ('typekit' === fontType) {
       this._enqueuedTypekit = true;
     }
   },
-
   onInit() {
     elementor.channels.editor.on('font:insertion', this.onFontChange.bind(this));
   }
-
 });
 
 /***/ }),
@@ -693,33 +617,26 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends elementorModules.editor.utils.Module {
   addCustomCss(css, context) {
     if (!context) {
       return;
     }
-
     const model = context.model,
-          customCSS = model.get('settings').get('custom_css');
+      customCSS = model.get('settings').get('custom_css');
     let selector = '.elementor-element.elementor-element-' + model.get('id');
-
     if ('document' === model.get('elType')) {
       selector = elementor.config.document.settings.cssWrapperSelector;
     }
-
     if (customCSS) {
       css += customCSS.replace(/selector/g, selector);
     }
-
     return css;
   }
-
   onElementorInit() {
     elementor.hooks.addFilter('editor/style/styleText', this.addCustomCss);
     elementor.on('navigator:init', this.onNavigatorInit.bind(this));
   }
-
   onNavigatorInit() {
     elementor.navigator.indicators.customCSS = {
       icon: 'code-bold',
@@ -728,9 +645,7 @@ class _default extends elementorModules.editor.utils.Module {
       section: 'section_custom_css'
     };
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -748,29 +663,23 @@ module.exports = elementorModules.editor.utils.Module.extend({
   onElementorInit() {
     elementor.channels.editor.on('section:activated', this.onSectionActivated);
   },
-
   onSectionActivated(sectionName, editor) {
     var editedElement = editor.getOption('editedElementView');
-
     if ('flip-box' !== editedElement.model.get('widgetType')) {
       return;
     }
-
     var isSideBSection = -1 !== ['section_side_b_content', 'section_style_b'].indexOf(sectionName);
     editedElement.$el.toggleClass('elementor-flip-box--flipped', isSideBSection);
     var $backLayer = editedElement.$el.find('.elementor-flip-box__back');
-
     if (isSideBSection) {
       $backLayer.css('transition', 'none');
     }
-
     if (!isSideBSection) {
       setTimeout(function () {
         $backLayer.css('transition', '');
       }, 10);
     }
   }
-
 });
 
 /***/ }),
@@ -788,24 +697,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var hooks = _interopRequireWildcard(__webpack_require__(/*! ./hooks/ */ "../modules/forms/assets/js/editor/hooks/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class Component extends $e.modules.ComponentBase {
   getNamespace() {
     return 'forms';
   }
-
   defaultHooks() {
     return this.importHooks(hooks);
   }
-
 }
-
 exports["default"] = Component;
 
 /***/ }),
@@ -824,15 +726,13 @@ module.exports = elementor.modules.controls.Repeater.extend({
   onBeforeRender() {
     this.$el.hide();
   },
-
   updateMap(fields) {
     var self = this,
-        savedMapObject = {};
+      savedMapObject = {};
     self.collection.each(function (model) {
       savedMapObject[model.get('remote_id')] = model.get('local_id');
     });
     self.collection.reset();
-
     _.each(fields, function (field) {
       var model = {
         remote_id: field.remote_id,
@@ -843,35 +743,28 @@ module.exports = elementor.modules.controls.Repeater.extend({
       };
       self.collection.add(model);
     });
-
     self.render();
   },
-
   onRender() {
     elementor.modules.controls.Base.prototype.onRender.apply(this, arguments);
     var self = this;
     self.children.each(function (view) {
       var localFieldsControl = view.children.last(),
-          options = {
-        '': '- ' + __('None', 'elementor') + ' -'
-      },
-          label = view.model.get('remote_label');
-
+        options = {
+          '': '- ' + __('None', 'elementor') + ' -'
+        },
+        label = view.model.get('remote_label');
       if (view.model.get('remote_required')) {
         label += '<span class="elementor-required">*</span>';
       }
-
       _.each(self.elementSettingsModel.get('form_fields').models, function (model, index) {
         // If it's an email field, add only email fields from thr form
         var remoteType = view.model.get('remote_type');
-
         if ('text' !== remoteType && remoteType !== model.get('field_type')) {
           return;
         }
-
         options[model.get('custom_id')] = model.get('field_label') || 'Field #' + (index + 1);
       });
-
       localFieldsControl.model.set('label', label);
       localFieldsControl.model.set('options', options);
       localFieldsControl.render();
@@ -881,12 +774,10 @@ module.exports = elementor.modules.controls.Repeater.extend({
       });
     });
     self.$el.find('.elementor-button-wrapper').remove();
-
     if (self.children.length) {
       self.$el.show();
     }
   }
-
 });
 
 /***/ }),
@@ -901,101 +792,78 @@ module.exports = elementor.modules.controls.Repeater.extend({
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _fieldsRepeaterRow = _interopRequireDefault(__webpack_require__(/*! ./fields-repeater-row */ "../modules/forms/assets/js/editor/fields-repeater-row.js"));
-
 module.exports = class extends elementor.modules.controls.Repeater {
   className() {
     let classes = super.className();
     classes += ' elementor-control-type-repeater';
     return classes;
   }
-
   getChildView() {
     return _fieldsRepeaterRow.default;
   }
-
   initialize() {
     super.initialize(...arguments);
     const formFields = this.container.settings.get('form_fields');
     this.listenTo(formFields, 'change', model => this.onFormFieldChange(model)).listenTo(formFields, 'remove', model => this.onFormFieldRemove(model));
   }
-
   getFirstChild() {
     return this.children.findByModel(this.collection.models[0]);
   }
-
   lockFirstStep() {
     const firstChild = this.getFirstChild();
-
     if ('step' !== firstChild.model.get('field_type')) {
       return;
     }
-
     const stepFields = this.collection.where({
       field_type: 'step'
     });
-
     if (1 < stepFields.length) {
       firstChild.toggleFieldTypeControl(false);
       firstChild.toggleTools(false);
     }
-
     firstChild.toggleSort(false);
   }
-
   onFormFieldChange(model) {
     const fieldType = model.changed.field_type;
-
     if (!fieldType || 'step' !== fieldType && 'step' !== model._previousAttributes.field_type) {
       return;
     }
-
     const isStep = 'step' === fieldType;
     this.children.findByModel(model).toggleStepField(isStep);
     this.onStepFieldChanged(isStep);
   }
-
   onFormFieldRemove(model) {
     if ('step' === model.get('field_type')) {
       this.onStepFieldChanged(false);
     }
   }
-
   onStepFieldChanged(isStep) {
     if (isStep) {
       this.lockFirstStep();
       return;
     }
-
     const stepFields = this.collection.where({
       field_type: 'step'
     });
-
     if (stepFields.length > 1) {
       return;
     }
-
     const firstChild = this.getFirstChild();
-
     if (1 === stepFields.length) {
       firstChild.toggleTools(true);
       firstChild.toggleFieldTypeControl(true);
       return;
     }
-
     firstChild.toggleSort(true);
   }
-
   onAddChild(childView) {
     super.onAddChild(childView);
-
     if ('step' === childView.model.get('field_type')) {
       this.lockFirstStep();
       childView.toggleStepField(true);
     }
   }
-
 };
 
 /***/ }),
@@ -1013,26 +881,21 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends elementor.modules.controls.RepeaterRow {
   toggleFieldTypeControl(show) {
     const fieldTypeModel = this.collection.findWhere({
-      name: 'field_type'
-    }),
-          fieldTypeControl = this.children.findByModel(fieldTypeModel);
+        name: 'field_type'
+      }),
+      fieldTypeControl = this.children.findByModel(fieldTypeModel);
     fieldTypeControl.$el.toggle(show);
   }
-
   toggleStepField(isStep) {
     this.$el.toggleClass('elementor-repeater-row--form-step', isStep);
   }
-
   toggleTools(show) {
     this.ui.removeButton.add(this.ui.duplicateButton).toggle(show);
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -1049,29 +912,23 @@ exports["default"] = _default;
 module.exports = elementorModules.editor.utils.Module.extend({
   renderField(inputField, item, i, settings) {
     var itemClasses = _.escape(item.css_classes),
-        required = '',
-        label = '',
-        checked = '';
-
+      required = '',
+      label = '',
+      checked = '';
     if (item.required) {
       required = 'required';
     }
-
     if (item.acceptance_text) {
       label = '<label for="form_field_' + i + '">' + item.acceptance_text + '</label>';
     }
-
     if (item.checked_by_default) {
       checked = ' checked="checked"';
     }
-
     return '<div class="elementor-field-subgroup">' + '<span class="elementor-field-option">' + '<input size="1" type="checkbox"' + checked + ' class="elementor-acceptance-field elementor-field elementor-size-' + settings.input_size + ' ' + itemClasses + '" name="form_field_' + i + '" id="form_field_' + i + '" ' + required + ' > ' + label + '</span></div>';
   },
-
   onInit() {
     elementor.hooks.addFilter('elementor_pro/forms/content_template/field/acceptance', this.renderField, 10, 4);
   }
-
 });
 
 /***/ }),
@@ -1088,38 +945,30 @@ module.exports = elementorModules.editor.utils.Module.extend({
 module.exports = elementorModules.editor.utils.Module.extend({
   renderField(inputField, item, i, settings) {
     var itemClasses = _.escape(item.css_classes),
-        required = '',
-        min = '',
-        max = '',
-        placeholder = '';
-
+      required = '',
+      min = '',
+      max = '',
+      placeholder = '';
     if (item.required) {
       required = 'required';
     }
-
     if (item.min_date) {
       min = ' min="' + item.min_date + '"';
     }
-
     if (item.max_date) {
       max = ' max="' + item.max_date + '"';
     }
-
     if (item.placeholder) {
       placeholder = ' placeholder="' + item.placeholder + '"';
     }
-
     if ('yes' === item.use_native_date) {
       itemClasses += ' elementor-use-native';
     }
-
     return '<input size="1"' + min + max + placeholder + ' pattern="[0-9]{4}-[0-9]{2}-[0-9]{2}" type="date" class="elementor-field-textual elementor-date-field elementor-field elementor-size-' + settings.input_size + ' ' + itemClasses + '" name="form_field_' + i + '" id="form_field_' + i + '" ' + required + ' >';
   },
-
   onInit() {
     elementor.hooks.addFilter('elementor_pro/forms/content_template/field/date', this.renderField, 10, 4);
   }
-
 });
 
 /***/ }),
@@ -1136,25 +985,20 @@ module.exports = elementorModules.editor.utils.Module.extend({
 module.exports = elementorModules.editor.utils.Module.extend({
   renderField(inputField, item, i, settings) {
     var itemClasses = _.escape(item.css_classes),
-        required = '',
-        placeholder = '';
-
+      required = '',
+      placeholder = '';
     if (item.required) {
       required = 'required';
     }
-
     if (item.placeholder) {
       placeholder = ' placeholder="' + item.placeholder + '"';
     }
-
     itemClasses = 'elementor-field-textual ' + itemClasses;
     return '<input size="1" type="' + item.field_type + '" class="elementor-field-textual elementor-field elementor-size-' + settings.input_size + ' ' + itemClasses + '" name="form_field_' + i + '" id="form_field_' + i + '" ' + required + ' ' + placeholder + ' pattern="[0-9()-]" >';
   },
-
   onInit() {
     elementor.hooks.addFilter('elementor_pro/forms/content_template/field/tel', this.renderField, 10, 4);
   }
-
 });
 
 /***/ }),
@@ -1171,28 +1015,22 @@ module.exports = elementorModules.editor.utils.Module.extend({
 module.exports = elementorModules.editor.utils.Module.extend({
   renderField(inputField, item, i, settings) {
     var itemClasses = _.escape(item.css_classes),
-        required = '',
-        placeholder = '';
-
+      required = '',
+      placeholder = '';
     if (item.required) {
       required = 'required';
     }
-
     if (item.placeholder) {
       placeholder = ' placeholder="' + item.placeholder + '"';
     }
-
     if ('yes' === item.use_native_time) {
       itemClasses += ' elementor-use-native';
     }
-
     return '<input size="1" type="time"' + placeholder + ' class="elementor-field-textual elementor-time-field elementor-field elementor-size-' + settings.input_size + ' ' + itemClasses + '" name="form_field_' + i + '" id="form_field_' + i + '" ' + required + ' >';
   },
-
   onInit() {
     elementor.hooks.addFilter('elementor_pro/forms/content_template/field/time', this.renderField, 10, 4);
   }
-
 });
 
 /***/ }),
@@ -1209,26 +1047,21 @@ module.exports = elementorModules.editor.utils.Module.extend({
 module.exports = elementorModules.editor.utils.Module.extend({
   renderField(inputField, item, i, settings) {
     var itemClasses = _.escape(item.css_classes),
-        required = '',
-        multiple = '',
-        fieldName = 'form_field_';
-
+      required = '',
+      multiple = '',
+      fieldName = 'form_field_';
     if (item.required) {
       required = 'required';
     }
-
     if (item.allow_multiple_upload) {
       multiple = ' multiple="multiple"';
       fieldName += '[]';
     }
-
     return '<input size="1"  type="file" class="elementor-file-field elementor-field elementor-size-' + settings.input_size + ' ' + itemClasses + '" name="' + fieldName + '" id="form_field_' + i + '" ' + required + multiple + ' >';
   },
-
   onInit() {
     elementor.hooks.addFilter('elementor_pro/forms/content_template/field/upload', this.renderField, 10, 4);
   }
-
 });
 
 /***/ }),
@@ -1246,54 +1079,45 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.FormFieldsSanitizeCustomId = void 0;
-
 class FormFieldsSanitizeCustomId extends $e.modules.hookData.Dependency {
   ID_SANITIZE_FILTER = /[^\w]/g;
-
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'elementor-pro-forms-fields-sanitize-custom-id';
   }
-
   getContainerType() {
     return 'repeater';
   }
-
   getConditions(args) {
     return undefined !== args.settings.custom_id;
   }
-
   apply(args) {
     const {
-      containers = [args.container],
-      settings
-    } = args,
-          // `custom_id` is the control name.
-    {
-      custom_id: customId
-    } = settings;
-
+        containers = [args.container],
+        settings
+      } = args,
+      // `custom_id` is the control name.
+      {
+        custom_id: customId
+      } = settings;
     if (customId.match(this.ID_SANITIZE_FILTER)) {
       // Re-render with old settings.
       containers.forEach(container => {
         const panelView = container.panel.getControlView('form_fields'),
-              currentItemView = panelView.children.findByModel(container.settings),
-              idView = currentItemView.children.find(view => 'custom_id' === view.model.get('name'));
+          currentItemView = panelView.children.findByModel(container.settings),
+          idView = currentItemView.children.find(view => 'custom_id' === view.model.get('name'));
         idView.render();
         idView.$el.find('input').trigger('focus');
-      }); // Hook-Break.
+      });
 
+      // Hook-Break.
       return false;
     }
-
     return true;
   }
-
 }
-
 exports.FormFieldsSanitizeCustomId = FormFieldsSanitizeCustomId;
 var _default = FormFieldsSanitizeCustomId;
 exports["default"] = _default;
@@ -1313,45 +1137,35 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.FormFieldsSetCustomId = void 0;
-
 class FormFieldsSetCustomId extends $e.modules.hookData.After {
   getCommand() {
     return 'document/repeater/insert';
   }
-
   getId() {
     return 'elementor-pro-forms-fields-set-custom-id';
   }
-
   getContainerType() {
     return 'widget';
   }
-
   getConditions(args) {
     return 'form_fields' === args.name;
   }
-
   apply(args, model) {
     const {
-      containers = [args.container]
-    } = args,
-          isDuplicate = $e.commands.isCurrentFirstTrace('document/repeater/duplicate');
-    containers.forEach((
-    /** Container */
-    container) => {
+        containers = [args.container]
+      } = args,
+      isDuplicate = $e.commands.isCurrentFirstTrace('document/repeater/duplicate');
+    containers.forEach(( /** Container */container) => {
       const itemContainer = container.repeaters.form_fields.children.find(childrenContainer => {
         // Sometimes, one of children is {Empty}.
         if (childrenContainer) {
           return model.get('_id') === childrenContainer.id;
         }
-
         return false;
       });
-
       if (!isDuplicate && itemContainer.settings.get('custom_id')) {
         return;
       }
-
       $e.run('document/elements/settings', {
         container: itemContainer,
         settings: {
@@ -1364,9 +1178,7 @@ class FormFieldsSetCustomId extends $e.modules.hookData.After {
     });
     return true;
   }
-
 }
-
 exports.FormFieldsSetCustomId = FormFieldsSetCustomId;
 var _default = FormFieldsSetCustomId;
 exports["default"] = _default;
@@ -1386,40 +1198,31 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.FormFieldsAddFirstStep = void 0;
-
 class FormFieldsAddFirstStep extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'elementor-pro-forms-fields-first-step';
   }
-
   getContainerType() {
     return 'repeater';
   }
-
   getConditions(args) {
     const {
       containers = [args.container]
     } = args;
     return 'form' === containers[0].parent.parent.model.get('widgetType') && 'step' === args.settings.field_type;
   }
-
   apply(args) {
     const {
       containers = [args.container]
     } = args;
-    containers.forEach((
-    /** Container */
-    container) => {
+    containers.forEach(( /** Container */container) => {
       const firstItem = container.parent.children[0];
-
       if ('step' === firstItem.settings.get('field_type')) {
         return;
       }
-
       $e.run('document/repeater/insert', {
         container: container.parent.parent,
         // Widget
@@ -1435,9 +1238,7 @@ class FormFieldsAddFirstStep extends $e.modules.hookData.After {
     });
     return true;
   }
-
 }
-
 exports.FormFieldsAddFirstStep = FormFieldsAddFirstStep;
 var _default = FormFieldsAddFirstStep;
 exports["default"] = _default;
@@ -1457,26 +1258,20 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.FormSanitizeId = void 0;
-
 class FormSanitizeId extends $e.modules.hookData.Dependency {
   ID_SANITIZE_FILTER = /[^\w]/g;
-
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'elementor-pro-forms-sanitize-id';
   }
-
   getContainerType() {
     return 'widget';
   }
-
   getConditions(args) {
     return undefined !== args.settings.form_id;
   }
-
   apply(args) {
     const {
       container,
@@ -1484,21 +1279,20 @@ class FormSanitizeId extends $e.modules.hookData.Dependency {
     } = args;
     const {
       form_id: formId
-    } = settings; // Re-render with old settings.
+    } = settings;
 
+    // Re-render with old settings.
     if (formId.match(this.ID_SANITIZE_FILTER)) {
       const formIdView = container.panel.getControlView('form_id');
       formIdView.render();
-      formIdView.$el.find('input').trigger('focus'); // Hook-Break.
+      formIdView.$el.find('input').trigger('focus');
 
+      // Hook-Break.
       return false;
     }
-
     return true;
   }
-
 }
-
 exports.FormSanitizeId = FormSanitizeId;
 var _default = FormSanitizeId;
 exports["default"] = _default;
@@ -1541,13 +1335,9 @@ Object.defineProperty(exports, "FormSanitizeId", ({
     return _formSanitizeId.FormSanitizeId;
   }
 }));
-
 var _formFieldsSanitizeCustomId = __webpack_require__(/*! ./form-fields-sanitize-custom-id */ "../modules/forms/assets/js/editor/hooks/data/form-fields-sanitize-custom-id.js");
-
 var _formFieldsSetCustomId = __webpack_require__(/*! ./form-fields-set-custom-id */ "../modules/forms/assets/js/editor/hooks/data/form-fields-set-custom-id.js");
-
 var _formFieldsStep = __webpack_require__(/*! ./form-fields-step */ "../modules/forms/assets/js/editor/hooks/data/form-fields-step.js");
-
 var _formSanitizeId = __webpack_require__(/*! ./form-sanitize-id */ "../modules/forms/assets/js/editor/hooks/data/form-sanitize-id.js");
 
 /***/ }),
@@ -1564,9 +1354,7 @@ var _formSanitizeId = __webpack_require__(/*! ./form-sanitize-id */ "../modules/
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-
 var _data = __webpack_require__(/*! ./data/ */ "../modules/forms/assets/js/editor/hooks/data/index.js");
-
 Object.keys(_data).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _data[key]) return;
@@ -1577,9 +1365,7 @@ Object.keys(_data).forEach(function (key) {
     }
   });
 });
-
 var _ui = __webpack_require__(/*! ./ui/ */ "../modules/forms/assets/js/editor/hooks/ui/index.js");
-
 Object.keys(_ui).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _ui[key]) return;
@@ -1606,44 +1392,34 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.FormFieldsUpdateShortCode = void 0;
-
 class FormFieldsUpdateShortCode extends $e.modules.hookUI.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'elementor-pro-forms-fields-update-shortcode';
   }
-
   getContainerType() {
     return 'repeater';
   }
-
   getConditions(args) {
     if (!$e.routes.isPartOf('panel/editor') || undefined === args.settings.custom_id) {
       return false;
     }
-
     return true;
   }
-
   apply(args) {
     const {
       containers = [args.container]
     } = args;
-    containers.forEach((
-    /** Container */
-    container) => {
+    containers.forEach(( /** Container */container) => {
       const panelView = container.panel.getControlView('form_fields'),
-            currentItemView = panelView.children.find(view => container.id === view.model.get('_id')),
-            shortcodeView = currentItemView.children.find(view => 'shortcode' === view.model.get('name'));
+        currentItemView = panelView.children.find(view => container.id === view.model.get('_id')),
+        shortcodeView = currentItemView.children.find(view => 'shortcode' === view.model.get('name'));
       shortcodeView.render();
     });
   }
-
 }
-
 exports.FormFieldsUpdateShortCode = FormFieldsUpdateShortCode;
 var _default = FormFieldsUpdateShortCode;
 exports["default"] = _default;
@@ -1668,7 +1444,6 @@ Object.defineProperty(exports, "FormFieldsUpdateShortCode", ({
     return _formFieldsUpdateShortcode.FormFieldsUpdateShortCode;
   }
 }));
-
 var _formFieldsUpdateShortcode = __webpack_require__(/*! ./form-fields-update-shortcode */ "../modules/forms/assets/js/editor/hooks/ui/form-fields-update-shortcode.js");
 
 /***/ }),
@@ -1684,14 +1459,11 @@ var _formFieldsUpdateShortcode = __webpack_require__(/*! ./form-fields-update-sh
 
 
 var BaseIntegrationModule = __webpack_require__(/*! ./base */ "../modules/forms/assets/js/editor/integrations/base.js");
-
 module.exports = BaseIntegrationModule.extend({
   fields: {},
-
   getName() {
     return 'activecampaign';
   },
-
   onElementChange(setting) {
     switch (setting) {
       case 'activecampaign_api_credentials_source':
@@ -1699,25 +1471,21 @@ module.exports = BaseIntegrationModule.extend({
       case 'activecampaign_api_url':
         this.onApiUpdate();
         break;
-
       case 'activecampaign_list':
         this.onListUpdate();
         break;
     }
   },
-
   onApiUpdate() {
     const self = this,
-          apikeyControlView = self.getEditorControlView('activecampaign_api_key'),
-          apiUrlControlView = self.getEditorControlView('activecampaign_api_url'),
-          apiCredControlView = self.getEditorControlView('activecampaign_api_credentials_source');
-
+      apikeyControlView = self.getEditorControlView('activecampaign_api_key'),
+      apiUrlControlView = self.getEditorControlView('activecampaign_api_url'),
+      apiCredControlView = self.getEditorControlView('activecampaign_api_credentials_source');
     if ('default' !== apiCredControlView.getControlValue() && ('' === apikeyControlView.getControlValue() || '' === apiUrlControlView.getControlValue())) {
       self.updateOptions('activecampaign_list', []);
       self.getEditorControlView('activecampaign_list').setValue('');
       return;
     }
-
     self.addControlSpinner('activecampaign_list');
     const cacheKey = this.getCacheKey({
       controls: [apiCredControlView.getControlValue(), apiUrlControlView.getControlValue(), apikeyControlView.getControlValue()]
@@ -1727,18 +1495,14 @@ module.exports = BaseIntegrationModule.extend({
       self.fields = data.fields;
     });
   },
-
   onListUpdate() {
     this.updateFieldsMapping();
   },
-
   updateFieldsMapping() {
     var controlView = this.getEditorControlView('activecampaign_list');
-
     if (!controlView.getControlValue()) {
       return;
     }
-
     var remoteFields = [{
       remote_label: __('Email', 'elementor'),
       remote_type: 'email',
@@ -1765,23 +1529,19 @@ module.exports = BaseIntegrationModule.extend({
       remote_id: 'orgname',
       remote_required: false
     }];
-
     for (var field in this.fields) {
       if (Object.prototype.hasOwnProperty.call(this.fields, field)) {
         remoteFields.push(this.fields[field]);
       }
     }
-
     this.getEditorControlView('activecampaign_fields_map').updateMap(remoteFields);
   },
-
   getActiveCampaignCache(type, action, cacheKey, requestArgs) {
     if (_.has(this.cache[type], cacheKey)) {
       var data = {};
       data[type] = this.cache[type][cacheKey];
       return jQuery.Deferred().resolve(data);
     }
-
     requestArgs = _.extend({}, requestArgs, {
       service: 'activecampaign',
       activecampaign_action: action,
@@ -1791,7 +1551,6 @@ module.exports = BaseIntegrationModule.extend({
     });
     return this.fetchCache(type, cacheKey, requestArgs);
   }
-
 });
 
 /***/ }),
@@ -1806,25 +1565,20 @@ module.exports = BaseIntegrationModule.extend({
 
 
 var ElementEditorModule = __webpack_require__(/*! elementor-pro/editor/element-editor-module */ "../assets/dev/js/editor/element-editor-module.js");
-
 module.exports = ElementEditorModule.extend({
   __construct() {
     this.cache = {};
-
     ElementEditorModule.prototype.__construct.apply(this, arguments);
   },
-
   getName() {
     return '';
   },
-
   getCacheKey(args) {
     return JSON.stringify({
       service: this.getName(),
       data: args
     });
   },
-
   fetchCache(type, cacheKey, requestArgs) {
     let immediately = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
     return elementorPro.ajax.addRequest('forms_panel_action_data', {
@@ -1836,17 +1590,13 @@ module.exports = ElementEditorModule.extend({
       }
     }, immediately);
   },
-
   onInit() {
     this.addSectionListener('section_' + this.getName(), this.onSectionActive);
   },
-
   onSectionActive() {
     this.onApiUpdate();
   },
-
   onApiUpdate() {}
-
 });
 
 /***/ }),
@@ -1862,36 +1612,30 @@ module.exports = ElementEditorModule.extend({
 
 
 var BaseIntegrationModule = __webpack_require__(/*! ./base */ "../modules/forms/assets/js/editor/integrations/base.js");
-
 module.exports = BaseIntegrationModule.extend({
   getName() {
     return 'convertkit';
   },
-
   onElementChange(setting) {
     switch (setting) {
       case 'convertkit_api_key_source':
       case 'convertkit_custom_api_key':
         this.onApiUpdate();
         break;
-
       case 'convertkit_form':
         this.onListUpdate();
         break;
     }
   },
-
   onApiUpdate() {
     var self = this,
-        apiKeyControlView = self.getEditorControlView('convertkit_api_key_source'),
-        customApikeyControlView = self.getEditorControlView('convertkit_custom_api_key');
-
+      apiKeyControlView = self.getEditorControlView('convertkit_api_key_source'),
+      customApikeyControlView = self.getEditorControlView('convertkit_custom_api_key');
     if ('default' !== apiKeyControlView.getControlValue() && '' === customApikeyControlView.getControlValue()) {
       self.updateOptions('convertkit_form', []);
       self.getEditorControlView('convertkit_form').setValue('');
       return;
     }
-
     self.addControlSpinner('convertkit_form');
     const cacheKey = this.getCacheKey({
       type: 'data',
@@ -1902,18 +1646,14 @@ module.exports = BaseIntegrationModule.extend({
       self.updateOptions('convertkit_tags', data.data.tags);
     });
   },
-
   onListUpdate() {
     this.updateFieldsMapping();
   },
-
   updateFieldsMapping() {
     var controlView = this.getEditorControlView('convertkit_form');
-
     if (!controlView.getControlValue()) {
       return;
     }
-
     var remoteFields = [{
       remote_label: __('Email', 'elementor'),
       remote_type: 'email',
@@ -1927,14 +1667,12 @@ module.exports = BaseIntegrationModule.extend({
     }];
     this.getEditorControlView('convertkit_fields_map').updateMap(remoteFields);
   },
-
   getConvertKitCache(type, action, cacheKey, requestArgs) {
     if (_.has(this.cache[type], cacheKey)) {
       var data = {};
       data[type] = this.cache[type][cacheKey];
       return jQuery.Deferred().resolve(data);
     }
-
     requestArgs = _.extend({}, requestArgs, {
       service: 'convertkit',
       convertkit_action: action,
@@ -1943,7 +1681,6 @@ module.exports = BaseIntegrationModule.extend({
     });
     return this.fetchCache(type, cacheKey, requestArgs);
   }
-
 });
 
 /***/ }),
@@ -1959,36 +1696,30 @@ module.exports = BaseIntegrationModule.extend({
 
 
 var BaseIntegrationModule = __webpack_require__(/*! ./base */ "../modules/forms/assets/js/editor/integrations/base.js");
-
 module.exports = BaseIntegrationModule.extend({
   getName() {
     return 'drip';
   },
-
   onElementChange(setting) {
     switch (setting) {
       case 'drip_api_token_source':
       case 'drip_custom_api_token':
         this.onApiUpdate();
         break;
-
       case 'drip_account':
         this.onDripAccountsUpdate();
         break;
     }
   },
-
   onApiUpdate() {
     var self = this,
-        controlView = self.getEditorControlView('drip_api_token_source'),
-        customControlView = self.getEditorControlView('drip_custom_api_token');
-
+      controlView = self.getEditorControlView('drip_api_token_source'),
+      customControlView = self.getEditorControlView('drip_custom_api_token');
     if ('default' !== controlView.getControlValue() && '' === customControlView.getControlValue()) {
       self.updateOptions('drip_account', []);
       self.getEditorControlView('drip_account').setValue('');
       return;
     }
-
     self.addControlSpinner('drip_account');
     this.getCacheKey({
       type: 'accounts',
@@ -1998,18 +1729,14 @@ module.exports = BaseIntegrationModule.extend({
       self.updateOptions('drip_account', data.accounts);
     });
   },
-
   onDripAccountsUpdate() {
     this.updateFieldsMapping();
   },
-
   updateFieldsMapping() {
     var controlView = this.getEditorControlView('drip_account');
-
     if (!controlView.getControlValue()) {
       return;
     }
-
     var remoteFields = {
       remote_label: __('Email', 'elementor'),
       remote_type: 'email',
@@ -2018,14 +1745,12 @@ module.exports = BaseIntegrationModule.extend({
     };
     this.getEditorControlView('drip_fields_map').updateMap([remoteFields]);
   },
-
   getDripCache(type, action, cacheKey, requestArgs) {
     if (_.has(this.cache[type], cacheKey)) {
       var data = {};
       data[type] = this.cache[type][cacheKey];
       return jQuery.Deferred().resolve(data);
     }
-
     requestArgs = _.extend({}, requestArgs, {
       service: 'drip',
       drip_action: action,
@@ -2034,7 +1759,6 @@ module.exports = BaseIntegrationModule.extend({
     });
     return this.fetchCache(type, cacheKey, requestArgs);
   }
-
 });
 
 /***/ }),
@@ -2049,36 +1773,30 @@ module.exports = BaseIntegrationModule.extend({
 
 
 var BaseIntegrationModule = __webpack_require__(/*! ./base */ "../modules/forms/assets/js/editor/integrations/base.js");
-
 module.exports = BaseIntegrationModule.extend({
   getName() {
     return 'getresponse';
   },
-
   onElementChange(setting) {
     switch (setting) {
       case 'getresponse_custom_api_key':
       case 'getresponse_api_key_source':
         this.onApiUpdate();
         break;
-
       case 'getresponse_list':
         this.onGetResonseListUpdate();
         break;
     }
   },
-
   onApiUpdate() {
     var self = this,
-        controlView = self.getEditorControlView('getresponse_api_key_source'),
-        customControlView = self.getEditorControlView('getresponse_custom_api_key');
-
+      controlView = self.getEditorControlView('getresponse_api_key_source'),
+      customControlView = self.getEditorControlView('getresponse_custom_api_key');
     if ('default' !== controlView.getControlValue() && '' === customControlView.getControlValue()) {
       self.updateOptions('getresponse_list', []);
       self.getEditorControlView('getresponse_list').setValue('');
       return;
     }
-
     self.addControlSpinner('getresponse_list');
     const cacheKey = this.getCacheKey({
       type: 'lists',
@@ -2088,19 +1806,15 @@ module.exports = BaseIntegrationModule.extend({
       self.updateOptions('getresponse_list', data.lists);
     });
   },
-
   onGetResonseListUpdate() {
     this.updatGetResonseList();
   },
-
   updatGetResonseList() {
     var self = this,
-        controlView = self.getEditorControlView('getresponse_list');
-
+      controlView = self.getEditorControlView('getresponse_list');
     if (!controlView.getControlValue()) {
       return;
     }
-
     self.addControlSpinner('getresponse_fields_map');
     const cacheKey = this.getCacheKey({
       type: 'fields',
@@ -2112,14 +1826,12 @@ module.exports = BaseIntegrationModule.extend({
       self.getEditorControlView('getresponse_fields_map').updateMap(data.fields);
     });
   },
-
   getCache(type, action, cacheKey, requestArgs) {
     if (_.has(this.cache[type], cacheKey)) {
       var data = {};
       data[type] = this.cache[type][cacheKey];
       return jQuery.Deferred().resolve(data);
     }
-
     requestArgs = _.extend({}, requestArgs, {
       service: 'getresponse',
       getresponse_action: action,
@@ -2128,12 +1840,10 @@ module.exports = BaseIntegrationModule.extend({
     });
     return this.fetchCache(type, cacheKey, requestArgs);
   },
-
   onSectionActive() {
     BaseIntegrationModule.prototype.onSectionActive.apply(this, arguments);
     this.updatGetResonseList();
   }
-
 });
 
 /***/ }),
@@ -2148,44 +1858,40 @@ module.exports = BaseIntegrationModule.extend({
 
 
 var BaseIntegrationModule = __webpack_require__(/*! ./base */ "../modules/forms/assets/js/editor/integrations/base.js");
-
 module.exports = BaseIntegrationModule.extend({
   getName() {
     return 'mailchimp';
   },
-
   onElementChange(setting) {
     switch (setting) {
       case 'mailchimp_api_key_source':
       case 'mailchimp_api_key':
         this.onApiUpdate();
         break;
-
       case 'mailchimp_list':
         this.onMailchimpListUpdate();
         break;
     }
   },
-
   onApiUpdate() {
     var self = this,
-        controlView = self.getEditorControlView('mailchimp_api_key'),
-        GlobalApiKeycontrolView = self.getEditorControlView('mailchimp_api_key_source');
-
+      controlView = self.getEditorControlView('mailchimp_api_key'),
+      GlobalApiKeycontrolView = self.getEditorControlView('mailchimp_api_key_source');
     if ('default' !== GlobalApiKeycontrolView.getControlValue() && '' === controlView.getControlValue()) {
       self.updateOptions('mailchimp_list', []);
       self.getEditorControlView('mailchimp_list').setValue('');
       return;
-    } // Add a spinner to the `Audience` list control.
+    }
 
-
+    // Add a spinner to the `Audience` list control.
     self.resetControlIndicators('mailchimp_list');
     self.addControlSpinner('mailchimp_list');
     const cacheKey = this.getCacheKey({
       type: 'lists',
       controls: [controlView.getControlValue(), GlobalApiKeycontrolView.getControlValue()]
-    }); // Fetch data
+    });
 
+    // Fetch data
     self.getMailchimpCache('lists', 'lists', cacheKey).done(function (data) {
       self.updateOptions('mailchimp_list', data.lists);
       self.updatMailchimpList();
@@ -2195,29 +1901,27 @@ module.exports = BaseIntegrationModule.extend({
       self.removeControlSpinner('mailchimp_list');
     });
   },
-
   onMailchimpListUpdate() {
     this.updateOptions('mailchimp_groups', []);
     this.getEditorControlView('mailchimp_groups').setValue('');
     this.updatMailchimpList();
   },
-
   updatMailchimpList() {
     var self = this,
-        controlView = self.getEditorControlView('mailchimp_list');
-
+      controlView = self.getEditorControlView('mailchimp_list');
     if (!controlView.getControlValue()) {
       return;
-    } // Add a spinner to the groups select box.
+    }
 
-
+    // Add a spinner to the groups select box.
     self.resetControlIndicators('mailchimp_groups');
     self.addControlSpinner('mailchimp_groups');
     this.getCacheKey({
       type: 'list_details',
       controls: [controlView.getControlValue()]
-    }); // Fetch The data
+    });
 
+    // Fetch The data
     self.getMailchimpCache('list_details', 'list_details', controlView.getControlValue(), {
       mailchimp_list: controlView.getControlValue()
     }).done(function (data) {
@@ -2227,10 +1931,11 @@ module.exports = BaseIntegrationModule.extend({
       self.addControlError('mailchimp_groups', error);
     }).always(function () {
       self.removeControlSpinner('mailchimp_groups');
-    }); // Get list fields.
+    });
+
+    // Get list fields.
     // The requests needed to be executed immediately in order to fill the `Field Mapping` select-boxes
     // without waiting for other requests to finish.
-
     const args = {
       type: 'fields',
       action: 'fields',
@@ -2244,16 +1949,13 @@ module.exports = BaseIntegrationModule.extend({
       self.getEditorControlView('mailchimp_fields_map').updateMap(data.fields);
     });
   },
-
   getMailchimpCache(type, action, cacheKey, requestArgs) {
     let immediately = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-
     if (_.has(this.cache[type], cacheKey)) {
       var data = {};
       data[type] = this.cache[type][cacheKey];
       return jQuery.Deferred().resolve(data);
     }
-
     requestArgs = _.extend({}, requestArgs, {
       service: 'mailchimp',
       mailchimp_action: action,
@@ -2262,12 +1964,10 @@ module.exports = BaseIntegrationModule.extend({
     });
     return this.fetchCache(type, cacheKey, requestArgs, immediately);
   },
-
   onSectionActive() {
     BaseIntegrationModule.prototype.onSectionActive.apply(this, arguments);
     this.onApiUpdate();
   }
-
 });
 
 /***/ }),
@@ -2283,38 +1983,31 @@ module.exports = BaseIntegrationModule.extend({
 
 
 const BaseIntegrationModule = __webpack_require__(/*! ./base */ "../modules/forms/assets/js/editor/integrations/base.js");
-
 module.exports = BaseIntegrationModule.extend({
   fields: {},
-
   getName() {
     return 'mailerlite';
   },
-
   onElementChange(setting) {
     switch (setting) {
       case 'mailerlite_api_key_source':
       case 'mailerlite_custom_api_key':
         this.onMailerliteApiKeyUpdate();
         break;
-
       case 'mailerlite_group':
         this.updateFieldsMapping();
         break;
     }
   },
-
   onMailerliteApiKeyUpdate() {
     var self = this,
-        controlView = self.getEditorControlView('mailerlite_custom_api_key'),
-        GlobalApiKeycontrolView = self.getEditorControlView('mailerlite_api_key_source');
-
+      controlView = self.getEditorControlView('mailerlite_custom_api_key'),
+      GlobalApiKeycontrolView = self.getEditorControlView('mailerlite_api_key_source');
     if ('default' !== GlobalApiKeycontrolView.getControlValue() && '' === controlView.getControlValue()) {
       self.updateOptions('mailerlite_group', []);
       self.getEditorControlView('mailerlite_group').setValue('');
       return;
     }
-
     self.addControlSpinner('mailerlite_group');
     const cacheKey = this.getCacheKey({
       type: 'groups',
@@ -2325,14 +2018,11 @@ module.exports = BaseIntegrationModule.extend({
       self.fields = data.fields;
     });
   },
-
   updateFieldsMapping() {
     const controlView = this.getEditorControlView('mailerlite_group');
-
     if (!controlView.getControlValue()) {
       return;
     }
-
     const remoteFields = [{
       remote_label: __('Email', 'elementor'),
       remote_type: 'email',
@@ -2379,23 +2069,19 @@ module.exports = BaseIntegrationModule.extend({
       remote_id: 'zip',
       remote_required: false
     }];
-
     for (const field in this.fields) {
       if (Object.prototype.hasOwnProperty.call(this.fields, field)) {
         remoteFields.push(this.fields[field]);
       }
     }
-
     this.getEditorControlView('mailerlite_fields_map').updateMap(remoteFields);
   },
-
   getMailerliteCache(type, action, cacheKey, requestArgs) {
     if (_.has(this.cache[type], cacheKey)) {
       const data = {};
       data[type] = this.cache[type][cacheKey];
       return jQuery.Deferred().resolve(data);
     }
-
     requestArgs = _.extend({}, requestArgs, {
       service: 'mailerlite',
       mailerlite_action: action,
@@ -2404,12 +2090,10 @@ module.exports = BaseIntegrationModule.extend({
     });
     return this.fetchCache(type, cacheKey, requestArgs);
   },
-
   onSectionActive() {
     BaseIntegrationModule.prototype.onSectionActive.apply(this, arguments);
     this.onMailerliteApiKeyUpdate();
   }
-
 });
 
 /***/ }),
@@ -2424,25 +2108,21 @@ module.exports = BaseIntegrationModule.extend({
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/forms/assets/js/editor/component.js"));
-
 class FormsModule extends elementorModules.editor.utils.Module {
   onElementorInit() {
     const ReplyToField = __webpack_require__(/*! ./reply-to-field */ "../modules/forms/assets/js/editor/reply-to-field.js"),
-          Recaptcha = __webpack_require__(/*! ./recaptcha */ "../modules/forms/assets/js/editor/recaptcha.js"),
-          MailerLite = __webpack_require__(/*! ./integrations/mailerlite */ "../modules/forms/assets/js/editor/integrations/mailerlite.js"),
-          Mailchimp = __webpack_require__(/*! ./integrations/mailchimp */ "../modules/forms/assets/js/editor/integrations/mailchimp.js"),
-          Drip = __webpack_require__(/*! ./integrations/drip */ "../modules/forms/assets/js/editor/integrations/drip.js"),
-          ActiveCampaign = __webpack_require__(/*! ./integrations/activecampaign */ "../modules/forms/assets/js/editor/integrations/activecampaign.js"),
-          GetResponse = __webpack_require__(/*! ./integrations/getresponse */ "../modules/forms/assets/js/editor/integrations/getresponse.js"),
-          ConvertKit = __webpack_require__(/*! ./integrations/convertkit */ "../modules/forms/assets/js/editor/integrations/convertkit.js");
-
+      Recaptcha = __webpack_require__(/*! ./recaptcha */ "../modules/forms/assets/js/editor/recaptcha.js"),
+      MailerLite = __webpack_require__(/*! ./integrations/mailerlite */ "../modules/forms/assets/js/editor/integrations/mailerlite.js"),
+      Mailchimp = __webpack_require__(/*! ./integrations/mailchimp */ "../modules/forms/assets/js/editor/integrations/mailchimp.js"),
+      Drip = __webpack_require__(/*! ./integrations/drip */ "../modules/forms/assets/js/editor/integrations/drip.js"),
+      ActiveCampaign = __webpack_require__(/*! ./integrations/activecampaign */ "../modules/forms/assets/js/editor/integrations/activecampaign.js"),
+      GetResponse = __webpack_require__(/*! ./integrations/getresponse */ "../modules/forms/assets/js/editor/integrations/getresponse.js"),
+      ConvertKit = __webpack_require__(/*! ./integrations/convertkit */ "../modules/forms/assets/js/editor/integrations/convertkit.js");
     this.replyToField = new ReplyToField();
     this.mailchimp = new Mailchimp('form');
     this.recaptcha = new Recaptcha('form');
@@ -2450,14 +2130,14 @@ class FormsModule extends elementorModules.editor.utils.Module {
     this.activecampaign = new ActiveCampaign('form');
     this.getresponse = new GetResponse('form');
     this.convertkit = new ConvertKit('form');
-    this.mailerlite = new MailerLite('form'); // Form fields
+    this.mailerlite = new MailerLite('form');
 
+    // Form fields
     const TimeField = __webpack_require__(/*! ./fields/time */ "../modules/forms/assets/js/editor/fields/time.js"),
-          DateField = __webpack_require__(/*! ./fields/date */ "../modules/forms/assets/js/editor/fields/date.js"),
-          AcceptanceField = __webpack_require__(/*! ./fields/acceptance */ "../modules/forms/assets/js/editor/fields/acceptance.js"),
-          UploadField = __webpack_require__(/*! ./fields/upload */ "../modules/forms/assets/js/editor/fields/upload.js"),
-          TelField = __webpack_require__(/*! ./fields/tel */ "../modules/forms/assets/js/editor/fields/tel.js");
-
+      DateField = __webpack_require__(/*! ./fields/date */ "../modules/forms/assets/js/editor/fields/date.js"),
+      AcceptanceField = __webpack_require__(/*! ./fields/acceptance */ "../modules/forms/assets/js/editor/fields/acceptance.js"),
+      UploadField = __webpack_require__(/*! ./fields/upload */ "../modules/forms/assets/js/editor/fields/upload.js"),
+      TelField = __webpack_require__(/*! ./fields/tel */ "../modules/forms/assets/js/editor/fields/tel.js");
     this.Fields = {
       time: new TimeField('form'),
       date: new DateField('form'),
@@ -2468,15 +2148,12 @@ class FormsModule extends elementorModules.editor.utils.Module {
     elementor.addControlView('Fields_map', __webpack_require__(/*! ./fields-map-control */ "../modules/forms/assets/js/editor/fields-map-control.js"));
     elementor.addControlView('form-fields-repeater', __webpack_require__(/*! ./fields-repeater-control */ "../modules/forms/assets/js/editor/fields-repeater-control.js"));
   }
-
   onElementorInitComponents() {
     $e.components.register(new _component.default({
       manager: this
     }));
   }
-
 }
-
 exports["default"] = FormsModule;
 
 /***/ }),
@@ -2496,53 +2173,42 @@ module.exports = elementorModules.editor.utils.Module.extend({
       elementorFrontend.elements.$body.append('<scr' + 'ipt src="' + url + '" id="recaptcha-' + type + '"</scri' + 'pt>');
     }
   },
-
   renderField(inputField, item) {
     inputField += '<div class="elementor-field ' + item.field_type + ' ">';
     inputField += this.getDataSettings(item);
     inputField += '</div>';
     return inputField;
   },
-
   getDataSettings(item) {
     const config = elementorPro.config.forms[item.field_type],
-          srcURL = 'https://www.google.com/recaptcha/api.js?render=explicit';
-
+      srcURL = 'https://www.google.com/recaptcha/api.js?render=explicit';
     if (!config.enabled) {
       return '<div class="elementor-alert elementor-alert-info">' + config.setup_message + '</div>';
     }
-
     let recaptchaData = 'data-sitekey="' + config.site_key + '" data-type="' + config.type + '"';
-
     switch (config.type) {
       case 'v3':
         recaptchaData += ' data-action="form" data-size="invisible" data-badge="' + item.recaptcha_badge + '"';
         break;
-
       case 'v2_checkbox':
         recaptchaData += ' data-theme="' + item.recaptcha_style + '"';
         recaptchaData += ' data-size="' + item.recaptcha_size + '"';
         break;
     }
-
     this.enqueueRecaptchaJs(srcURL, config.type);
     return '<div class="elementor-g-recaptcha' + _.escape(item.css_classes) + '" ' + recaptchaData + '></div>';
   },
-
   filterItem(item) {
     if ('recaptcha' === item.field_type) {
       item.field_label = false;
     }
-
     return item;
   },
-
   onInit() {
     elementor.hooks.addFilter('elementor_pro/forms/content_template/item', this.filterItem);
     elementor.hooks.addFilter('elementor_pro/forms/content_template/field/recaptcha', this.renderField, 10, 2);
     elementor.hooks.addFilter('elementor_pro/forms/content_template/field/recaptcha_v3', this.renderField, 10, 2);
   }
-
 });
 
 /***/ }),
@@ -2560,31 +2226,26 @@ module.exports = elementorModules.editor.utils.Module.extend({
 
 module.exports = function () {
   var editor, editedModel, replyToControl;
-
   var setReplyToControl = function () {
     replyToControl = editor.collection.findWhere({
       name: 'email_reply_to'
     });
   };
-
   var getReplyToView = function () {
     return editor.children.findByModelCid(replyToControl.cid);
   };
-
   var refreshReplyToElement = function () {
     var replyToView = getReplyToView();
-
     if (replyToView) {
       replyToView.render();
     }
   };
-
   var updateReplyToOptions = function () {
     var settingsModel = editedModel.get('settings'),
-        emailModels = settingsModel.get('form_fields').where({
-      field_type: 'email'
-    }),
-        emailFields;
+      emailModels = settingsModel.get('form_fields').where({
+        field_type: 'email'
+      }),
+      emailFields;
     emailModels = _.reject(emailModels, {
       field_label: ''
     });
@@ -2597,19 +2258,15 @@ module.exports = function () {
     replyToControl.set('options', {
       '': replyToControl.get('options')['']
     });
-
     _.each(emailFields, function (emailField) {
       replyToControl.get('options')[emailField.id] = emailField.label;
     });
-
     refreshReplyToElement();
   };
-
   var updateDefaultReplyTo = function (settingsModel) {
     replyToControl.get('options')[''] = settingsModel.get('email_from');
     refreshReplyToElement();
   };
-
   var onFormFieldsChange = function (changedModel) {
     // If it's repeater field
     if (changedModel.get('custom_id')) {
@@ -2617,12 +2274,10 @@ module.exports = function () {
         updateReplyToOptions();
       }
     }
-
     if (changedModel.changed.email_from) {
       updateDefaultReplyTo(changedModel);
     }
   };
-
   var onPanelShow = function (panel, model) {
     editor = panel.getCurrentPageView();
     editedModel = model;
@@ -2632,11 +2287,9 @@ module.exports = function () {
     updateDefaultReplyTo(settingsModel);
     updateReplyToOptions();
   };
-
   var init = function () {
     elementor.hooks.addAction('panel/open_editor/widget/form', onPanelShow);
   };
-
   init();
 };
 
@@ -2660,7 +2313,6 @@ Object.defineProperty(exports, "Templates", ({
     return _templates.Templates;
   }
 }));
-
 var _templates = __webpack_require__(/*! ./templates */ "../modules/global-widget/assets/js/editor/commands-data/templates.js");
 
 /***/ }),
@@ -2678,7 +2330,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Templates = void 0;
-
 /**
  * Data command: 'document/global/templates', accessing 'global-widget/templates' remote endpoint.
  * Used to get global templates from the backend/cache.
@@ -2687,7 +2338,6 @@ class Templates extends $e.modules.CommandData {
   static getEndpointFormat() {
     return 'global-widget/templates';
   }
-
   onAfterApply() {
     let args = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
     let result = arguments.length > 1 ? arguments[1] : undefined;
@@ -2698,9 +2348,7 @@ class Templates extends $e.modules.CommandData {
       $e.data.setCache(this.component, `document/global/global-widget/templates/${templateID}`, {}, data);
     });
   }
-
 }
-
 exports.Templates = Templates;
 var _default = Templates;
 exports["default"] = _default;
@@ -2725,7 +2373,6 @@ Object.defineProperty(exports, "SaveTemplates", ({
     return _saveTemplates.SaveTemplates;
   }
 }));
-
 var _saveTemplates = __webpack_require__(/*! ./save-templates */ "../modules/global-widget/assets/js/editor/commands-internal/save-templates.js");
 
 /***/ }),
@@ -2743,7 +2390,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.SaveTemplates = void 0;
-
 /**
  * The command should run over all changed global widgets and
  * update the settings of the `document/global/global-widget/templates`,
@@ -2752,11 +2398,9 @@ exports["default"] = exports.SaveTemplates = void 0;
 class SaveTemplates extends $e.modules.CommandInternalBase {
   apply() {
     const templateModels = this.getCurrentTemplatesModels(this.component.changedContainersId);
-
     if (!templateModels.length) {
       return;
     }
-
     return new Promise((resolve, reject) => {
       elementorCommon.ajax.addRequest('update_templates', {
         data: {
@@ -2793,25 +2437,20 @@ class SaveTemplates extends $e.modules.CommandInternalBase {
       });
     });
   }
-
   getCurrentTemplatesModels(changedContainersId) {
     const templatesData = [];
     Object.entries(changedContainersId).forEach(_ref => {
       let [templateID, containerId] = _ref;
       const templateData = $e.data.getCache(this.component, `document/global/global-widget/templates/${templateID}`);
-
       if (!templateData) {
         if ($e.devTools) {
           $e.devTools.log.warn(`$e.data.getCache( component, \`document/global/global-widget/templates/${templateID}\` ) - not found.`);
         }
       }
-
       const container = elementor.getContainer(containerId);
-
       if (!container) {
         return;
       }
-
       templatesData.push(new Backbone.Model({
         id: templateID,
         elType: 'widget',
@@ -2824,9 +2463,7 @@ class SaveTemplates extends $e.modules.CommandInternalBase {
     });
     return templatesData;
   }
-
 }
-
 exports.SaveTemplates = SaveTemplates;
 var _default = SaveTemplates;
 exports["default"] = _default;
@@ -2857,9 +2494,7 @@ Object.defineProperty(exports, "Unlink", ({
     return _unlink.Unlink;
   }
 }));
-
 var _link = __webpack_require__(/*! ./link */ "../modules/global-widget/assets/js/editor/commands/link.js");
-
 var _unlink = __webpack_require__(/*! ./unlink */ "../modules/global-widget/assets/js/editor/commands/unlink.js");
 
 /***/ }),
@@ -2878,9 +2513,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Link = void 0;
-
 __webpack_require__(/*! core-js/modules/es.error.cause.js */ "../node_modules/core-js/modules/es.error.cause.js");
-
 class Link extends $e.modules.document.CommandHistory {
   validateArgs(args) {
     this.requireContainer(args);
@@ -2888,15 +2521,12 @@ class Link extends $e.modules.document.CommandHistory {
     const {
       containers = [args.container]
     } = args;
-    containers.forEach((
-    /* Container */
-    container) => {
+    containers.forEach(( /* Container */container) => {
       if ('global' === container.model.get('widgetType')) {
         throw Error(`Invalid container, id: '${container.id}' is already global.`);
       }
     });
   }
-
   getHistory(args) {
     const {
       data
@@ -2907,22 +2537,19 @@ class Link extends $e.modules.document.CommandHistory {
       type: __('Linked to Global', 'elementor-pro')
     };
   }
-
   apply(args) {
     const {
       data,
       containers = [args.container]
     } = args;
-    containers.forEach((
-    /** Container */
-    container) => {
+    containers.forEach(( /** Container */container) => {
       const widgetModel = container.model,
-            widgetModelIndex = widgetModel.collection.indexOf(widgetModel);
+        widgetModelIndex = widgetModel.collection.indexOf(widgetModel);
       data.elType = data.type;
       data.settings = widgetModel.get('settings').attributes;
       data.widgetType = widgetModel.get('widgetType');
       const elementModel = elementorPro.modules.globalWidget.addGlobalWidget(data.template_id, data),
-            elementModelAttributes = elementModel.attributes;
+        elementModelAttributes = elementModel.attributes;
       $e.data.setCache(this.component, `document/global/global-widget/templates/${data.template_id}`, {}, data);
       $e.run('document/elements/create', {
         container: container.parent,
@@ -2942,9 +2569,7 @@ class Link extends $e.modules.document.CommandHistory {
     });
     $e.route('panel/elements/global');
   }
-
 }
-
 exports.Link = Link;
 var _default = Link;
 exports["default"] = _default;
@@ -2965,12 +2590,10 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.Unlink = void 0;
-
 class Unlink extends $e.modules.document.CommandHistory {
   validateArgs(args) {
     this.requireContainer(args);
   }
-
   getHistory(args) {
     const {
       containers = [args.container]
@@ -2981,24 +2604,19 @@ class Unlink extends $e.modules.document.CommandHistory {
       type: __('Unlink Widget', 'elementor-pro')
     };
   }
-
   async apply(args) {
     const {
       containers = [args.container]
     } = args;
-    const ids = containers.map((
-    /** Container */
-    container) => container.model.get('templateID'));
+    const ids = containers.map(( /** Container */container) => container.model.get('templateID'));
     const {
       data
     } = await $e.data.get('document/global/templates', {
       ids
     });
-    containers.forEach((
-    /** Container */
-    container) => {
+    containers.forEach(( /** Container */container) => {
       const id = container.model.get('templateID'),
-            elementModel = elementorPro.modules.globalWidget.createGlobalModel(id, data[id]);
+        elementModel = elementorPro.modules.globalWidget.createGlobalModel(id, data[id]);
       $e.run('document/elements/create', {
         container: container.parent,
         model: {
@@ -3018,9 +2636,7 @@ class Unlink extends $e.modules.document.CommandHistory {
       });
     });
   }
-
 }
-
 exports.Unlink = Unlink;
 var _default = Unlink;
 exports["default"] = _default;
@@ -3040,19 +2656,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var commands = _interopRequireWildcard(__webpack_require__(/*! ./commands/ */ "../modules/global-widget/assets/js/editor/commands/index.js"));
-
 var commandsInternal = _interopRequireWildcard(__webpack_require__(/*! ./commands-internal/ */ "../modules/global-widget/assets/js/editor/commands-internal/index.js"));
-
 var commandsData = _interopRequireWildcard(__webpack_require__(/*! ./commands-data/ */ "../modules/global-widget/assets/js/editor/commands-data/index.js"));
-
 var hooks = _interopRequireWildcard(__webpack_require__(/*! ./hooks/ */ "../modules/global-widget/assets/js/editor/hooks/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class Component extends $e.modules.ComponentBase {
   /**
    * Holds all the template ids, which not available due they simply not exist in document data.
@@ -3061,13 +2670,14 @@ class Component extends $e.modules.ComponentBase {
    * @type {Array}
    */
   notLoadedTemplatesIds = [];
+
   /**
    * Last changed global widget(s).
    *
    * @type {null | Array} Container[]
    */
-
   lastChangedContainers = null;
+
   /**
    * Hold unsaved changed container id for each template id.
    *
@@ -3076,39 +2686,32 @@ class Component extends $e.modules.ComponentBase {
    *
    * @type {{}}
    */
-
   changedContainersId = {};
-
   registerAPI() {
-    super.registerAPI(); // TODO: Remove when route hooks are available.
+    super.registerAPI();
 
+    // TODO: Remove when route hooks are available.
     $e.routes.on('run:after', (component, route) => {
       if ('panel/elements/global' === route) {
         this.onRoutePanelElementsGlobal();
       }
     });
   }
-
   getNamespace() {
     return 'document/global';
   }
-
   defaultCommands() {
     return this.importCommands(commands);
   }
-
   defaultCommandsInternal() {
     return this.importCommands(commandsInternal);
   }
-
   defaultData() {
     return this.importCommands(commandsData);
   }
-
   defaultHooks() {
     return this.importHooks(hooks);
   }
-
   onRoutePanelElementsGlobal() {
     if (this.notLoadedTemplatesIds.length) {
       $e.data.get('document/global/templates', {
@@ -3119,6 +2722,7 @@ class Component extends $e.modules.ComponentBase {
       });
     }
   }
+
   /**
    * Update each 'Backbone.Model' will handle issue when the global widget saved only in draft.
    * Scenario for better understanding the issue:
@@ -3131,8 +2735,6 @@ class Component extends $e.modules.ComponentBase {
    *
    * @param {Object} targetContainer Container class
    */
-
-
   updateGlobalsRecursive(targetContainer) {
     const modelsToUpdate = ['dynamic', 'globals', 'settings'];
     elementor.getPreviewContainer().forEachChildrenRecursive(container => {
@@ -3140,7 +2742,6 @@ class Component extends $e.modules.ComponentBase {
       if (targetContainer !== container && parseInt(container.model.get('templateID')) === parseInt(targetContainer.model.get('templateID'))) {
         modelsToUpdate.forEach(modelName => {
           const model = targetContainer[modelName];
-
           if (model instanceof Backbone.Model) {
             const accordingTo = 'settings' === modelName ? targetContainer.settings.attributes : model.changed;
             Object.entries(accordingTo).forEach(_ref => {
@@ -3153,9 +2754,7 @@ class Component extends $e.modules.ComponentBase {
       }
     });
   }
-
 }
-
 exports["default"] = Component;
 
 /***/ }),
@@ -3173,7 +2772,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.BaseGlobalWidgetPrepareUpdate = void 0;
-
 /**
  * Hook is responsible for saving last changed global widget and update
  * which containers are needed for updating the template.
@@ -3182,24 +2780,23 @@ class BaseGlobalWidgetPrepareUpdate extends $e.modules.hookData.After {
   getConditions(args) {
     const {
       containers = [args.container]
-    } = args; // When the container is repeater item it should add the global repeater itself to the `lastChangedContainers` and not the repeater item
+    } = args;
 
+    // When the container is repeater item it should add the global repeater itself to the `lastChangedContainers` and not the repeater item
     return containers.some(container => {
       var _container$renderer, _container$renderer$m;
-
       return (_container$renderer = container.renderer) === null || _container$renderer === void 0 ? void 0 : (_container$renderer$m = _container$renderer.model) === null || _container$renderer$m === void 0 ? void 0 : _container$renderer$m.get('templateID');
     });
   }
-
   apply(args) {
     const {
-      containers = [args.container]
-    } = args,
-          component = $e.components.get('document/global'); // Filter only the containers that are global widgets. (Can pass multiple containers that some of them global widgets and some of them not).
+        containers = [args.container]
+      } = args,
+      component = $e.components.get('document/global');
 
+    // Filter only the containers that are global widgets. (Can pass multiple containers that some of them global widgets and some of them not).
     const globalWidgetContainers = containers.filter(container => {
       var _container$renderer2, _container$renderer2$;
-
       return (_container$renderer2 = container.renderer) === null || _container$renderer2 === void 0 ? void 0 : (_container$renderer2$ = _container$renderer2.model) === null || _container$renderer2$ === void 0 ? void 0 : _container$renderer2$.get('templateID');
     });
     component.lastChangedContainers = globalWidgetContainers.map(container => container.renderer);
@@ -3207,9 +2804,7 @@ class BaseGlobalWidgetPrepareUpdate extends $e.modules.hookData.After {
       component.changedContainersId[container.renderer.model.get('templateID')] = container.renderer.id;
     });
   }
-
 }
-
 exports.BaseGlobalWidgetPrepareUpdate = BaseGlobalWidgetPrepareUpdate;
 var _default = BaseGlobalWidgetPrepareUpdate;
 exports["default"] = _default;
@@ -3229,24 +2824,20 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.GlobalWidgetPrepareUpdateElementSetSettings = void 0;
-
 var _baseGlobalWidgetPrepareUpdate = __webpack_require__(/*! ../../../base-global-widget-prepare-update */ "../modules/global-widget/assets/js/editor/hooks/data/base-global-widget-prepare-update.js");
-
 /**
  * Hook is responsible for saving last changed global widget and update
  * which containers are needed for updating the template.
  */
+
 class GlobalWidgetPrepareUpdateElementSetSettings extends _baseGlobalWidgetPrepareUpdate.BaseGlobalWidgetPrepareUpdate {
   getCommand() {
     return 'document/elements/set-settings';
   }
-
   getId() {
     return 'elementor-pro-global-widget-prepare-update-element-set-settings';
   }
-
 }
-
 exports.GlobalWidgetPrepareUpdateElementSetSettings = GlobalWidgetPrepareUpdateElementSetSettings;
 var _default = GlobalWidgetPrepareUpdateElementSetSettings;
 exports["default"] = _default;
@@ -3266,7 +2857,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.GlobalWidgetDoUpdate = void 0;
-
 /**
  * On after all `document/elements/set-settings` has stop, the history mechanism will call to
  * `document/history/end-log` the hook will update all other global widgets according to this last change.
@@ -3275,24 +2865,19 @@ class GlobalWidgetDoUpdate extends $e.modules.hookData.After {
   getCommand() {
     return 'document/history/end-log';
   }
-
   getId() {
     return 'elementor-pro-global-widget-do-update';
   }
-
   getConditions() {
     return $e.components.get('document/global').lastChangedContainers;
   }
-
   apply() {
     const component = $e.components.get('document/global'),
-          containers = component.lastChangedContainers;
+      containers = component.lastChangedContainers;
     containers.forEach(container => component.updateGlobalsRecursive(container));
     component.lastChangedContainers = null;
   }
-
 }
-
 exports.GlobalWidgetDoUpdate = GlobalWidgetDoUpdate;
 var _default = GlobalWidgetDoUpdate;
 exports["default"] = _default;
@@ -3309,29 +2894,24 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.GlobalWidgetPrepareUpdateRepeaterInsert = void 0;
-
 var _baseGlobalWidgetPrepareUpdate = _interopRequireDefault(__webpack_require__(/*! ../../../base-global-widget-prepare-update */ "../modules/global-widget/assets/js/editor/hooks/data/base-global-widget-prepare-update.js"));
-
 /**
  * Hook is responsible for saving last changed global widget and update
  * which containers are needed for updating the template.
  */
+
 class GlobalWidgetPrepareUpdateRepeaterInsert extends _baseGlobalWidgetPrepareUpdate.default {
   getCommand() {
     return 'document/repeater/insert';
   }
-
   getId() {
     return 'elementor-pro-global-widget-prepare-update-repeater-insert';
   }
-
 }
-
 exports.GlobalWidgetPrepareUpdateRepeaterInsert = GlobalWidgetPrepareUpdateRepeaterInsert;
 var _default = GlobalWidgetPrepareUpdateRepeaterInsert;
 exports["default"] = _default;
@@ -3351,24 +2931,20 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.GlobalWidgetPrepareUpdateRepeaterRemove = void 0;
-
 var _baseGlobalWidgetPrepareUpdate = __webpack_require__(/*! ../../../base-global-widget-prepare-update */ "../modules/global-widget/assets/js/editor/hooks/data/base-global-widget-prepare-update.js");
-
 /**
  * Hook is responsible for saving last changed global widget and update
  * which containers are needed for updating the template.
  */
+
 class GlobalWidgetPrepareUpdateRepeaterRemove extends _baseGlobalWidgetPrepareUpdate.BaseGlobalWidgetPrepareUpdate {
   getCommand() {
     return 'document/repeater/remove';
   }
-
   getId() {
     return 'elementor-pro-global-widget-prepare-update-repeater-remove';
   }
-
 }
-
 exports.GlobalWidgetPrepareUpdateRepeaterRemove = GlobalWidgetPrepareUpdateRepeaterRemove;
 var _default = GlobalWidgetPrepareUpdateRepeaterRemove;
 exports["default"] = _default;
@@ -3388,7 +2964,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.GlobalWidgetSaveTemplates = void 0;
-
 /**
  * The hook is responsible for updating the global templates, on editor save,
  * hook will run 'document/global/save-templates' to handle the save.
@@ -3397,28 +2972,22 @@ class GlobalWidgetSaveTemplates extends $e.modules.hookData.After {
   getCommand() {
     return 'document/save/save';
   }
-
   getId() {
     return 'elementor-pro-global-widget-save-templates';
   }
-
   getConditions(args) {
     if (!Object.keys($e.components.get('document/global').changedContainersId).length) {
       return false;
     }
-
     const {
       document = elementor.documents.getCurrent()
     } = args;
     return document.config.panel.has_elements && args.status && -1 !== ['private', 'publish'].indexOf(args.status);
   }
-
   apply() {
     $e.internal('document/global/save-templates');
   }
-
 }
-
 exports.GlobalWidgetSaveTemplates = GlobalWidgetSaveTemplates;
 var _default = GlobalWidgetSaveTemplates;
 exports["default"] = _default;
@@ -3438,7 +3007,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.GlobalWidgetLoadTemplates = void 0;
-
 /**
  * Hook responsible to load current active templates ( global widget that are in used ) to `$e.data.cache`,
  * also it tells the component which templates are not active and required to be loaded from the backend.
@@ -3450,7 +3018,6 @@ class GlobalWidgetLoadTemplates extends $e.modules.hookData.After {
    * @type {boolean}
    */
   static calledOnce = false;
-
   initialize() {
     // Since 'initialize' called before the component is registered.
     // TODO: apply this logic at HookBase for '.initialize.
@@ -3458,19 +3025,15 @@ class GlobalWidgetLoadTemplates extends $e.modules.hookData.After {
       this.component = $e.components.get('document/global');
     });
   }
-
   getCommand() {
     return 'editor/documents/attach-preview';
   }
-
   getId() {
     return 'elementor-pro-global-widget-load-templates';
   }
-
   getConditions() {
     return !GlobalWidgetLoadTemplates.calledOnce;
   }
-
   apply() {
     GlobalWidgetLoadTemplates.calledOnce = true;
     Object.entries(elementorPro.config.widget_templates).forEach(_ref => {
@@ -3479,14 +3042,11 @@ class GlobalWidgetLoadTemplates extends $e.modules.hookData.After {
       this.addTemplateToCache(id);
     });
   }
-
   addTemplateToCache(id) {
     const container = elementor.getPreviewContainer().findChildrenRecursive(i => parseInt(i.model.get('templateID')) === parseInt(id));
-
     if (!container) {
       return this.component.notLoadedTemplatesIds.push(id);
     }
-
     const args = {
       id: container.model.get('templateID'),
       elType: 'widget',
@@ -3498,9 +3058,7 @@ class GlobalWidgetLoadTemplates extends $e.modules.hookData.After {
     };
     $e.data.setCache(this.component, `document/global/global-widget/templates/${id}`, {}, args);
   }
-
 }
-
 exports.GlobalWidgetLoadTemplates = GlobalWidgetLoadTemplates;
 var _default = GlobalWidgetLoadTemplates;
 exports["default"] = _default;
@@ -3555,17 +3113,11 @@ Object.defineProperty(exports, "GlobalWidgetSaveTemplates", ({
     return _globalWidgetSaveTemplates.GlobalWidgetSaveTemplates;
   }
 }));
-
 var _globalWidgetPrepareUpdateElementSetSettings = __webpack_require__(/*! ./document/elements/set-settings/global-widget-prepare-update-element-set-settings */ "../modules/global-widget/assets/js/editor/hooks/data/document/elements/set-settings/global-widget-prepare-update-element-set-settings.js");
-
 var _globalWidgetPrepareUpdateRepeaterInsert = __webpack_require__(/*! ./document/repeater/insert/global-widget-prepare-update-repeater-insert */ "../modules/global-widget/assets/js/editor/hooks/data/document/repeater/insert/global-widget-prepare-update-repeater-insert.js");
-
 var _globalWidgetPrepareUpdateRepeaterRemove = __webpack_require__(/*! ./document/repeater/remove/global-widget-prepare-update-repeater-remove */ "../modules/global-widget/assets/js/editor/hooks/data/document/repeater/remove/global-widget-prepare-update-repeater-remove.js");
-
 var _globalWidgetDoUpdate = __webpack_require__(/*! ./document/history/end-log/global-widget-do-update */ "../modules/global-widget/assets/js/editor/hooks/data/document/history/end-log/global-widget-do-update.js");
-
 var _globalWidgetSaveTemplates = __webpack_require__(/*! ./document/save/save/global-widget-save-templates */ "../modules/global-widget/assets/js/editor/hooks/data/document/save/save/global-widget-save-templates.js");
-
 var _globalWidgetLoadTemplates = __webpack_require__(/*! ./editor/documents/attach-preview/global-widget-load-templates */ "../modules/global-widget/assets/js/editor/hooks/data/editor/documents/attach-preview/global-widget-load-templates.js");
 
 /***/ }),
@@ -3582,9 +3134,7 @@ var _globalWidgetLoadTemplates = __webpack_require__(/*! ./editor/documents/atta
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-
 var _data = __webpack_require__(/*! ./data/ */ "../modules/global-widget/assets/js/editor/hooks/data/index.js");
-
 Object.keys(_data).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _data[key]) return;
@@ -3595,9 +3145,7 @@ Object.keys(_data).forEach(function (key) {
     }
   });
 });
-
 var _ui = __webpack_require__(/*! ./ui/ */ "../modules/global-widget/assets/js/editor/hooks/ui/index.js");
-
 Object.keys(_ui).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _ui[key]) return;
@@ -3624,7 +3172,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.GlobalWidgetHistoryUpdate = void 0;
-
 /**
  * Since editing of global widget applies changes to the all widgets with the same template id,
  * the same needs to be done on undo/redo.
@@ -3633,31 +3180,25 @@ class GlobalWidgetHistoryUpdate extends $e.modules.hookUI.After {
   getCommand() {
     return 'document/elements/set-settings';
   }
-
   getId() {
     return 'elementor-pro-global-widget-history-update';
   }
-
   getContainerType() {
     return 'widget';
   }
-
   getConditions(args) {
     const {
       containers = [args.container]
     } = args;
     return !elementor.documents.getCurrent().history.getActive() && containers.some(container => container.model.get('templateID'));
   }
-
   apply(args) {
     const {
       containers = [args.container]
     } = args;
     containers.forEach(container => $e.components.get('document/global').updateGlobalsRecursive(container));
   }
-
 }
-
 exports.GlobalWidgetHistoryUpdate = GlobalWidgetHistoryUpdate;
 var _default = GlobalWidgetHistoryUpdate;
 exports["default"] = _default;
@@ -3682,7 +3223,6 @@ Object.defineProperty(exports, "GlobalWidgetHistoryUpdate", ({
     return _globalWidgetHistoryUpdate.GlobalWidgetHistoryUpdate;
   }
 }));
-
 var _globalWidgetHistoryUpdate = __webpack_require__(/*! ./document/elements/set-settings/global-widget-history-update */ "../modules/global-widget/assets/js/editor/hooks/ui/document/elements/set-settings/global-widget-history-update.js");
 
 /***/ }),
@@ -3698,21 +3238,16 @@ var _globalWidgetHistoryUpdate = __webpack_require__(/*! ./document/elements/set
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/global-widget/assets/js/editor/component.js"));
-
 class Module extends elementorModules.editor.utils.Module {
   panelWidgets = new Backbone.Collection();
-
   addGlobalWidget(templateId, templateData) {
     return this.panelWidgets.add(this.createGlobalModel(templateId, templateData));
   }
-
   createGlobalModel(templateId, templateData) {
     templateData = Object.assign({}, templateData, {
       id: templateId,
@@ -3727,24 +3262,20 @@ class Module extends elementorModules.editor.utils.Module {
     elementModel.set('id', templateId);
     return elementModel;
   }
-
   setWidgetType() {
     elementor.hooks.addFilter('element/view', function (DefaultView, model) {
       if (model.get('templateID')) {
         return (__webpack_require__(/*! ./widget/view */ "../modules/global-widget/assets/js/editor/widget/view.js")["default"]);
       }
-
       return DefaultView;
     });
     elementor.hooks.addFilter('element/model', function (DefaultModel, attrs) {
       if (attrs.templateID) {
         return (__webpack_require__(/*! ./widget/model */ "../modules/global-widget/assets/js/editor/widget/model.js")["default"]);
       }
-
       return DefaultModel;
     });
   }
-
   registerTemplateType() {
     elementor.templates.registerTemplateType('widget', {
       showInLibrary: false,
@@ -3752,34 +3283,28 @@ class Module extends elementorModules.editor.utils.Module {
         title: __('Save your widget as a global widget', 'elementor-pro'),
         description: __('You\'ll be able to add this global widget to multiple areas on your site, and edit it from one single place.', 'elementor-pro')
       },
-
       prepareSavedData(data) {
         data.widgetType = data.content[0].widgetType;
         return data;
       },
-
       ajaxParams: {
         success: this.onWidgetTemplateSaved.bind(this)
       }
     });
   }
-
   addPanelPage() {
     elementor.getPanelView().addPage('globalWidget', {
       view: __webpack_require__(/*! ./views/panel-page */ "../modules/global-widget/assets/js/editor/views/panel-page.js")
     });
   }
-
   getGlobalModels(id) {
     elementorCommon.helpers.softDeprecated('elementorPro.modules.globalWidget.getGlobalModels( id )', '3.5.0', '$e.data.getCache( `document/global/global-widget/templates/${ id }` )');
     return $e.data.getCache(this.component, `document/global/global-widget/templates/${id}`);
   }
-
   saveTemplates() {
     elementorCommon.helpers.softDeprecated('elementorPro.modules.globalWidget.saveTemplates()', '3.5.0', "$e.internal( 'document/global/save-templates' )");
     $e.internal('document/global/save-templates');
   }
-
   requestGlobalModelSettings(globalModel, callback) {
     elementorCommon.helpers.softDeprecated('elementorPro.modules.globalWidget.requestGlobalModelSettings()', '3.5.0', "$e.data.get( 'document/global/templates' )");
     $e.data.get('document/global/templates', {
@@ -3788,27 +3313,22 @@ class Module extends elementorModules.editor.utils.Module {
       callback(data);
     });
   }
-
   setWidgetContextMenuSaveAction() {
     elementor.hooks.addFilter('elements/widget/contextMenuGroups', (groups, widget) => {
       const saveGroup = _.findWhere(groups, {
         name: 'save'
       });
-
       if (!saveGroup) {
         return groups;
       }
-
       const saveAction = _.findWhere(saveGroup.actions, {
         name: 'save'
       });
-
       saveAction.callback = widget.save.bind(widget);
       delete saveAction.shortcut;
       return groups;
     });
   }
-
   onElementorInit() {
     elementor.on('panel:init', () => {
       elementor.hooks.addFilter('panel/elements/regionViews', regionViews => {
@@ -3818,7 +3338,6 @@ class Module extends elementorModules.editor.utils.Module {
             collection: this.panelWidgets
           }
         });
-
         return regionViews;
       });
     });
@@ -3826,19 +3345,16 @@ class Module extends elementorModules.editor.utils.Module {
     this.setWidgetContextMenuSaveAction();
     this.setWidgetType();
   }
-
   onElementorInitComponents() {
     $e.components.register(new _component.default());
     $e.data.get('document/global/templates', {}, {
       refresh: true
     });
   }
-
   onElementorPreviewLoaded(isFirst) {
     if (!isFirst) {
       return;
     }
-
     this.addPanelPage();
     $e.routes.register('panel/editor', 'global', args => {
       elementor.getPanelView().setPage('globalWidget', 'Global Editing', {
@@ -3846,7 +3362,6 @@ class Module extends elementorModules.editor.utils.Module {
       });
     });
   }
-
   onWidgetTemplateSaved(data) {
     elementor.templates.layout.hideModal();
     const container = elementor.getContainer(elementor.templates.layout.modalContent.currentView.model.id);
@@ -3855,9 +3370,7 @@ class Module extends elementorModules.editor.utils.Module {
       data
     });
   }
-
 }
-
 exports["default"] = Module;
 
 /***/ }),
@@ -3873,17 +3386,13 @@ exports["default"] = Module;
 
 module.exports = elementor.modules.layouts.panel.pages.elements.views.Elements.extend({
   id: 'elementor-global-templates',
-
   getEmptyView() {
     if (this.collection.length) {
       return null;
     }
-
     return __webpack_require__(/*! ./no-templates */ "../modules/global-widget/assets/js/editor/views/no-templates.js");
   },
-
   onFilterEmpty() {}
-
 });
 
 /***/ }),
@@ -3928,11 +3437,9 @@ module.exports = Marionette.ItemView.extend({
     'click @ui.editButton': 'onEditButtonClick',
     'click @ui.unlinkButton': 'onUnlinkButtonClick'
   },
-
   initialize() {
     this.initUnlinkDialog();
   },
-
   buildUnlinkDialog() {
     var self = this;
     return elementorCommon.dialogsManager.createWidget('confirm', {
@@ -3947,26 +3454,20 @@ module.exports = Marionette.ItemView.extend({
         confirm: __('Unlink', 'elementor-pro'),
         cancel: __('Cancel', 'elementor-pro')
       },
-
       onConfirm() {
         self.getOption('editedView').unlink();
       }
-
     });
   },
-
   initUnlinkDialog() {
     var dialog;
-
     this.getUnlinkDialog = function () {
       if (!dialog) {
         dialog = this.buildUnlinkDialog();
       }
-
       return dialog;
     };
   },
-
   editGlobalModel() {
     var editedView = this.getOption('editedView');
     $e.run('panel/editor/open', {
@@ -3974,15 +3475,12 @@ module.exports = Marionette.ItemView.extend({
       view: editedView
     });
   },
-
   onEditButtonClick() {
     this.editGlobalModel();
   },
-
   onUnlinkButtonClick() {
     this.getUnlinkDialog().show();
   }
-
 });
 
 /***/ }),
@@ -4001,7 +3499,6 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 const ElementModel = elementor.modules.elements.models.Element;
-
 class Model extends ElementModel {
   initSettings() {
     // If global widget is created, the settings should come from recent template.
@@ -4009,27 +3506,23 @@ class Model extends ElementModel {
     if ($e.commands.is('document/elements/create')) {
       return this.initSettingsFromTemplate();
     }
-
     super.initSettings();
   }
-
   initEditSettings() {
-    super.initEditSettings(); // Set default edit tab.
+    super.initEditSettings();
 
+    // Set default edit tab.
     this.get('editSettings').set('editTab', 'global');
   }
-
   initSettingsFromTemplate() {
     const id = this.get('templateID'),
-          component = $e.components.get('document/global'),
-          data = $e.data.getCache(component, `document/global/global-widget/templates/${id}`) || this.attributes,
-          elementModel = elementorPro.modules.globalWidget.createGlobalModel(id, data);
+      component = $e.components.get('document/global'),
+      data = $e.data.getCache(component, `document/global/global-widget/templates/${id}`) || this.attributes,
+      elementModel = elementorPro.modules.globalWidget.createGlobalModel(id, data);
     this.set('settings', elementModel.get('settings'));
     elementorFrontend.config.elements.data[this.cid] = this.get('settings');
   }
-
 }
-
 exports["default"] = Model;
 
 /***/ }),
@@ -4049,46 +3542,40 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 const WidgetView = elementor.modules.elements.views.Widget;
-
 class View extends WidgetView {
   className() {
     return super.className() + ' elementor-global-widget elementor-global-' + this.model.get('templateID');
   }
-
-  addInlineEditingAttributes() {// See `this.removeInlineAddingAttributes` for more information.
+  addInlineEditingAttributes() {
+    // See `this.removeInlineAddingAttributes` for more information.
   }
-
   unlink() {
     $e.run('document/global/unlink', {
       container: this.getContainer()
     });
   }
-
   onEditRequest() {
     $e.route('panel/editor/global', {
       view: this
     });
   }
-
   getContextMenuGroups() {
     // Remove 'Save as global' for global widget view.
     return super.getContextMenuGroups().filter(group => 'save' !== group.name);
   }
-
   getContainer() {
     if (this.container) {
       return this.container;
     }
-
     const container = super.getContainer();
     container.label = container.label + ' (' + __('global', 'elementor-pro') + ')';
     return container;
   }
-
   render() {
     super.render();
     setTimeout(this.removeInlineAddingAttributes.bind(this));
   }
+
   /**
    * The issue is complex:
    * 1. There is a mechanism in the editor which responsible for adding inline the method below: `addInlineEditingAttributes`.
@@ -4102,18 +3589,13 @@ class View extends WidgetView {
    *          global mechanism.
    *          eventually it will trigger the logic of the backend for adding the inline attributes.
    */
-
-
   removeInlineAddingAttributes() {
     const globalWidgetElementDom = this.el.querySelector('.elementor-inline-editing');
-
     if (globalWidgetElementDom) {
       globalWidgetElementDom.classList.remove('elementor-inline-editing');
     }
   }
-
 }
-
 exports["default"] = View;
 
 /***/ }),
@@ -4130,10 +3612,8 @@ exports["default"] = View;
 module.exports = elementorModules.editor.utils.Module.extend({
   onElementorPreviewLoaded() {
     var EditButton = __webpack_require__(/*! ./editor/edit-button */ "../modules/library/assets/js/editor/edit-button.js");
-
     this.editButton = new EditButton();
   }
-
 });
 
 /***/ }),
@@ -4150,28 +3630,24 @@ module.exports = elementorModules.editor.utils.Module.extend({
 
 module.exports = function () {
   var self = this;
-
   self.onPanelShow = function (panel) {
     var model = panel.content.currentView.collection.findWhere({
       name: 'template_id'
     });
-    self.templateIdView = panel.content.currentView.children.findByModelCid(model.cid); // Change Edit link on render & on change template.
+    self.templateIdView = panel.content.currentView.children.findByModelCid(model.cid);
 
+    // Change Edit link on render & on change template.
     self.templateIdView.elementSettingsModel.on('change', self.onTemplateIdChange);
     self.templateIdView.on('render', self.onTemplateIdChange);
   };
-
   self.onTemplateIdChange = function () {
     var templateID = self.templateIdView.elementSettingsModel.get('template_id'),
-        $editButton = self.templateIdView.$el.find('.elementor-edit-template');
-
+      $editButton = self.templateIdView.$el.find('.elementor-edit-template');
     if (!templateID) {
       $editButton.remove();
       return;
     }
-
     var editUrl = ElementorConfig.home_url + '?p=' + templateID + '&elementor';
-
     if ($editButton.length) {
       $editButton.prop('href', editUrl);
     } else {
@@ -4184,11 +3660,9 @@ module.exports = function () {
       self.templateIdView.$el.find('.elementor-control-input-wrapper').after($editButton);
     }
   };
-
   self.init = function () {
     elementor.hooks.addAction('panel/open_editor/widget/template', self.onPanelShow);
   };
-
   self.init();
 };
 
@@ -4203,10 +3677,9 @@ module.exports = function () {
 "use strict";
 
 
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
-var _documentHandle = _interopRequireDefault(__webpack_require__(/*! elementor-pro/preview/utils/document-handle */ "../assets/dev/js/preview/utils/document-handle.js"));
-
+var _documentHandle = _interopRequireWildcard(__webpack_require__(/*! elementor-pro/preview/utils/document-handle */ "../assets/dev/js/preview/utils/document-handle.js"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 class loopBuilderModule extends elementorModules.editor.utils.Module {
   onElementorFrontendInit() {
     elementorFrontend.elements.$body.on('click', '.e-loop-empty-view__box-cta', () => {
@@ -4215,95 +3688,74 @@ class loopBuilderModule extends elementorModules.editor.utils.Module {
     this.createDocumentSaveHandles();
     elementor.on('document:loaded', this.createDocumentSaveHandles.bind(this));
   }
-
   createTemplate() {
     setTimeout(() => {
       elementor.getPanelView().getCurrentPageView().activateSection('section_layout')._renderChildren();
-
       this.getEditorControlView('template_id').createTemplate();
     });
   }
-
   createDocumentSaveHandles() {
     var _elementorFrontend$co, _elementorFrontend$co2;
-
     Object.entries((_elementorFrontend$co = elementorFrontend.config) === null || _elementorFrontend$co === void 0 ? void 0 : (_elementorFrontend$co2 = _elementorFrontend$co.elements) === null || _elementorFrontend$co2 === void 0 ? void 0 : _elementorFrontend$co2.data).forEach(_ref => {
-      var _element$attributes;
-
       let [cid, element] = _ref;
-
-      if ('loop-grid' !== (element === null || element === void 0 ? void 0 : (_element$attributes = element.attributes) === null || _element$attributes === void 0 ? void 0 : _element$attributes.widgetType)) {
+      const elementData = elementor.getElementData(element);
+      if (!(elementData !== null && elementData !== void 0 && elementData.is_loop)) {
         return;
       }
-
       const md = elementorFrontend.elements.$body.find('[data-model-cid="' + cid + '"]');
-
       if (!md.length) {
         return;
       }
-
       const masterItem = md.find('[data-elementor-type="loop-item"]').first();
-
       if (masterItem) {
         (0, _documentHandle.default)({
           element: masterItem,
           id: 0,
           title: '& Back'
-        }, 'save');
+        }, _documentHandle.SAVE_CONTEXT, null, '.elementor-' + elementor.config.initial_document.id);
       }
     });
   }
-
   onElementorLoaded() {
     elementor.on('document:loaded', this.onDocumentLoaded.bind(this));
     elementor.on('document:unload', this.onDocumentUnloaded.bind(this));
     this.onApplySourceChange = this.onApplySourceChange.bind(this);
   }
-
   onDocumentLoaded(document) {
     if (!document.config.theme_builder) {
       return;
     }
-
     elementor.channels.editor.on('elementorLoopBuilder:ApplySourceChange', this.onApplySourceChange);
   }
-
   onDocumentUnloaded(document) {
     if (!document.config.theme_builder) {
       return;
     }
-
     elementor.channels.editor.off('elementorLoopBuilder:ApplySourceChange', this.onApplySourceChange);
   }
-
   onApplySourceChange() {
     this.saveAndRefresh().then(() => {
       location.reload();
     });
   }
-
   async saveAndRefresh() {
     await $e.run('document/save/update', {
       force: true
     });
   }
-
   getCtaStyles() {
     const ctaStyle = document.createElement('link');
     ctaStyle.setAttribute('rel', 'stylesheet');
     ctaStyle.setAttribute('href', `${elementorAppProConfig.baseUrl}/assets/css/loop-grid-cta.css`);
     return ctaStyle;
   }
-
-  getCtaContent() {
+  getCtaContent(widgetName) {
     const ctaContent = document.createElement('div');
-    ctaContent.classList.add('e-loop-empty-view__container', 'elementor-grid');
-    ctaContent.innerHTML = Marionette.Renderer.render('#tmpl-loop-grid-cta');
+    ctaContent.classList.add('e-loop-empty-view__container', 'elementor-grid', widgetName);
+    ctaContent.innerHTML = Marionette.Renderer.render('#tmpl-' + widgetName + '-cta');
     return ctaContent;
   }
-
 }
-
 module.exports = loopBuilderModule;
 
 /***/ }),
@@ -4322,12 +3774,10 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends elementorModules.editor.utils.Module {
   onElementorInit() {
     elementor.on('navigator:init', this.onNavigatorInit.bind(this));
   }
-
   onNavigatorInit() {
     elementor.navigator.indicators.motionFX = {
       icon: 'flash',
@@ -4336,9 +3786,7 @@ class _default extends elementorModules.editor.utils.Module {
       section: 'section_effects'
     };
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -4353,21 +3801,16 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _stripe = _interopRequireDefault(__webpack_require__(/*! ./stripe */ "../modules/payments/assets/js/editor/stripe.js"));
-
 class StripeModule extends elementorModules.editor.utils.Module {
   onElementorInit() {
     this.stripeButton = new _stripe.default('stripe-button');
   }
-
 }
-
 exports["default"] = StripeModule;
 
 /***/ }),
@@ -4382,20 +3825,16 @@ exports["default"] = StripeModule;
 
 
 const ElementEditorModule = __webpack_require__(/*! elementor-pro/editor/element-editor-module */ "../assets/dev/js/editor/element-editor-module.js");
-
 module.exports = ElementEditorModule.extend({
   __construct() {
     ElementEditorModule.prototype.__construct.apply(this, arguments);
   },
-
   getName() {
     return 'stripe-button';
   },
-
   onInit() {
     elementor.channels.editor.on('editor:widget:stripe-button:section_stripe_account:activated', this.onSectionActive);
   },
-
   onSectionActive() {
     return elementorPro.ajax.addRequest('get_stripe_tax_rates', {
       success: data => {
@@ -4404,7 +3843,6 @@ module.exports = ElementEditorModule.extend({
       }
     }, true);
   }
-
 });
 
 /***/ }),
@@ -4422,29 +3860,21 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var hooks = _interopRequireWildcard(__webpack_require__(/*! ./hooks/ */ "../modules/popup/assets/js/editor/hooks/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class PopupComponent extends $e.modules.ComponentBase {
   /**
    * @type {null|Function}
    */
   onPageSettingsCloseHandler = null;
-
   getNamespace() {
     return 'document/popup';
   }
-
   defaultHooks() {
     return this.importHooks(hooks);
   }
-
 }
-
 exports["default"] = PopupComponent;
 
 /***/ }),
@@ -4462,7 +3892,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends elementorModules.editor.views.ControlsStack {
   constructor() {
     super(...arguments);
@@ -4470,48 +3899,40 @@ class _default extends elementorModules.editor.views.ControlsStack {
     this.activeTab = 'content';
     this.listenTo(this.model, 'change', this.onModelChange);
   }
-
   getNamespaceArray() {
     return ['popup', 'display-settings'];
   }
-
   className() {
     return super.className() + ' elementor-popup__display-settings';
   }
-
   toggleGroup(groupName, $groupElement) {
     $groupElement.toggleClass('elementor-active', !!this.model.get(groupName));
   }
-
   onRenderTemplate() {
     this.activateFirstSection();
   }
-
   onRender() {
     const name = this.getOption('name');
     let $groupWrapper;
     this.children.each(child => {
       const type = child.model.get('type');
-
       if ('heading' !== type) {
         if ($groupWrapper) {
           $groupWrapper.append(child.$el);
         }
-
         return;
       }
-
       const groupName = child.model.get('name').replace('_heading', '');
       $groupWrapper = jQuery('<div>', {
         id: `elementor-popup__${name}-controls-group--${groupName}`,
         class: 'elementor-popup__display-settings_controls_group'
       });
       const $imageWrapper = jQuery('<div>', {
-        class: 'elementor-popup__display-settings_controls_group__icon'
-      }),
-            $image = jQuery('<img>', {
-        src: elementorPro.config.urls.modules + `popup/assets/images/${name}/${groupName}.svg`
-      });
+          class: 'elementor-popup__display-settings_controls_group__icon'
+        }),
+        $image = jQuery('<img>', {
+          src: elementorPro.config.urls.modules + `popup/assets/images/${name}/${groupName}.svg`
+        });
       $imageWrapper.html($image);
       $groupWrapper.html($imageWrapper);
       child.$el.before($groupWrapper);
@@ -4519,20 +3940,15 @@ class _default extends elementorModules.editor.views.ControlsStack {
       this.toggleGroup(groupName, $groupWrapper);
     });
   }
-
   onModelChange() {
     const changedControlName = Object.keys(this.model.changed)[0],
-          changedControlView = this.getControlViewByName(changedControlName);
-
+      changedControlView = this.getControlViewByName(changedControlName);
     if ('switcher' !== changedControlView.model.get('type')) {
       return;
     }
-
     this.toggleGroup(changedControlName, changedControlView.$el.parent());
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -4555,7 +3971,6 @@ Object.defineProperty(exports, "PopupSave", ({
     return _save.PopupSave;
   }
 }));
-
 var _save = __webpack_require__(/*! ./save */ "../modules/popup/assets/js/editor/hooks/data/save.js");
 
 /***/ }),
@@ -4573,20 +3988,16 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PopupSave = void 0;
-
 class PopupSave extends $e.modules.hookData.After {
   getCommand() {
     return 'document/save/save';
   }
-
   getId() {
     return 'elementor-pro-popup-save';
   }
-
   getConditions() {
     return 'popup' === elementor.config.document.type;
   }
-
   apply() {
     const settings = {};
     jQuery.each(elementorPro.modules.popup.displaySettingsTypes, (type, data) => {
@@ -4600,9 +4011,7 @@ class PopupSave extends $e.modules.hookData.After {
       }
     });
   }
-
 }
-
 exports.PopupSave = PopupSave;
 var _default = PopupSave;
 exports["default"] = _default;
@@ -4621,9 +4030,7 @@ exports["default"] = _default;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-
 var _data = __webpack_require__(/*! ./data/ */ "../modules/popup/assets/js/editor/hooks/data/index.js");
-
 Object.keys(_data).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _data[key]) return;
@@ -4634,9 +4041,7 @@ Object.keys(_data).forEach(function (key) {
     }
   });
 });
-
 var _ui = __webpack_require__(/*! ./ui/ */ "../modules/popup/assets/js/editor/hooks/ui/index.js");
-
 Object.keys(_ui).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _ui[key]) return;
@@ -4663,15 +4068,12 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class BaseHookPopupAfter extends $e.modules.hookUI.After {
   run() {
     this.component = this.component || $e.components.get('document/popup');
     return super.run(...arguments);
   }
-
 }
-
 exports["default"] = BaseHookPopupAfter;
 
 /***/ }),
@@ -4686,36 +4088,28 @@ exports["default"] = BaseHookPopupAfter;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PopupRemoveInstructions = void 0;
-
 var _baseHookPopupAfter = _interopRequireDefault(__webpack_require__(/*! ../../../base/base-hook-popup-after */ "../modules/popup/assets/js/editor/hooks/ui/base/base-hook-popup-after.js"));
-
 class PopupRemoveInstructions extends _baseHookPopupAfter.default {
   getCommand() {
     return 'editor/documents/unload';
   }
-
   getId() {
     return 'elementor-pro-popup-remove-instructions';
   }
-
   getConditions(args) {
     const {
       document
     } = args;
     return 'popup' === document.config.type && !elementor.config.user.introduction.popupSettings;
   }
-
   apply() {
     $e.components.get('panel/page-settings').off('route/close', this.component.onPageSettingsCloseHandler);
   }
-
 }
-
 exports.PopupRemoveInstructions = PopupRemoveInstructions;
 var _default = PopupRemoveInstructions;
 exports["default"] = _default;
@@ -4735,29 +4129,23 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PopupRemoveLibraryTab = void 0;
-
 class PopupRemoveLibraryTab extends $e.modules.hookUI.After {
   getCommand() {
     return 'editor/documents/unload';
   }
-
   getId() {
     return 'elementor-pro-popup-remove-library-tab';
   }
-
   getConditions(args) {
     const {
       document
     } = args;
     return 'popup' === document.config.type;
   }
-
   apply() {
     $e.components.get('library').removeTab('templates/popups');
   }
-
 }
-
 exports.PopupRemoveLibraryTab = PopupRemoveLibraryTab;
 var _default = PopupRemoveLibraryTab;
 exports["default"] = _default;
@@ -4777,28 +4165,23 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PopupRemoveTriggers = void 0;
-
 class PopupRemoveTriggers extends $e.modules.hookUI.After {
   getCommand() {
     return 'editor/documents/unload';
   }
-
   getId() {
     return 'elementor-pro-popup-remove-triggers';
   }
-
   getConditions(args) {
     const {
       document
     } = args;
     return 'popup' === document.config.type;
   }
-
   apply() {
     this.removePanelFooterSubmenuItems();
     this.removePublishTabs();
   }
-
   removePanelFooterSubmenuItems() {
     const displaySettingsTypes = elementorPro.modules.popup.displaySettingsTypes;
     jQuery.each(displaySettingsTypes, type => {
@@ -4807,17 +4190,14 @@ class PopupRemoveTriggers extends $e.modules.hookUI.After {
       });
     });
   }
-
   removePublishTabs() {
     const component = $e.components.get('theme-builder-publish'),
-          displaySettingsTypes = elementorPro.modules.popup.displaySettingsTypes;
+      displaySettingsTypes = elementorPro.modules.popup.displaySettingsTypes;
     jQuery.each(displaySettingsTypes, type => {
       component.removeTab(type);
     });
   }
-
 }
-
 exports.PopupRemoveTriggers = PopupRemoveTriggers;
 var _default = PopupRemoveTriggers;
 exports["default"] = _default;
@@ -4835,41 +4215,33 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PopupAddInstructions = void 0;
-
 var _baseHookPopupAfter = _interopRequireDefault(__webpack_require__(/*! ../../../base/base-hook-popup-after */ "../modules/popup/assets/js/editor/hooks/ui/base/base-hook-popup-after.js"));
-
 class PopupAddInstructions extends _baseHookPopupAfter.default {
   getCommand() {
     return 'editor/documents/open';
   }
-
   getId() {
     return 'elementor-pro-popup-add-instructions';
   }
-
   getConditions(args) {
     const document = elementor.documents.get(args.id);
     return 'popup' === document.config.type && !elementor.config.user.introduction.popupSettings;
   }
-
   apply() {
     // Expose for the remove hook.
     this.component.onPageSettingsCloseHandler = this.onPageSettingsClose.bind(this);
     $e.components.get('panel/page-settings').on('route/close', this.component.onPageSettingsCloseHandler);
   }
-
   onPageSettingsClose() {
     const introduction = this.getIntroduction();
     introduction.show(elementor.getPanelView().footer.currentView.ui.settings[0]);
     introduction.setViewed();
     $e.components.get('panel/page-settings').off('route/close', this.component.onPageSettingsCloseHandler);
   }
-
   getIntroduction() {
     return new elementorModules.editor.utils.Introduction({
       introductionKey: 'popupSettings',
@@ -4890,9 +4262,7 @@ class PopupAddInstructions extends _baseHookPopupAfter.default {
       }
     });
   }
-
 }
-
 exports.PopupAddInstructions = PopupAddInstructions;
 var _default = PopupAddInstructions;
 exports["default"] = _default;
@@ -4913,21 +4283,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PopupAddLibraryTab = void 0;
-
 class PopupAddLibraryTab extends $e.modules.hookUI.After {
   getCommand() {
     return 'editor/documents/open';
   }
-
   getId() {
     return 'elementor-pro-popup-add-library-tab';
   }
-
   getConditions(args) {
     const document = elementor.documents.get(args.id);
     return 'popup' === document.config.type;
   }
-
   apply() {
     $e.components.get('library').addTab('templates/popups', {
       title: __('Popups', 'elementor-pro'),
@@ -4937,9 +4303,7 @@ class PopupAddLibraryTab extends $e.modules.hookUI.After {
       }
     }, 1);
   }
-
 }
-
 exports.PopupAddLibraryTab = PopupAddLibraryTab;
 var _default = PopupAddLibraryTab;
 exports["default"] = _default;
@@ -4956,28 +4320,22 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.PopupAddTriggers = void 0;
-
 var _displaySettings = _interopRequireDefault(__webpack_require__(/*! modules/popup/assets/js/editor/controls/display-settings */ "../modules/popup/assets/js/editor/controls/display-settings.js"));
-
 class PopupAddTriggers extends $e.modules.hookUI.After {
   getCommand() {
     return 'editor/documents/open';
   }
-
   getId() {
     return 'elementor-pro-popup-add-triggers';
   }
-
   getConditions(args) {
     const document = elementor.documents.get(args.id);
     return 'popup' === document.config.type;
   }
-
   apply() {
     if (elementor.panel) {
       this.addUI();
@@ -4986,21 +4344,18 @@ class PopupAddTriggers extends $e.modules.hookUI.After {
       elementor.on('preview:loaded', this.addUI.bind(this));
     }
   }
-
   addUI() {
     // Since 'addUI' can be called each document load, if 'theme-builder-publish/triggers' exists, the UI already exist.
     if ($e.routes.commands['theme-builder-publish/triggers']) {
       return;
     }
-
     this.addPanelFooterSubmenuItems();
     this.addPublishTabs();
   }
-
   addPublishTabs() {
     const config = elementor.config.document.displaySettings,
-          component = $e.components.get('theme-builder-publish'),
-          module = elementorPro.modules.popup;
+      component = $e.components.get('theme-builder-publish'),
+      module = elementorPro.modules.popup;
     jQuery.each(module.displaySettingsTypes, (type, data) => {
       // Init models for editor save.
       data.model = new elementorModules.editor.elements.models.BaseSettings(config[type].settings, {
@@ -5021,10 +4376,9 @@ class PopupAddTriggers extends $e.modules.hookUI.After {
       });
     });
   }
-
   addPanelFooterSubmenuItems() {
     const component = $e.components.get('theme-builder-publish'),
-          displaySettingsTypes = elementorPro.modules.popup.displaySettingsTypes;
+      displaySettingsTypes = elementorPro.modules.popup.displaySettingsTypes;
     jQuery.each(displaySettingsTypes, (type, data) => {
       elementor.getPanelView().footer.currentView.addSubMenuItem('saver-options', {
         before: 'save-template',
@@ -5035,9 +4389,7 @@ class PopupAddTriggers extends $e.modules.hookUI.After {
       });
     });
   }
-
 }
-
 exports.PopupAddTriggers = PopupAddTriggers;
 var _default = PopupAddTriggers;
 exports["default"] = _default;
@@ -5092,17 +4444,11 @@ Object.defineProperty(exports, "PopupRemoveTriggers", ({
     return _removeTriggers.PopupRemoveTriggers;
   }
 }));
-
 var _addInstructions = __webpack_require__(/*! ./editor/documents/open/add-instructions */ "../modules/popup/assets/js/editor/hooks/ui/editor/documents/open/add-instructions.js");
-
 var _addLibraryTab = __webpack_require__(/*! ./editor/documents/open/add-library-tab */ "../modules/popup/assets/js/editor/hooks/ui/editor/documents/open/add-library-tab.js");
-
 var _addTriggers = __webpack_require__(/*! ./editor/documents/open/add-triggers */ "../modules/popup/assets/js/editor/hooks/ui/editor/documents/open/add-triggers.js");
-
 var _removeInstructions = __webpack_require__(/*! ./editor/documents/close/remove-instructions */ "../modules/popup/assets/js/editor/hooks/ui/editor/documents/close/remove-instructions.js");
-
 var _removeLibraryTab = __webpack_require__(/*! ./editor/documents/close/remove-library-tab */ "../modules/popup/assets/js/editor/hooks/ui/editor/documents/close/remove-library-tab.js");
-
 var _removeTriggers = __webpack_require__(/*! ./editor/documents/close/remove-triggers */ "../modules/popup/assets/js/editor/hooks/ui/editor/documents/close/remove-triggers.js");
 
 /***/ }),
@@ -5118,9 +4464,7 @@ var _removeTriggers = __webpack_require__(/*! ./editor/documents/close/remove-tr
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/popup/assets/js/editor/component.js"));
-
 class PopupModule extends elementorModules.editor.utils.Module {
   constructor() {
     super(...arguments);
@@ -5137,15 +4481,12 @@ class PopupModule extends elementorModules.editor.utils.Module {
       }
     };
   }
-
   onElementorLoaded() {
     this.component = $e.components.register(new _component.default({
       manager: this
     }));
   }
-
 }
-
 module.exports = PopupModule;
 
 /***/ }),
@@ -5169,7 +4510,6 @@ module.exports = elementorModules.editor.utils.Module.extend({
       return elementor.addControlView('template_query', TemplateQueryControl);
     });
   }
-
 });
 
 /***/ }),
@@ -5187,19 +4527,16 @@ module.exports = elementorModules.editor.utils.Module.extend({
 module.exports = elementor.modules.controls.Select2.extend({
   cache: null,
   isTitlesReceived: false,
-
   getSelect2Placeholder() {
     return {
       id: '',
       text: __('All', 'elementor-pro')
     };
   },
-
   getControlValueByName(controlName) {
     const name = this.model.get('group_prefix') + controlName;
     return this.elementSettingsModel.attributes[name];
   },
-
   getQueryDataDeprecated() {
     return {
       filter_type: this.model.get('filter_type'),
@@ -5208,29 +4545,23 @@ module.exports = elementor.modules.controls.Select2.extend({
       query: this.model.get('query')
     };
   },
-
   getQueryData() {
     // Use a clone to keep model data unchanged:
     const autocomplete = elementorCommon.helpers.cloneObject(this.model.get('autocomplete'));
-
     if (_.isEmpty(autocomplete.query)) {
       autocomplete.query = {};
-    } // Specific for Group_Control_Query
-
-
+    }
+    // Specific for Group_Control_Query
     if ('cpt_tax' === autocomplete.object) {
       autocomplete.object = 'tax';
-
       if (_.isEmpty(autocomplete.query) || _.isEmpty(autocomplete.query.post_type)) {
         autocomplete.query.post_type = this.getControlValueByName('post_type');
       }
     }
-
     return {
       autocomplete
     };
   },
-
   getSelect2DefaultOptions() {
     const self = this;
     return jQuery.extend(elementor.modules.controls.Select2.prototype.getSelect2DefaultOptions.apply(this, arguments), {
@@ -5238,15 +4569,13 @@ module.exports = elementor.modules.controls.Select2.extend({
         transport(params, success, failure) {
           const bcFormat = !_.isEmpty(self.model.get('filter_type'));
           let data = {},
-              action = 'panel_posts_control_filter_autocomplete';
-
+            action = 'panel_posts_control_filter_autocomplete';
           if (bcFormat) {
             data = self.getQueryDataDeprecated();
             action = 'panel_posts_control_filter_autocomplete_deprecated';
           } else {
             data = self.getQueryData();
           }
-
           data.q = params.data.q;
           return elementorPro.ajax.addRequest(action, {
             data,
@@ -5254,34 +4583,28 @@ module.exports = elementor.modules.controls.Select2.extend({
             error: failure
           });
         },
-
         data(params) {
           return {
             q: params.term,
             page: params.page
           };
         },
-
         cache: true
       },
-
       escapeMarkup(markup) {
         return markup;
       },
-
       minimumInputLength: 1
     });
   },
-
   getValueTitles() {
     const self = this,
-          data = {},
-          bcFormat = !_.isEmpty(this.model.get('filter_type'));
+      data = {},
+      bcFormat = !_.isEmpty(this.model.get('filter_type'));
     let ids = this.getControlValue(),
-        action = 'query_control_value_titles',
-        filterTypeName = 'autocomplete',
-        filterType = {};
-
+      action = 'query_control_value_titles',
+      filterTypeName = 'autocomplete',
+      filterType = {};
     if (bcFormat) {
       filterTypeName = 'filter_type';
       filterType = this.model.get(filterTypeName).object;
@@ -5295,44 +4618,35 @@ module.exports = elementor.modules.controls.Select2.extend({
       data.get_titles = self.getQueryData().autocomplete;
       data.unique_id = '' + self.cid + filterType;
     }
-
     if (!ids || !filterType) {
       return;
     }
-
     if (!_.isArray(ids)) {
       ids = [ids];
     }
-
     elementorCommon.ajax.loadObjects({
       action,
       ids,
       data,
-
       before() {
         self.addControlSpinner();
       },
-
       success(ajaxData) {
         self.isTitlesReceived = true;
         self.model.set('options', ajaxData);
         self.render();
       }
-
     });
   },
-
   addControlSpinner() {
     this.ui.select.prop('disabled', true);
     this.$el.find('.elementor-control-title').after('<span class="elementor-control-spinner">&nbsp;<i class="eicon-spinner eicon-animation-spin"></i>&nbsp;</span>');
   },
-
   onReady() {
     if (!this.isTitlesReceived) {
       this.getValueTitles();
     }
   }
-
 });
 
 /***/ }),
@@ -5350,24 +4664,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var dataHooks = _interopRequireWildcard(__webpack_require__(/*! ./hooks/data */ "../modules/screenshots/assets/js/editor/hooks/data/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class _default extends $e.modules.ComponentBase {
   getNamespace() {
     return 'screenshots';
   }
-
   defaultHooks() {
     return this.importHooks(dataHooks);
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -5385,24 +4692,20 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.DeleteScreenshot = void 0;
-
 class DeleteScreenshot extends $e.modules.hookData.After {
   getCommand() {
     return 'document/save/save';
   }
-
   getConditions(args) {
     const {
-      status
-    } = args,
-          config = elementor.documents.getCurrent().config;
+        status
+      } = args,
+      config = elementor.documents.getCurrent().config;
     return 'publish' === status && config.support_site_editor;
   }
-
   getId() {
     return 'document/save/save::delete-screenshot';
   }
-
   apply() {
     const postId = elementor.documents.getCurrent().id;
     return elementorCommon.ajax.addRequest('screenshot_delete', {
@@ -5412,9 +4715,7 @@ class DeleteScreenshot extends $e.modules.hookData.After {
       }
     });
   }
-
 }
-
 exports.DeleteScreenshot = DeleteScreenshot;
 var _default = DeleteScreenshot;
 exports["default"] = _default;
@@ -5439,7 +4740,6 @@ Object.defineProperty(exports, "DeleteScreenshot", ({
     return _deleteScreenshot.DeleteScreenshot;
   }
 }));
-
 var _deleteScreenshot = __webpack_require__(/*! ./document/save/save/delete-screenshot */ "../modules/screenshots/assets/js/editor/hooks/data/document/save/save/delete-screenshot.js");
 
 /***/ }),
@@ -5454,21 +4754,16 @@ var _deleteScreenshot = __webpack_require__(/*! ./document/save/save/delete-scre
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/screenshots/assets/js/editor/component.js"));
-
 class Module extends elementorModules.editor.utils.Module {
   onElementorInit() {
     $e.components.register(new _component.default());
   }
-
 }
-
 exports["default"] = Module;
 
 /***/ }),
@@ -5486,24 +4781,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var hooks = _interopRequireWildcard(__webpack_require__(/*! ./hooks/ui */ "../modules/scroll-snap/assets/js/editor/hooks/ui/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class ScrollSnapComponent extends $e.modules.ComponentBase {
   getNamespace() {
     return 'scroll-snap';
   }
-
   defaultHooks() {
     return this.importHooks(hooks);
   }
-
 }
-
 exports["default"] = ScrollSnapComponent;
 
 /***/ }),
@@ -5521,30 +4809,23 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.FocusPreview = void 0;
-
 class FocusPreview extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'focus-preview--document/elements/settings';
   }
-
   getConditions(args) {
     var _args$settings$scroll;
-
     return ((_args$settings$scroll = args.settings.scroll_snap_padding) === null || _args$settings$scroll === void 0 ? void 0 : _args$settings$scroll.size) !== '';
   }
-
   apply() {
     setTimeout(() => {
       elementor.$preview[0].contentWindow.scrollBy(0, 0);
     }, 100);
   }
-
 }
-
 exports.FocusPreview = FocusPreview;
 var _default = FocusPreview;
 exports["default"] = _default;
@@ -5569,7 +4850,6 @@ Object.defineProperty(exports, "FocusPreview", ({
     return _focusPreview.FocusPreview;
   }
 }));
-
 var _focusPreview = __webpack_require__(/*! ./document/elements/settings/focus-preview */ "../modules/scroll-snap/assets/js/editor/hooks/ui/document/elements/settings/focus-preview.js");
 
 /***/ }),
@@ -5584,14 +4864,11 @@ var _focusPreview = __webpack_require__(/*! ./document/elements/settings/focus-p
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/scroll-snap/assets/js/editor/component.js"));
-
 class Module extends elementorModules.editor.utils.Module {
   /**
    * Init
@@ -5600,9 +4877,7 @@ class Module extends elementorModules.editor.utils.Module {
     super.onInit();
     $e.components.register(new _component.default());
   }
-
 }
-
 exports["default"] = Module;
 
 /***/ }),
@@ -5624,32 +4899,24 @@ module.exports = elementorModules.editor.utils.Module.extend({
     email: 'fas fa-envelope',
     print: 'fas fa-print'
   },
-
   getNetworkClass(networkName) {
     let networkClass = this.networksClassDictionary[networkName] || 'fab fa-' + networkName;
-
     if (elementor.config.icons_update_needed) {
       networkClass = 'fa ' + networkClass;
     }
-
     return networkClass;
   },
-
   getNetworkTitle(buttonSettings) {
     var _this$getNetworkData;
-
     // BC for items that are already selected and have been removed from the options list.
     return buttonSettings.text || ((_this$getNetworkData = this.getNetworkData(buttonSettings)) === null || _this$getNetworkData === void 0 ? void 0 : _this$getNetworkData.title);
   },
-
   getNetworkData(buttonSettings) {
     return this.config[buttonSettings.button];
   },
-
   hasCounter(networkName, settings) {
     return 'icon' !== settings.view && 'yes' === settings.show_counter && this.config[networkName].has_counter;
   }
-
 });
 
 /***/ }),
@@ -5667,21 +4934,18 @@ module.exports = elementor.modules.controls.RepeaterRow.extend({
   template: '#tmpl-elementor-theme-builder-conditions-repeater-row',
   childViewContainer: '.elementor-theme-builder-conditions-repeater-row-controls',
   conflictCheckedOnFirstRender: false,
-
   id() {
     return 'elementor-condition-id-' + this.model.get('_id');
   },
-
   onBeforeRender() {
     var subNameModel = this.collection.findWhere({
-      name: 'sub_name'
-    }),
-        subIdModel = this.collection.findWhere({
-      name: 'sub_id'
-    }),
-        subConditionConfig = this.config.conditions[this.model.attributes.sub_name];
+        name: 'sub_name'
+      }),
+      subIdModel = this.collection.findWhere({
+        name: 'sub_id'
+      }),
+      subConditionConfig = this.config.conditions[this.model.attributes.sub_name];
     subNameModel.attributes.groups = this.getOptions();
-
     if (subConditionConfig && subConditionConfig.controls) {
       _(subConditionConfig.controls).each(function (control) {
         subIdModel.set(control);
@@ -5689,12 +4953,10 @@ module.exports = elementor.modules.controls.RepeaterRow.extend({
       });
     }
   },
-
   initialize() {
     elementor.modules.controls.RepeaterRow.prototype.initialize.apply(this, arguments);
     this.config = elementor.config.document.theme_builder;
   },
-
   updateOptions() {
     if (this.model.changed.name) {
       this.model.set({
@@ -5702,7 +4964,6 @@ module.exports = elementor.modules.controls.RepeaterRow.extend({
         sub_id: ''
       });
     }
-
     if (this.model.changed.name || this.model.changed.sub_name) {
       this.model.set('sub_id', '', {
         silent: true
@@ -5718,67 +4979,57 @@ module.exports = elementor.modules.controls.RepeaterRow.extend({
       });
       this.render();
     }
-
     if (this.model.changed.type) {
       this.setTypeAttribute();
     }
   },
-
   getOptions() {
     var self = this,
-        conditionConfig = self.config.conditions[this.model.get('name')];
-
+      conditionConfig = self.config.conditions[this.model.get('name')];
     if (!conditionConfig) {
       return;
     }
-
     var options = {
       '': conditionConfig.all_label
     };
-
     _(conditionConfig.sub_conditions).each(function (conditionId, conditionIndex) {
       var subConditionConfig = self.config.conditions[conditionId],
-          group;
-
+        group;
       if (!subConditionConfig) {
         return;
       }
-
       if (subConditionConfig.sub_conditions.length) {
         group = {
           label: subConditionConfig.label,
           options: {}
         };
         group.options[conditionId] = subConditionConfig.all_label;
-
         _(subConditionConfig.sub_conditions).each(function (subConditionId) {
           group.options[subConditionId] = self.config.conditions[subConditionId].label;
-        }); // Use a sting key - to keep order
+        });
 
-
+        // Use a sting key - to keep order
         options['key' + conditionIndex] = group;
       } else {
         options[conditionId] = subConditionConfig.label;
       }
     });
-
     return options;
   },
-
   setTypeAttribute() {
     var typeView = this.children.findByModel(this.collection.findWhere({
       name: 'type'
     }));
     typeView.$el.attr('data-elementor-condition-type', typeView.getControlValue());
   },
-
   // Moved from `modules/theme-builder/assets/js/editor/conditions/repeater.js`.
   checkConflicts() {
     var modelId = this.model.get('_id'),
-        rowId = 'elementor-condition-id-' + modelId,
-        errorMessageId = 'elementor-conditions-conflict-message-' + modelId,
-        $error = jQuery('#' + errorMessageId); // On render - the row isn't exist, so don't cache it.
+      rowId = 'elementor-condition-id-' + modelId,
+      errorMessageId = 'elementor-conditions-conflict-message-' + modelId,
+      $error = jQuery('#' + errorMessageId);
 
+    // On render - the row isn't exist, so don't cache it.
     jQuery('#' + rowId).removeClass('elementor-error');
     $error.remove();
     elementorPro.ajax.addRequest('theme_builder_conditions_check_conflicts', {
@@ -5786,65 +5037,55 @@ module.exports = elementor.modules.controls.RepeaterRow.extend({
       data: {
         condition: this.model.toJSON()
       },
-
       success(data) {
         if (!_.isEmpty(data)) {
           jQuery('#' + rowId).addClass('elementor-error').after('<div id="' + errorMessageId + '" class="elementor-conditions-conflict-message">' + data + '</div>');
         }
       }
-
     });
   },
-
   onRender() {
     var nameModel = this.collection.findWhere({
-      name: 'name'
-    }),
-        subNameModel = this.collection.findWhere({
-      name: 'sub_name'
-    }),
-        subIdModel = this.collection.findWhere({
-      name: 'sub_id'
-    }),
-        nameView = this.children.findByModel(nameModel),
-        subNameView = this.children.findByModel(subNameModel),
-        subIdView = this.children.findByModel(subIdModel),
-        conditionConfig = this.config.conditions[this.model.attributes.name],
-        subConditionConfig = this.config.conditions[this.model.attributes.sub_name],
-        typeConfig = this.config.types[this.config.settings.template_type];
-
+        name: 'name'
+      }),
+      subNameModel = this.collection.findWhere({
+        name: 'sub_name'
+      }),
+      subIdModel = this.collection.findWhere({
+        name: 'sub_id'
+      }),
+      nameView = this.children.findByModel(nameModel),
+      subNameView = this.children.findByModel(subNameModel),
+      subIdView = this.children.findByModel(subIdModel),
+      conditionConfig = this.config.conditions[this.model.attributes.name],
+      subConditionConfig = this.config.conditions[this.model.attributes.sub_name],
+      typeConfig = this.config.types[this.config.settings.template_type];
     if (typeConfig.condition_type === nameView.getControlValue() && 'general' !== nameView.getControlValue() && !_.isEmpty(conditionConfig.sub_conditions)) {
       nameView.$el.hide();
     }
-
     if (!conditionConfig || _.isEmpty(conditionConfig.sub_conditions) && _.isEmpty(conditionConfig.controls) || !nameView.getControlValue() || 'general' === nameView.getControlValue()) {
       subNameView.$el.hide();
     }
-
     if (!subConditionConfig || _.isEmpty(subConditionConfig.controls) || !subNameView.getControlValue()) {
       subIdView.$el.hide();
-    } // Avoid set a `single` for a-l-l singular types. (conflicted with 404 & custom cpt like Shops and Events plugins).
+    }
 
-
+    // Avoid set a `single` for a-l-l singular types. (conflicted with 404 & custom cpt like Shops and Events plugins).
     if ('singular' === typeConfig.condition_type) {
       if ('' === subNameView.getControlValue()) {
         subNameView.setValue('post');
       }
     }
-
     this.setTypeAttribute();
-
     if (!this.conflictCheckedOnFirstRender) {
       this.checkConflicts();
       this.conflictCheckedOnFirstRender = true;
     }
   },
-
   onModelChange() {
     this.updateOptions();
     this.checkConflicts();
   }
-
 });
 
 /***/ }),
@@ -5860,54 +5101,42 @@ module.exports = elementor.modules.controls.RepeaterRow.extend({
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _repeaterRow = _interopRequireDefault(__webpack_require__(/*! ./repeater-row */ "../modules/theme-builder/assets/js/editor/conditions/repeater-row.js"));
-
 module.exports = elementor.modules.controls.Repeater.extend({
   childView: _repeaterRow.default,
-
   updateActiveRow() {},
-
   initialize() {
     elementor.modules.controls.Repeater.prototype.initialize.apply(this, arguments);
     this.config = elementor.config.document.theme_builder;
     this.updateConditionsOptions(this.config.settings.template_type);
   },
-
   updateConditionsOptions(templateType) {
     var self = this,
-        conditionType = self.config.types[templateType].condition_type,
-        options = {};
-
+      conditionType = self.config.types[templateType].condition_type,
+      options = {};
     _([conditionType]).each(function (conditionId, conditionIndex) {
       var conditionConfig = self.config.conditions[conditionId],
-          group = {
-        label: conditionConfig.label,
-        options: {}
-      };
+        group = {
+          label: conditionConfig.label,
+          options: {}
+        };
       group.options[conditionId] = conditionConfig.all_label;
-
       _(conditionConfig.sub_conditions).each(function (subConditionId) {
         group.options[subConditionId] = self.config.conditions[subConditionId].label;
       });
-
       options[conditionIndex] = group;
     });
-
     var fields = this.model.get('fields');
     fields[1].default = conditionType;
-
     if ('general' === conditionType) {
       fields[1].groups = options;
     } else {
       fields[2].groups = options;
     }
   },
-
   onRender() {
     this.ui.btnAddRow.text(__('Add Condition', 'elementor-pro'));
   }
-
 });
 
 /***/ }),
@@ -5922,18 +5151,15 @@ module.exports = elementor.modules.controls.Repeater.extend({
 
 
 var inlineControlsStack = __webpack_require__(/*! elementor-pro/editor/inline-controls-stack.js */ "../assets/dev/js/editor/inline-controls-stack.js");
-
 module.exports = inlineControlsStack.extend({
   id: 'elementor-theme-builder-conditions-view',
   template: '#tmpl-elementor-theme-builder-conditions-view',
   childViewContainer: '#elementor-theme-builder-conditions-controls',
-
   childViewOptions() {
     return {
       elementSettingsModel: this.model
     };
   }
-
 });
 
 /***/ }),
@@ -5962,9 +5188,7 @@ Object.defineProperty(exports, "ThemeBuilderUpdatePreviewOptions", ({
     return _updatePreviewOptions.ThemeBuilderUpdatePreviewOptions;
   }
 }));
-
 var _saveAndReload = __webpack_require__(/*! ./save-and-reload */ "../modules/theme-builder/assets/js/editor/hooks/data/document/elements/settings/save-and-reload.js");
-
 var _updatePreviewOptions = __webpack_require__(/*! ./update-preview-options */ "../modules/theme-builder/assets/js/editor/hooks/data/document/elements/settings/update-preview-options.js");
 
 /***/ }),
@@ -5982,7 +5206,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderSaveAndReload = void 0;
-
 /**
  * Hook fired when template: 'single' page layout changed.
  */
@@ -5990,19 +5213,15 @@ class ThemeBuilderSaveAndReload extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-save-and-reload';
   }
-
   getContainerType() {
     return 'document';
   }
-
   getConditions(args) {
     return args.settings && args.settings.page_template;
   }
-
   apply() {
     $e.run('document/save/auto', {
       force: true,
@@ -6014,9 +5233,7 @@ class ThemeBuilderSaveAndReload extends $e.modules.hookData.After {
       }
     });
   }
-
 }
-
 exports.ThemeBuilderSaveAndReload = ThemeBuilderSaveAndReload;
 var _default = ThemeBuilderSaveAndReload;
 exports["default"] = _default;
@@ -6036,31 +5253,26 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderUpdatePreviewOptions = void 0;
-
 class ThemeBuilderUpdatePreviewOptions extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-update-preview-options';
   }
-
   getContainerType() {
     return 'document';
   }
-
   getConditions(args) {
     return args.settings && args.settings.preview_type;
   }
-
   apply(args) {
     const {
-      containers = [args.container]
-    } = args,
-          {
-      themeBuilder
-    } = elementorPro.modules;
+        containers = [args.container]
+      } = args,
+      {
+        themeBuilder
+      } = elementorPro.modules;
     $e.run('document/elements/settings', {
       containers,
       settings: {
@@ -6068,14 +5280,11 @@ class ThemeBuilderUpdatePreviewOptions extends $e.modules.hookData.After {
         preview_search_term: ''
       }
     });
-
     if ($e.routes.is('panel/page-settings/settings')) {
       themeBuilder.updatePreviewIdOptions(true);
     }
   }
-
 }
-
 exports.ThemeBuilderUpdatePreviewOptions = ThemeBuilderUpdatePreviewOptions;
 var _default = ThemeBuilderUpdatePreviewOptions;
 exports["default"] = _default;
@@ -6095,20 +5304,16 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderSaveConditions = void 0;
-
 class ThemeBuilderSaveConditions extends $e.modules.hookData.After {
   getCommand() {
     return 'document/save/save';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-save-conditions';
   }
-
   getConditions() {
     return !!elementor.config.document.theme_builder;
   }
-
   apply() {
     const {
       conditionsModel
@@ -6122,9 +5327,7 @@ class ThemeBuilderSaveConditions extends $e.modules.hookData.After {
       }
     });
   }
-
 }
-
 exports.ThemeBuilderSaveConditions = ThemeBuilderSaveConditions;
 var _default = ThemeBuilderSaveConditions;
 exports["default"] = _default;
@@ -6144,48 +5347,39 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderShowConditions = void 0;
-
 class ThemeBuilderShowConditions extends $e.modules.hookData.Dependency {
   getCommand() {
     return 'document/save/default';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-show-conditions';
   }
-
   getConditions(args) {
     const {
       force = false
-    } = args; // If force save, do not show conditions.
+    } = args;
 
+    // If force save, do not show conditions.
     if (force) {
       return false;
     }
-
     let showConditions = false;
     const themeBuilder = elementor.config.document.theme_builder;
-
     if (themeBuilder) {
       const hasConditions = themeBuilder.settings.conditions.length,
-            hasLocation = themeBuilder.settings.location,
-            isDraft = 'draft' === elementor.settings.page.model.get('post_status');
-
+        hasLocation = themeBuilder.settings.location,
+        isDraft = 'draft' === elementor.settings.page.model.get('post_status');
       if (hasLocation && (!hasConditions || isDraft)) {
         showConditions = true;
       }
     }
-
     return showConditions;
   }
-
   apply() {
     $e.route('theme-builder-publish/conditions');
     return false; // HookBreak.
   }
-
 }
-
 exports.ThemeBuilderShowConditions = ThemeBuilderShowConditions;
 var _default = ThemeBuilderShowConditions;
 exports["default"] = _default;
@@ -6205,31 +5399,24 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderPreviewBreak = void 0;
-
 class ThemeBuilderPreviewBreak extends $e.modules.hookData.Dependency {
   getCommand() {
     return 'editor/documents/preview';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-preview-break';
   }
-
   getConditions(args) {
     // If preview is forced, do not break it.
     if (args.force) {
       return false;
     }
-
     return !!elementor.documents.get(args.id).config.theme_builder;
   }
-
   apply() {
     return false; // HookBreak.
   }
-
 }
-
 exports.ThemeBuilderPreviewBreak = ThemeBuilderPreviewBreak;
 var _default = ThemeBuilderPreviewBreak;
 exports["default"] = _default;
@@ -6271,9 +5458,7 @@ Object.defineProperty(exports, "ThemeBuilderShowConditions", ({
     return _showConditions.ThemeBuilderShowConditions;
   }
 }));
-
 var _settings = __webpack_require__(/*! ./document/elements/settings */ "../modules/theme-builder/assets/js/editor/hooks/data/document/elements/settings/index.js");
-
 Object.keys(_settings).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (Object.prototype.hasOwnProperty.call(_exportNames, key)) return;
@@ -6285,11 +5470,8 @@ Object.keys(_settings).forEach(function (key) {
     }
   });
 });
-
 var _saveConditions = __webpack_require__(/*! ./document/save/save-conditions */ "../modules/theme-builder/assets/js/editor/hooks/data/document/save/save-conditions.js");
-
 var _showConditions = __webpack_require__(/*! ./document/save/show-conditions */ "../modules/theme-builder/assets/js/editor/hooks/data/document/save/show-conditions.js");
-
 var _previewBreak = __webpack_require__(/*! ./editor/documents/preview/preview-break */ "../modules/theme-builder/assets/js/editor/hooks/data/editor/documents/preview/preview-break.js");
 
 /***/ }),
@@ -6306,9 +5488,7 @@ var _previewBreak = __webpack_require__(/*! ./editor/documents/preview/preview-b
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-
 var _data = __webpack_require__(/*! ./data/ */ "../modules/theme-builder/assets/js/editor/hooks/data/index.js");
-
 Object.keys(_data).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _data[key]) return;
@@ -6319,9 +5499,7 @@ Object.keys(_data).forEach(function (key) {
     }
   });
 });
-
 var _ui = __webpack_require__(/*! ./ui/ */ "../modules/theme-builder/assets/js/editor/hooks/ui/index.js");
-
 Object.keys(_ui).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _ui[key]) return;
@@ -6348,33 +5526,26 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderToggleMenuConditions = void 0;
-
 class ThemeBuilderToggleMenuConditions extends $e.modules.hookUI.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-toggle-menu-conditions';
   }
-
   getContainerType() {
     return 'document';
   }
-
   getConditions(args) {
     return args.settings && args.settings.location;
   }
-
   apply() {
     const {
       themeBuilder
     } = elementorPro.modules;
     themeBuilder.ui.menuConditions.toggle(!!elementor.config.document.theme_builder.settings.location);
   }
-
 }
-
 exports.ThemeBuilderToggleMenuConditions = ThemeBuilderToggleMenuConditions;
 var _default = ThemeBuilderToggleMenuConditions;
 exports["default"] = _default;
@@ -6394,45 +5565,36 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderRemoveEditorUI = void 0;
-
 class ThemeBuilderRemoveEditorUI extends $e.modules.hookUI.After {
   getCommand() {
     return 'editor/documents/unload';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-remove-editor-ui';
   }
-
   getConditions(args) {
     const {
       document
     } = args;
     return document.config.theme_builder;
   }
-
   apply() {
     this.removePanelFooterSubmenuItems();
     this.removePublishTabs();
   }
-
   removePanelFooterSubmenuItems() {
     const footerView = elementor.getPanelView().footer.currentView,
-          behavior = footerView._behaviors[Object.keys(footerView.behaviors()).indexOf('saver')];
-
+      behavior = footerView._behaviors[Object.keys(footerView.behaviors()).indexOf('saver')];
     elementor.getPanelView().footer.currentView.removeSubMenuItem('saver-options', {
       name: 'conditions'
     });
     behavior.ui.buttonPreview.tipsy('enable').removeClass('elementor-panel-footer-theme-builder-buttons-wrapper elementor-toggle-state');
   }
-
   removePublishTabs() {
     const component = $e.components.get('theme-builder-publish');
     component.removeTab('conditions');
   }
-
 }
-
 exports.ThemeBuilderRemoveEditorUI = ThemeBuilderRemoveEditorUI;
 var _default = ThemeBuilderRemoveEditorUI;
 exports["default"] = _default;
@@ -6450,27 +5612,21 @@ exports["default"] = _default;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ThemeBuilderAddEditorUI = void 0;
-
 var _view = _interopRequireDefault(__webpack_require__(/*! ../../../../../conditions/view */ "../modules/theme-builder/assets/js/editor/conditions/view.js"));
-
 class ThemeBuilderAddEditorUI extends $e.modules.hookUI.After {
   getCommand() {
     return 'editor/documents/open';
   }
-
   getId() {
     return 'elementor-pro-theme-builder-add-editor-ui';
   }
-
   getConditions(args) {
     return elementor.documents.get(args.id).config.theme_builder;
   }
-
   apply() {
     if (elementor.panel) {
       this.addUI();
@@ -6479,21 +5635,18 @@ class ThemeBuilderAddEditorUI extends $e.modules.hookUI.After {
       elementor.once('preview:loaded', this.addUI.bind(this));
     }
   }
-
   addUI() {
     this.addRepeaterControlView();
     this.addPanelFooterSubmenuItems();
     this.addPublishTabs();
   }
-
   addRepeaterControlView() {
     elementor.addControlView('Conditions_repeater', __webpack_require__(/*! ../../../../../conditions/repeater */ "../modules/theme-builder/assets/js/editor/conditions/repeater.js"));
   }
-
   addPublishTabs() {
     const component = $e.components.get('theme-builder-publish'),
-          themeBuilderModuleConfig = elementor.config.document.theme_builder,
-          settings = themeBuilderModuleConfig.settings;
+      themeBuilderModuleConfig = elementor.config.document.theme_builder,
+      settings = themeBuilderModuleConfig.settings;
     component.manager.conditionsModel = new elementorModules.editor.elements.models.BaseSettings(settings, {
       controls: themeBuilderModuleConfig.template_conditions.controls
     });
@@ -6509,11 +5662,9 @@ class ThemeBuilderAddEditorUI extends $e.modules.hookUI.After {
       image: elementorPro.config.urls.modules + 'theme-builder/assets/images/conditions-tab.svg'
     });
   }
-
   addPanelFooterSubmenuItems() {
     const footerView = elementor.getPanelView().footer.currentView,
-          behavior = footerView._behaviors[Object.keys(footerView.behaviors()).indexOf('saver')];
-
+      behavior = footerView._behaviors[Object.keys(footerView.behaviors()).indexOf('saver')];
     footerView.ui.menuConditions = footerView.addSubMenuItem('saver-options', {
       before: 'save-template',
       name: 'conditions',
@@ -6524,9 +5675,7 @@ class ThemeBuilderAddEditorUI extends $e.modules.hookUI.After {
     footerView.ui.menuConditions.toggle(!!elementor.config.document.theme_builder.settings.location);
     behavior.ui.buttonPreview.tipsy('disable').html(jQuery('#tmpl-elementor-theme-builder-button-preview').html()).addClass('elementor-panel-footer-theme-builder-buttons-wrapper elementor-toggle-state');
   }
-
 }
-
 exports.ThemeBuilderAddEditorUI = ThemeBuilderAddEditorUI;
 var _default = ThemeBuilderAddEditorUI;
 exports["default"] = _default;
@@ -6569,13 +5718,9 @@ Object.defineProperty(exports, "ThemeBuilderToggleMenuConditions", ({
     return _toggleMenuConditions.ThemeBuilderToggleMenuConditions;
   }
 }));
-
 var _addEditorUi = __webpack_require__(/*! ./editor/documents/open/add-editor-ui */ "../modules/theme-builder/assets/js/editor/hooks/ui/editor/documents/open/add-editor-ui.js");
-
 var _removeEditorUi = __webpack_require__(/*! ./editor/documents/close/remove-editor-ui */ "../modules/theme-builder/assets/js/editor/hooks/ui/editor/documents/close/remove-editor-ui.js");
-
 var _toggleMenuConditions = __webpack_require__(/*! ./editor/document/elements/settings/toggle-menu-conditions */ "../modules/theme-builder/assets/js/editor/hooks/ui/editor/document/elements/settings/toggle-menu-conditions.js");
-
 var _after = __webpack_require__(/*! ./save/after */ "../modules/theme-builder/assets/js/editor/hooks/ui/save/after.js");
 
 /***/ }),
@@ -6594,61 +5739,48 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ThemeBuilderFooterSaverAfterSave = void 0;
-
 class ThemeBuilderFooterSaverAfterSave extends $e.modules.hookUI.After {
   getCommand() {
     return 'document/save/save';
   }
-
   getId() {
     return 'theme-builder-footer-saver-after-save';
   }
-
   getConditions() {
     return elementor.config.document.support_site_editor;
   }
-
   apply(args, result) {
     const {
       status
     } = args;
-
     if (result.statusChanged) {
       this.onPageStatusChange(status);
     }
   }
-
   onPageStatusChange(newStatus) {
     if ('publish' !== newStatus) {
       return;
     }
-
     const options = {
       classes: 'e-theme-builder-save-toaster',
       message: elementor.config.document.panel.messages.publish_notification,
       buttons: [{
         name: 'open_site_editor',
         text: '<i class="eicon-external-link-square"></i><span class="e-theme-builder-toaster-button-text">' + __('Open Site Editor', 'elementor-pro') + '</span>',
-
         callback() {
           $e.run('app/open');
         }
-
       }, {
         name: 'view_live_site',
         text: '<i class="eicon-preview-medium"></i><span class="e-theme-builder-toaster-button-text">' + __('View Live Site', 'elementor-pro') + '</span>',
-
         callback() {
           open(elementor.config.document.urls.permalink);
         }
-
       }]
     };
     elementor.notifications.showToast(options);
   }
-
 }
-
 exports.ThemeBuilderFooterSaverAfterSave = ThemeBuilderFooterSaverAfterSave;
 
 /***/ }),
@@ -6663,27 +5795,21 @@ exports.ThemeBuilderFooterSaverAfterSave = ThemeBuilderFooterSaverAfterSave;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./publish/component */ "../modules/theme-builder/assets/js/editor/publish/component.js"));
-
 class ThemeBuilderModule extends elementorModules.editor.utils.Module {
   __construct() {
     super.__construct(...arguments);
-
     Object.defineProperty(elementorPro.config, 'theme_builder', {
       get() {
         elementorCommon.helpers.softDeprecated('theme_builder', '2.9.0', 'elementor.config.document.theme_builder');
         return elementor.config.document.theme_builder;
       }
-
     });
   }
-
   onElementorLoaded() {
     this.component = $e.components.register(new _component.default({
       manager: this
@@ -6693,34 +5819,28 @@ class ThemeBuilderModule extends elementorModules.editor.utils.Module {
     this.onApplyPreview = this.onApplyPreview.bind(this);
     this.onSectionPreviewSettingsActive = this.onSectionPreviewSettingsActive.bind(this);
   }
-
   onDocumentLoaded(document) {
     if (!document.config.theme_builder) {
       return;
     }
-
     elementor.getPanelView().on('set:page:page_settings', this.updatePreviewIdOptions);
     elementor.channels.editor.on('elementorThemeBuilder:ApplyPreview', this.onApplyPreview);
     elementor.channels.editor.on('page_settings:preview_settings:activated', this.onSectionPreviewSettingsActive);
   }
-
   onDocumentUnloaded(document) {
     if (!document.config.theme_builder) {
       return;
     }
-
     elementor.getPanelView().off('set:page:page_settings', this.updatePreviewIdOptions);
     elementor.channels.editor.off('elementorThemeBuilder:ApplyPreview', this.onApplyPreview);
     elementor.channels.editor.off('page_settings:preview_settings:activated', this.onSectionPreviewSettingsActive);
   }
-
   saveAndReload() {
     $e.run('document/save/auto', {
       force: true,
       onSuccess: () => {
         elementor.dynamicTags.cleanCache();
         const isInitialDocument = elementor.config.initial_document.id === elementor.documents.getCurrentId();
-
         if (isInitialDocument) {
           // Page templates (e.g. single) with header/footer requires a full reload in order
           // to change the main query also for them.
@@ -6731,28 +5851,22 @@ class ThemeBuilderModule extends elementorModules.editor.utils.Module {
       }
     });
   }
-
   onApplyPreview() {
     this.saveAndReload();
   }
-
   onSectionPreviewSettingsActive() {
     this.updatePreviewIdOptions(true);
   }
-
   updatePreviewIdOptions(render) {
     let previewType = elementor.settings.page.model.get('preview_type');
-
     if (!previewType) {
       return;
     }
-
     previewType = previewType.split('/');
     const currentView = elementor.getPanelView().getCurrentPageView(),
-          controlModel = currentView.collection.findWhere({
-      name: 'preview_id'
-    });
-
+      controlModel = currentView.collection.findWhere({
+        name: 'preview_id'
+      });
     if ('author' === previewType[1]) {
       controlModel.set({
         autocomplete: {
@@ -6784,7 +5898,6 @@ class ThemeBuilderModule extends elementorModules.editor.utils.Module {
         }
       });
     }
-
     if (true === render) {
       // Can be model.
       const controlView = currentView.children.findByModel(controlModel);
@@ -6792,15 +5905,12 @@ class ThemeBuilderModule extends elementorModules.editor.utils.Module {
       controlView.$el.toggle(!!controlModel.get('autocomplete').object);
     }
   }
-
   async openSiteIdentity(e) {
     e.preventDefault();
     await $e.run('panel/global/open');
     $e.route('panel/global/settings-site-identity');
   }
-
 }
-
 exports["default"] = ThemeBuilderModule;
 
 /***/ }),
@@ -6815,38 +5925,28 @@ exports["default"] = ThemeBuilderModule;
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _content = _interopRequireDefault(__webpack_require__(/*! ./content */ "../modules/theme-builder/assets/js/editor/publish/content.js"));
-
 var _layout = _interopRequireDefault(__webpack_require__(/*! ./layout */ "../modules/theme-builder/assets/js/editor/publish/layout.js"));
-
 var hooks = _interopRequireWildcard(__webpack_require__(/*! ../hooks */ "../modules/theme-builder/assets/js/editor/hooks/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class Component extends $e.modules.ComponentModalBase {
   getNamespace() {
     // TODO: should be 'theme-builder/publish'.
     return 'theme-builder-publish';
   }
-
   getModalLayout() {
     return _layout.default;
   }
-
   defaultCommands() {
     return {
       next: () => {
         const tabs = Object.keys(this.tabs),
-              next = tabs[this.currentTabIndex + 1];
-
+          next = tabs[this.currentTabIndex + 1];
         if (next) {
           $e.route(this.getTabRoute(next));
         }
@@ -6861,39 +5961,32 @@ class Component extends $e.modules.ComponentModalBase {
         // TODO: This is function is not part of this component.
         const panel = elementor.getPanelView();
         $e.route('panel/page-settings/settings');
-
         panel.getCurrentPageView().activateSection('preview_settings')._renderChildren();
       }
     };
   }
-
   defaultHooks() {
     return this.importHooks(hooks);
   }
-
   getTabsWrapperSelector() {
     return '#elementor-publish__tabs';
   }
-
   renderTab(tab) {
     const tabs = this.getTabs(),
-          keys = Object.keys(tabs),
-          tabArgs = tabs[tab];
+      keys = Object.keys(tabs),
+      tabArgs = tabs[tab];
     this.currentTabIndex = keys.indexOf(tab);
     const isLastTab = !keys[this.currentTabIndex + 1];
     this.layout.modalContent.currentView.screen.show(new tabArgs.View(tabArgs.viewOptions));
     this.layout.modal.getElements('next').toggle(!isLastTab);
     this.layout.modal.getElements('publish').toggleClass('elementor-button-success', isLastTab);
   }
-
   activateTab(tab) {
     $e.routes.saveState(this.getNamespace());
     super.activateTab(tab);
   }
-
   open() {
     super.open();
-
     if (!this.layoutContent) {
       this.layout.showLogo();
       this.layout.modalContent.show(new _content.default({
@@ -6901,12 +5994,9 @@ class Component extends $e.modules.ComponentModalBase {
       }));
       this.layoutContent = true;
     }
-
     return true;
   }
-
 }
-
 exports["default"] = Component;
 
 /***/ }),
@@ -6924,30 +6014,24 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends Marionette.LayoutView {
   id() {
     return 'elementor-publish';
   }
-
   getTemplate() {
     return Marionette.TemplateCache.get('#tmpl-elementor-component-publish');
   }
-
   regions() {
     return {
       screen: '#elementor-publish__screen'
     };
   }
-
   templateHelpers() {
     return {
       tabs: this.getOption('component').getTabs()
     };
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -6966,7 +6050,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 class _default extends elementorModules.common.views.modal.Layout {
   getModalOptions() {
     return {
@@ -6976,13 +6059,11 @@ class _default extends elementorModules.common.views.modal.Layout {
       }
     };
   }
-
   getLogoOptions() {
     return {
       title: __('Publish Settings', 'elementor-pro')
     };
   }
-
   initModal() {
     super.initModal();
     this.modal.addButton({
@@ -6998,9 +6079,7 @@ class _default extends elementorModules.common.views.modal.Layout {
     const $publishButton = this.modal.getElements('publish');
     this.modal.getElements('next').addClass('elementor-button-success').add($publishButton).addClass('elementor-button').removeClass('dialog-button');
   }
-
 }
-
 exports["default"] = _default;
 
 /***/ }),
@@ -7016,19 +6095,17 @@ exports["default"] = _default;
 
 module.exports = function () {
   var self = this;
-
   self.onPanelShow = function (panel, model) {
-    var settingsModel = model.get('settings'); // If no skins - set the skin to `theme_comments`.
+    var settingsModel = model.get('settings');
 
+    // If no skins - set the skin to `theme_comments`.
     if (!settingsModel.controls._skin.default) {
       settingsModel.set('_skin', 'theme_comments');
     }
   };
-
   self.init = function () {
     elementor.hooks.addAction('panel/open_editor/widget/post-comments', self.onPanelShow);
   };
-
   self.init();
 };
 
@@ -7046,10 +6123,8 @@ module.exports = function () {
 module.exports = elementorModules.editor.utils.Module.extend({
   onElementorPreviewLoaded() {
     var CommentsSkin = __webpack_require__(/*! ./comments-skin */ "../modules/theme-elements/assets/js/editor/comments-skin.js");
-
     this.commentsSkin = new CommentsSkin();
   }
-
 });
 
 /***/ }),
@@ -7067,24 +6142,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var hooks = _interopRequireWildcard(__webpack_require__(/*! ./hooks/ui */ "../modules/video-playlist/assets/js/editor/hooks/ui/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class VideoPlaylistComponent extends $e.modules.ComponentBase {
   getNamespace() {
     return 'video-playlist';
   }
-
   defaultHooks() {
     return this.importHooks(hooks);
   }
-
 }
-
 exports["default"] = VideoPlaylistComponent;
 
 /***/ }),
@@ -7102,7 +6170,6 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = exports.ActiveTab = void 0;
-
 /**
  * Hook fired when template: 'single' page layout changed.
  */
@@ -7110,19 +6177,15 @@ class ActiveTab extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'active-tab--document/elements/settings';
   }
-
   getContainerType() {
     return 'repeater';
   }
-
   getConditions(args) {
     return args.settings.inner_tab_content_1 || args.settings.inner_tab_content_2;
   }
-
   apply(args) {
     if (args.settings.inner_tab_content_1) {
       args.container.view.model.get('editSettings').set('innerActiveIndex', 0);
@@ -7130,9 +6193,7 @@ class ActiveTab extends $e.modules.hookData.After {
       args.container.view.model.get('editSettings').set('innerActiveIndex', 1);
     }
   }
-
 }
-
 exports.ActiveTab = ActiveTab;
 var _default = ActiveTab;
 exports["default"] = _default;
@@ -7157,7 +6218,6 @@ Object.defineProperty(exports, "ActiveTab", ({
     return _activeTab.ActiveTab;
   }
 }));
-
 var _activeTab = __webpack_require__(/*! ./document/elements/settings/active-tab */ "../modules/video-playlist/assets/js/editor/hooks/ui/document/elements/settings/active-tab.js");
 
 /***/ }),
@@ -7172,14 +6232,11 @@ var _activeTab = __webpack_require__(/*! ./document/elements/settings/active-tab
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/video-playlist/assets/js/editor/component.js"));
-
 class Module extends elementorModules.editor.utils.Module {
   /**
    * Init
@@ -7188,7 +6245,6 @@ class Module extends elementorModules.editor.utils.Module {
     super.onInit();
     $e.components.register(new _component.default());
   }
-
   onElementorLoaded() {
     elementor.channels.editor.on('elementorPlaylistWidget:setVideoData', e => {
       $e.run('document/elements/settings', {
@@ -7206,9 +6262,7 @@ class Module extends elementorModules.editor.utils.Module {
       });
     });
   }
-
 }
-
 exports["default"] = Module;
 
 /***/ }),
@@ -7226,24 +6280,17 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports["default"] = void 0;
-
 var hooks = _interopRequireWildcard(__webpack_require__(/*! ./hooks/ */ "../modules/woocommerce/assets/js/editor/hooks/index.js"));
-
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-
 class Component extends $e.modules.ComponentBase {
   getNamespace() {
     return 'woocommerce';
   }
-
   defaultHooks() {
     return this.importHooks(hooks);
   }
-
 }
-
 exports["default"] = Component;
 
 /***/ }),
@@ -7261,30 +6308,23 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.WoocommerceCreateWidgetActivateSettingsModal = void 0;
-
 class WoocommerceCreateWidgetActivateSettingsModal extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/create';
   }
-
   getId() {
     return 'elementor-pro-woocommerce-create-widget-activate-settings-modal';
   }
-
   getContainerType() {
     return 'column';
   }
-
   getConditions(args, container) {
     return Object.prototype.hasOwnProperty.call(elementorPro.modules.woocommerce.pageSettingsWidgets, container.model.get('widgetType'));
   }
-
   apply(args, container) {
     elementorPro.modules.woocommerce.onCreateWidget(container);
   }
-
 }
-
 exports.WoocommerceCreateWidgetActivateSettingsModal = WoocommerceCreateWidgetActivateSettingsModal;
 
 /***/ }),
@@ -7302,30 +6342,23 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.WoocommerceDeleteWidgetDeactivateSettingsModal = void 0;
-
 class WoocommerceDeleteWidgetDeactivateSettingsModal extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/delete';
   }
-
   getId() {
     return 'elementor-pro-woocommerce-delete-widget-deactivate-settings-modal';
   }
-
   getContainerType() {
     return 'widget';
   }
-
   getConditions(args, container) {
     return Object.prototype.hasOwnProperty.call(elementorPro.modules.woocommerce.pageSettingsWidgets, container.model.get('widgetType'));
   }
-
   apply(args, container) {
     elementorPro.modules.woocommerce.onDeleteWidget(container);
   }
-
 }
-
 exports.WoocommerceDeleteWidgetDeactivateSettingsModal = WoocommerceDeleteWidgetDeactivateSettingsModal;
 
 /***/ }),
@@ -7366,13 +6399,9 @@ Object.defineProperty(exports, "WoocommerceSaveShowModal", ({
     return _saveShowModal.WoocommerceSaveShowModal;
   }
 }));
-
 var _saveShowModal = __webpack_require__(/*! ./save-show-modal */ "../modules/woocommerce/assets/js/editor/hooks/data/save-show-modal.js");
-
 var _createWidgetActivateSettingsModal = __webpack_require__(/*! ./create-widget-activate-settings-modal */ "../modules/woocommerce/assets/js/editor/hooks/data/create-widget-activate-settings-modal.js");
-
 var _deleteWidgetDeactivateSettingsModal = __webpack_require__(/*! ./delete-widget-deactivate-settings-modal */ "../modules/woocommerce/assets/js/editor/hooks/data/delete-widget-deactivate-settings-modal.js");
-
 var _notices = __webpack_require__(/*! ./notices */ "../modules/woocommerce/assets/js/editor/hooks/data/notices.js");
 
 /***/ }),
@@ -7390,29 +6419,23 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.WoocommerceNotices = void 0;
-
 class WoocommerceNotices extends $e.modules.hookData.After {
   getCommand() {
     return 'document/elements/settings';
   }
-
   getId() {
     return 'woocommerce-notices';
   }
-
   getConditions(args) {
     return 'kit' === elementor.documents.getCurrent().config.type && Array.isArray(args.settings.woocommerce_notices_elements);
   }
-
   apply(args) {
     const {
       woocommerce
     } = elementorPro.modules;
     woocommerce.renderMockNotices(args.settings.woocommerce_notices_elements);
   }
-
 }
-
 exports.WoocommerceNotices = WoocommerceNotices;
 
 /***/ }),
@@ -7430,26 +6453,20 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.WoocommerceSaveShowModal = void 0;
-
 class WoocommerceSaveShowModal extends $e.modules.hookData.After {
   getCommand() {
     return 'document/save/save';
   }
-
   getId() {
     return 'elementor-pro-woocommerce-save-show-modal';
   }
-
   getConditions(args) {
     return args.status && -1 !== ['private', 'publish'].indexOf(args.status);
   }
-
   apply() {
     elementorPro.modules.woocommerce.onUpdateDocument();
   }
-
 }
-
 exports.WoocommerceSaveShowModal = WoocommerceSaveShowModal;
 
 /***/ }),
@@ -7466,9 +6483,7 @@ exports.WoocommerceSaveShowModal = WoocommerceSaveShowModal;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-
 var _data = __webpack_require__(/*! ./data/ */ "../modules/woocommerce/assets/js/editor/hooks/data/index.js");
-
 Object.keys(_data).forEach(function (key) {
   if (key === "default" || key === "__esModule") return;
   if (key in exports && exports[key] === _data[key]) return;
@@ -7493,9 +6508,7 @@ Object.keys(_data).forEach(function (key) {
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _component = _interopRequireDefault(__webpack_require__(/*! ./component */ "../modules/woocommerce/assets/js/editor/component.js"));
-
 class WoocommerceModule extends elementorModules.editor.utils.Module {
   constructor() {
     super(...arguments);
@@ -7539,15 +6552,12 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
     };
     this.createdPageSettingsWidgets = [];
   }
-
   addWooCommerceClassToLoopWrapper(LoopGridHandler) {
     LoopGridHandler.$element.addClass('woocommerce');
   }
-
   onElementorInit() {
     elementor.hooks.addAction('editor/widgets/loop-grid/on-init', this.addWooCommerceClassToLoopWrapper);
   }
-
   onElementorFrontendInit() {
     elementorFrontend.elements.$body.on('added_to_cart', (e, data) => {
       // We do not want the page to reload in the Editor after we triggered the 'added_to_cart' event.
@@ -7555,7 +6565,6 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
         return false;
       }
     });
-
     if ('loop-item' === elementor.documents.currentDocument.config.type && 'product' === elementor.documents.currentDocument.config.settings.settings.source) {
       // Add the 'woocommerce' class to the Loop document wrapper only when editing a Product Loop Template in the
       // theme builder.
@@ -7564,77 +6573,66 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
       });
     }
   }
-
   didManuallyTriggerAddToCartEvent() {
     let data = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     return data === null || data === void 0 ? void 0 : data.e_manually_triggered;
   }
-
   onElementorLoaded() {
     this.component = $e.components.register(new _component.default({
       manager: this
-    })); // WooCommerce Notice Settings.
-
+    }));
+    // WooCommerce Notice Settings.
     const noticeSections = ['section_woocommerce_notices', 'woocommerce_message_notices', 'woocommerce_info_notices', 'woocommerce_error_notices'];
-
     for (const section of noticeSections) {
       elementor.channels.editor.on('kit_settings:' + section + ':activated', () => {
         this.renderMockNotices(elementor.documents.getCurrent().container.settings.get('woocommerce_notices_elements'));
       });
-    } // Custom Empty Cart Template.
+    }
 
-
+    // Custom Empty Cart Template.
     elementor.channels.editor.on('editor:widget:woocommerce-cart:section_additional_options:activated', () => {
       this.onTemplateIdChange('additional_template_select');
-    }); // Custom My Account Dashboard Template
+    });
 
+    // Custom My Account Dashboard Template
     elementor.channels.editor.on('editor:widget:woocommerce-my-account:section_additional_options:activated', () => {
       this.onTemplateIdChange('customize_dashboard_select');
     });
   }
-
   renderMockNotices(noticeElements) {
     const noticesWrapper = elementor.$previewContents.find('.woocommerce-notices-wrapper');
-
     if (noticeElements.length <= 0) {
       noticesWrapper.remove();
       return;
     }
-
     let noticesClass = '';
-
     for (const notice of noticeElements) {
       const className = notice.replace('_', '-');
       noticesClass += 'e-' + className + '-notice ';
     }
-
     elementorFrontend.elements.$body.addClass(noticesClass.trim());
-    noticesWrapper.addClass('elementor-loading'); // Wait for the Ajax call to finish before the select2 can be changed again.
-
+    noticesWrapper.addClass('elementor-loading');
+    // Wait for the Ajax call to finish before the select2 can be changed again.
     jQuery('.elementor-select2').attr('disabled', 'disabled');
     elementorPro.ajax.addRequest('woocommerce_mock_notices', {
       data: {
         notice_elements: noticeElements
       },
-
       success(data) {
         noticesWrapper.remove();
         elementor.$previewContents.find('.elementor-editor-preview').prepend(data);
-        noticesWrapper.removeClass('elementor-loading'); // Enable the select2 again.
-
+        noticesWrapper.removeClass('elementor-loading');
+        // Enable the select2 again.
         jQuery('.elementor-select2').removeAttr('disabled');
       }
-
     });
   }
-
   onTemplateIdChange(sectionActive) {
     const editor = elementor.getPanelView().getCurrentPageView(),
-          model = editor.getOption('editedElementView').getEditModel(),
-          settingsModel = model.get('settings'),
-          templateID = settingsModel.get(sectionActive),
-          $editButton = editor.$el.find('.elementor-edit-template');
-
+      model = editor.getOption('editedElementView').getEditModel(),
+      settingsModel = model.get('settings'),
+      templateID = settingsModel.get(sectionActive),
+      $editButton = editor.$el.find('.elementor-edit-template');
     if (!templateID) {
       $editButton.addClass('e-control-tool-disabled').hide();
     } else {
@@ -7642,45 +6640,37 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
       $editButton.prop('href', editUrl).removeClass('e-control-tool-disabled').show();
     }
   }
-
   onCreateWidget(container) {
     const widgetType = container.model.get('widgetType');
-
     if (undefined === this.createdPageSettingsWidgets[widgetType]) {
       this.createdPageSettingsWidgets[widgetType] = 0;
     }
-
     this.createdPageSettingsWidgets[widgetType]++;
   }
-
   onDeleteWidget(container) {
     const widgetType = container.model.get('widgetType');
     this.createdPageSettingsWidgets[widgetType]--;
-
     if (!this.createdPageSettingsWidgets[widgetType]) {
       delete this.createdPageSettingsWidgets[widgetType];
     }
   }
-
   onUpdateDocument() {
     // On page Save trigger the 'added_to_cart' event so that the persistent cart cache can refresh so that the 'Preview' can be immediately updated without having to go and make a change in the Cart first.
     elementorFrontend.elements.$body.trigger('added_to_cart', [{
       e_manually_triggered: true
     }]);
     const saveWoocommercePageSettingKeys = Object.keys(this.createdPageSettingsWidgets),
-          lastWidgetCreated = saveWoocommercePageSettingKeys[saveWoocommercePageSettingKeys.length - 1],
-          postId = elementor.documents.getCurrent().id;
-
+      lastWidgetCreated = saveWoocommercePageSettingKeys[saveWoocommercePageSettingKeys.length - 1],
+      postId = elementor.documents.getCurrent().id;
     if (1 !== saveWoocommercePageSettingKeys.length) {
       return;
     }
+    const lastWidgetCreatedOptions = this.pageSettingsWidgets[lastWidgetCreated];
 
-    const lastWidgetCreatedOptions = this.pageSettingsWidgets[lastWidgetCreated]; // Bail if this page is already set as the corresponding WC page.
-
+    // Bail if this page is already set as the corresponding WC page.
     if (postId === elementorPro.config.woocommerce.woocommercePages[lastWidgetCreatedOptions.woocommercePageName]) {
       return;
     }
-
     elementorCommon.dialogsManager.createWidget('confirm', {
       id: 'elementor-woocommerce-save-pages',
       className: 'e-global__confirm-add',
@@ -7699,7 +6689,6 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
     }).show();
     this.createdPageSettingsWidgets = [];
   }
-
   onConfirmModal(lastWidgetCreatedOptions) {
     elementorPro.ajax.addRequest('woocommerce_update_page_option', {
       data: {
@@ -7713,11 +6702,9 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
       error: () => this.showPagesSettingsToast(lastWidgetCreatedOptions.failedMessage)
     });
   }
-
   onCancelModal(lastWidgetCreatedOptions) {
     this.showPagesSettingsToast(lastWidgetCreatedOptions.cancelMessage);
   }
-
   showPagesSettingsToast(message) {
     const buttons = [];
     elementor.notifications.initToast();
@@ -7730,25 +6717,21 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
       message,
       buttons
     });
-  } // TODO: Add this as a reusable core function - to be able to open any settings tab.
+  }
 
-
+  // TODO: Add this as a reusable core function - to be able to open any settings tab.
   openSiteSettingsTab() {
     let tabId = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
     let sectionId = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
     const isWPPreviewMode = elementorCommon.elements.$body.hasClass('elementor-editor-preview');
-
     if (isWPPreviewMode) {
       elementor.exitPreviewMode();
     }
-
     const isInSettingsPanelActive = 'panel/global/menu' === elementor.documents.currentDocument.config.panel.default_route;
-
     if (isInSettingsPanelActive) {
       $e.run('panel/global/close');
       return;
     }
-
     $e.run('editor/documents/switch', {
       id: elementor.config.kit_id,
       mode: 'autosave'
@@ -7756,20 +6739,18 @@ class WoocommerceModule extends elementorModules.editor.utils.Module {
       if (tabId) {
         $e.route('panel/global/' + tabId);
       }
-    }) // TODO: Replace with a standard routing solution once one is available
+    })
+    // TODO: Replace with a standard routing solution once one is available
     .then(() => {
       if (sectionId) {
         const sectionElement = jQuery('.elementor-control-' + sectionId);
-
         if (sectionElement.length) {
           sectionElement.trigger('click');
         }
       }
     });
   }
-
 }
-
 module.exports = WoocommerceModule;
 
 /***/ }),
@@ -7881,10 +6862,10 @@ module.exports = {
   \********************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
+var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "../node_modules/core-js/internals/function-uncurry-this-raw.js");
 
-var toString = uncurryThis({}.toString);
-var stringSlice = uncurryThis(''.slice);
+var toString = uncurryThisRaw({}.toString);
+var stringSlice = uncurryThisRaw(''.slice);
 
 module.exports = function (it) {
   return stringSlice(toString(it), 8, -1);
@@ -7927,30 +6908,6 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     : CORRECT_ARGUMENTS ? classofRaw(O)
     // ES3 arguments fallback
     : (result = classofRaw(O)) == 'Object' && isCallable(O.callee) ? 'Arguments' : result;
-};
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/clear-error-stack.js":
-/*!**************************************************************!*\
-  !*** ../node_modules/core-js/internals/clear-error-stack.js ***!
-  \**************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
-
-var $Error = Error;
-var replace = uncurryThis(''.replace);
-
-var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
-var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
-var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
-
-module.exports = function (stack, dropEntries) {
-  if (IS_V8_OR_CHAKRA_STACK && typeof stack == 'string' && !$Error.prepareStackTrace) {
-    while (dropEntries--) stack = replace(stack, V8_OR_CHAKRA_STACK_ENTRY, '');
-  } return stack;
 };
 
 
@@ -8065,7 +7022,7 @@ module.exports = function (O, key, value, options) {
 
 var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
 
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
 
 module.exports = function (key, value) {
@@ -8089,9 +7046,28 @@ var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-
 
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 });
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/document-all.js":
+/*!*********************************************************!*\
+  !*** ../node_modules/core-js/internals/document-all.js ***!
+  \*********************************************************/
+/***/ ((module) => {
+
+var documentAll = typeof document == 'object' && document.all;
+
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
+
+module.exports = {
+  all: documentAll,
+  IS_HTMLDDA: IS_HTMLDDA
+};
 
 
 /***/ }),
@@ -8186,6 +7162,30 @@ module.exports = [
 
 /***/ }),
 
+/***/ "../node_modules/core-js/internals/error-stack-clear.js":
+/*!**************************************************************!*\
+  !*** ../node_modules/core-js/internals/error-stack-clear.js ***!
+  \**************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
+
+var $Error = Error;
+var replace = uncurryThis(''.replace);
+
+var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
+var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
+var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
+
+module.exports = function (stack, dropEntries) {
+  if (IS_V8_OR_CHAKRA_STACK && typeof stack == 'string' && !$Error.prepareStackTrace) {
+    while (dropEntries--) stack = replace(stack, V8_OR_CHAKRA_STACK_ENTRY, '');
+  } return stack;
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/internals/error-stack-installable.js":
 /*!********************************************************************!*\
   !*** ../node_modules/core-js/internals/error-stack-installable.js ***!
@@ -8198,7 +7198,7 @@ var createPropertyDescriptor = __webpack_require__(/*! ../internals/create-prope
 module.exports = !fails(function () {
   var error = Error('a');
   if (!('stack' in error)) return true;
-  // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+  // eslint-disable-next-line es/no-object-defineproperty -- safe
   Object.defineProperty(error, 'stack', createPropertyDescriptor(1, 7));
   return error.stack !== 7;
 });
@@ -8299,7 +7299,7 @@ var FunctionPrototype = Function.prototype;
 var apply = FunctionPrototype.apply;
 var call = FunctionPrototype.call;
 
-// eslint-disable-next-line es-x/no-reflect -- safe
+// eslint-disable-next-line es/no-reflect -- safe
 module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function () {
   return call.apply(apply, arguments);
 });
@@ -8316,7 +7316,7 @@ module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? c
 var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-js/internals/fails.js");
 
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-function-prototype-bind -- safe
+  // eslint-disable-next-line es/no-function-prototype-bind -- safe
   var test = (function () { /* empty */ }).bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
@@ -8352,7 +7352,7 @@ var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "../node_m
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
 
 var FunctionPrototype = Function.prototype;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
@@ -8369,25 +7369,41 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../node_modules/core-js/internals/function-uncurry-this-raw.js":
+/*!**********************************************************************!*\
+  !*** ../node_modules/core-js/internals/function-uncurry-this-raw.js ***!
+  \**********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "../node_modules/core-js/internals/function-bind-native.js");
+
+var FunctionPrototype = Function.prototype;
+var call = FunctionPrototype.call;
+var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
+
+module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
+  return function () {
+    return call.apply(fn, arguments);
+  };
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/internals/function-uncurry-this.js":
 /*!******************************************************************!*\
   !*** ../node_modules/core-js/internals/function-uncurry-this.js ***!
   \******************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var NATIVE_BIND = __webpack_require__(/*! ../internals/function-bind-native */ "../node_modules/core-js/internals/function-bind-native.js");
+var classofRaw = __webpack_require__(/*! ../internals/classof-raw */ "../node_modules/core-js/internals/classof-raw.js");
+var uncurryThisRaw = __webpack_require__(/*! ../internals/function-uncurry-this-raw */ "../node_modules/core-js/internals/function-uncurry-this-raw.js");
 
-var FunctionPrototype = Function.prototype;
-var bind = FunctionPrototype.bind;
-var call = FunctionPrototype.call;
-var uncurryThis = NATIVE_BIND && bind.bind(call, call);
-
-module.exports = NATIVE_BIND ? function (fn) {
-  return fn && uncurryThis(fn);
-} : function (fn) {
-  return fn && function () {
-    return call.apply(fn, arguments);
-  };
+module.exports = function (fn) {
+  // Nashorn bug:
+  //   https://github.com/zloirock/core-js/issues/1128
+  //   https://github.com/zloirock/core-js/issues/1130
+  if (classofRaw(fn) === 'Function') return uncurryThisRaw(fn);
 };
 
 
@@ -8420,12 +7436,13 @@ module.exports = function (namespace, method) {
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var aCallable = __webpack_require__(/*! ../internals/a-callable */ "../node_modules/core-js/internals/a-callable.js");
+var isNullOrUndefined = __webpack_require__(/*! ../internals/is-null-or-undefined */ "../node_modules/core-js/internals/is-null-or-undefined.js");
 
 // `GetMethod` abstract operation
 // https://tc39.es/ecma262/#sec-getmethod
 module.exports = function (V, P) {
   var func = V[P];
-  return func == null ? undefined : aCallable(func);
+  return isNullOrUndefined(func) ? undefined : aCallable(func);
 };
 
 
@@ -8443,7 +7460,7 @@ var check = function (it) {
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 module.exports =
-  // eslint-disable-next-line es-x/no-global-this -- safe
+  // eslint-disable-next-line es/no-global-this -- safe
   check(typeof globalThis == 'object' && globalThis) ||
   check(typeof window == 'object' && window) ||
   // eslint-disable-next-line no-restricted-globals -- safe
@@ -8468,7 +7485,7 @@ var hasOwnProperty = uncurryThis({}.hasOwnProperty);
 
 // `HasOwnProperty` abstract operation
 // https://tc39.es/ecma262/#sec-hasownproperty
-// eslint-disable-next-line es-x/no-object-hasown -- safe
+// eslint-disable-next-line es/no-object-hasown -- safe
 module.exports = Object.hasOwn || function hasOwn(it, key) {
   return hasOwnProperty(toObject(it), key);
 };
@@ -8499,7 +7516,7 @@ var createElement = __webpack_require__(/*! ../internals/document-create-element
 
 // Thanks to IE8 for its funny defineProperty
 module.exports = !DESCRIPTORS && !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
   }).a != 7;
@@ -8611,9 +7628,8 @@ module.exports = function (O, options) {
   \***********************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-var NATIVE_WEAK_MAP = __webpack_require__(/*! ../internals/native-weak-map */ "../node_modules/core-js/internals/native-weak-map.js");
+var NATIVE_WEAK_MAP = __webpack_require__(/*! ../internals/weak-map-basic-detection */ "../node_modules/core-js/internals/weak-map-basic-detection.js");
 var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
-var uncurryThis = __webpack_require__(/*! ../internals/function-uncurry-this */ "../node_modules/core-js/internals/function-uncurry-this.js");
 var isObject = __webpack_require__(/*! ../internals/is-object */ "../node_modules/core-js/internals/is-object.js");
 var createNonEnumerableProperty = __webpack_require__(/*! ../internals/create-non-enumerable-property */ "../node_modules/core-js/internals/create-non-enumerable-property.js");
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
@@ -8641,26 +7657,28 @@ var getterFor = function (TYPE) {
 
 if (NATIVE_WEAK_MAP || shared.state) {
   var store = shared.state || (shared.state = new WeakMap());
-  var wmget = uncurryThis(store.get);
-  var wmhas = uncurryThis(store.has);
-  var wmset = uncurryThis(store.set);
+  /* eslint-disable no-self-assign -- prototype methods protection */
+  store.get = store.get;
+  store.has = store.has;
+  store.set = store.set;
+  /* eslint-enable no-self-assign -- prototype methods protection */
   set = function (it, metadata) {
-    if (wmhas(store, it)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
-    wmset(store, it, metadata);
+    store.set(it, metadata);
     return metadata;
   };
   get = function (it) {
-    return wmget(store, it) || {};
+    return store.get(it) || {};
   };
   has = function (it) {
-    return wmhas(store, it);
+    return store.has(it);
   };
 } else {
   var STATE = sharedKey('state');
   hiddenKeys[STATE] = true;
   set = function (it, metadata) {
-    if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (hasOwn(it, STATE)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
     createNonEnumerableProperty(it, STATE, metadata);
     return metadata;
@@ -8688,11 +7706,17 @@ module.exports = {
 /*!********************************************************!*\
   !*** ../node_modules/core-js/internals/is-callable.js ***!
   \********************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var $documentAll = __webpack_require__(/*! ../internals/document-all */ "../node_modules/core-js/internals/document-all.js");
+
+var documentAll = $documentAll.all;
 
 // `IsCallable` abstract operation
 // https://tc39.es/ecma262/#sec-iscallable
-module.exports = function (argument) {
+module.exports = $documentAll.IS_HTMLDDA ? function (argument) {
+  return typeof argument == 'function' || argument === documentAll;
+} : function (argument) {
   return typeof argument == 'function';
 };
 
@@ -8731,6 +7755,21 @@ module.exports = isForced;
 
 /***/ }),
 
+/***/ "../node_modules/core-js/internals/is-null-or-undefined.js":
+/*!*****************************************************************!*\
+  !*** ../node_modules/core-js/internals/is-null-or-undefined.js ***!
+  \*****************************************************************/
+/***/ ((module) => {
+
+// we can't use just `it == null` since of `document.all` special case
+// https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot-aec
+module.exports = function (it) {
+  return it === null || it === undefined;
+};
+
+
+/***/ }),
+
 /***/ "../node_modules/core-js/internals/is-object.js":
 /*!******************************************************!*\
   !*** ../node_modules/core-js/internals/is-object.js ***!
@@ -8738,8 +7777,13 @@ module.exports = isForced;
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../node_modules/core-js/internals/is-callable.js");
+var $documentAll = __webpack_require__(/*! ../internals/document-all */ "../node_modules/core-js/internals/document-all.js");
 
-module.exports = function (it) {
+var documentAll = $documentAll.all;
+
+module.exports = $documentAll.IS_HTMLDDA ? function (it) {
+  return typeof it == 'object' ? it !== null : isCallable(it) || it === documentAll;
+} : function (it) {
   return typeof it == 'object' ? it !== null : isCallable(it);
 };
 
@@ -8813,7 +7857,7 @@ var InternalStateModule = __webpack_require__(/*! ../internals/internal-state */
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
@@ -8867,51 +7911,11 @@ var floor = Math.floor;
 
 // `Math.trunc` method
 // https://tc39.es/ecma262/#sec-math.trunc
-// eslint-disable-next-line es-x/no-math-trunc -- safe
+// eslint-disable-next-line es/no-math-trunc -- safe
 module.exports = Math.trunc || function trunc(x) {
   var n = +x;
   return (n > 0 ? floor : ceil)(n);
 };
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/native-symbol.js":
-/*!**********************************************************!*\
-  !*** ../node_modules/core-js/internals/native-symbol.js ***!
-  \**********************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-/* eslint-disable es-x/no-symbol -- required for testing */
-var V8_VERSION = __webpack_require__(/*! ../internals/engine-v8-version */ "../node_modules/core-js/internals/engine-v8-version.js");
-var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-js/internals/fails.js");
-
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- required for testing
-module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
-  var symbol = Symbol();
-  // Chrome 38 Symbol has incorrect toString conversion
-  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
-  return !String(symbol) || !(Object(symbol) instanceof Symbol) ||
-    // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
-    !Symbol.sham && V8_VERSION && V8_VERSION < 41;
-});
-
-
-/***/ }),
-
-/***/ "../node_modules/core-js/internals/native-weak-map.js":
-/*!************************************************************!*\
-  !*** ../node_modules/core-js/internals/native-weak-map.js ***!
-  \************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
-var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../node_modules/core-js/internals/is-callable.js");
-var inspectSource = __webpack_require__(/*! ../internals/inspect-source */ "../node_modules/core-js/internals/inspect-source.js");
-
-var WeakMap = global.WeakMap;
-
-module.exports = isCallable(WeakMap) && /native code/.test(inspectSource(WeakMap));
 
 
 /***/ }),
@@ -8944,9 +7948,9 @@ var anObject = __webpack_require__(/*! ../internals/an-object */ "../node_module
 var toPropertyKey = __webpack_require__(/*! ../internals/to-property-key */ "../node_modules/core-js/internals/to-property-key.js");
 
 var $TypeError = TypeError;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var $defineProperty = Object.defineProperty;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 var ENUMERABLE = 'enumerable';
 var CONFIGURABLE = 'configurable';
@@ -8999,7 +8003,7 @@ var toPropertyKey = __webpack_require__(/*! ../internals/to-property-key */ "../
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
 var IE8_DOM_DEFINE = __webpack_require__(/*! ../internals/ie8-dom-define */ "../node_modules/core-js/internals/ie8-dom-define.js");
 
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // `Object.getOwnPropertyDescriptor` method
@@ -9029,7 +8033,7 @@ var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 // `Object.getOwnPropertyNames` method
 // https://tc39.es/ecma262/#sec-object.getownpropertynames
-// eslint-disable-next-line es-x/no-object-getownpropertynames -- safe
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
@@ -9043,7 +8047,7 @@ exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   \****************************************************************************/
 /***/ ((__unused_webpack_module, exports) => {
 
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- safe
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 exports.f = Object.getOwnPropertySymbols;
 
 
@@ -9101,7 +8105,7 @@ module.exports = function (object, names) {
 "use strict";
 
 var $propertyIsEnumerable = {}.propertyIsEnumerable;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Nashorn ~ JDK8 bug
@@ -9131,13 +8135,13 @@ var aPossiblePrototype = __webpack_require__(/*! ../internals/a-possible-prototy
 // `Object.setPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.setprototypeof
 // Works with __proto__ only. Old v8 can't work with null proto objects.
-// eslint-disable-next-line es-x/no-object-setprototypeof -- safe
+// eslint-disable-next-line es/no-object-setprototypeof -- safe
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   var CORRECT_SETTER = false;
   var test = {};
   var setter;
   try {
-    // eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
     setter = uncurryThis(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set);
     setter(test, []);
     CORRECT_SETTER = test instanceof Array;
@@ -9226,14 +8230,16 @@ module.exports = function (Target, Source, key) {
 /*!*********************************************************************!*\
   !*** ../node_modules/core-js/internals/require-object-coercible.js ***!
   \*********************************************************************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var isNullOrUndefined = __webpack_require__(/*! ../internals/is-null-or-undefined */ "../node_modules/core-js/internals/is-null-or-undefined.js");
 
 var $TypeError = TypeError;
 
 // `RequireObjectCoercible` abstract operation
 // https://tc39.es/ecma262/#sec-requireobjectcoercible
 module.exports = function (it) {
-  if (it == undefined) throw $TypeError("Can't call method on " + it);
+  if (isNullOrUndefined(it)) throw $TypeError("Can't call method on " + it);
   return it;
 };
 
@@ -9287,11 +8293,34 @@ var store = __webpack_require__(/*! ../internals/shared-store */ "../node_module
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.23.4',
+  version: '3.26.0',
   mode: IS_PURE ? 'pure' : 'global',
   copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.23.4/LICENSE',
+  license: 'https://github.com/zloirock/core-js/blob/v3.26.0/LICENSE',
   source: 'https://github.com/zloirock/core-js'
+});
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/symbol-constructor-detection.js":
+/*!*************************************************************************!*\
+  !*** ../node_modules/core-js/internals/symbol-constructor-detection.js ***!
+  \*************************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+/* eslint-disable es/no-symbol -- required for testing */
+var V8_VERSION = __webpack_require__(/*! ../internals/engine-v8-version */ "../node_modules/core-js/internals/engine-v8-version.js");
+var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-js/internals/fails.js");
+
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
+module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
+  var symbol = Symbol();
+  // Chrome 38 Symbol has incorrect toString conversion
+  // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
+  return !String(symbol) || !(Object(symbol) instanceof Symbol) ||
+    // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
+    !Symbol.sham && V8_VERSION && V8_VERSION < 41;
 });
 
 
@@ -9527,8 +8556,8 @@ module.exports = function (key) {
   \**************************************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
-/* eslint-disable es-x/no-symbol -- required for testing */
-var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/native-symbol */ "../node_modules/core-js/internals/native-symbol.js");
+/* eslint-disable es/no-symbol -- required for testing */
+var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/symbol-constructor-detection */ "../node_modules/core-js/internals/symbol-constructor-detection.js");
 
 module.exports = NATIVE_SYMBOL
   && !Symbol.sham
@@ -9549,12 +8578,28 @@ var fails = __webpack_require__(/*! ../internals/fails */ "../node_modules/core-
 // V8 ~ Chrome 36-
 // https://bugs.chromium.org/p/v8/issues/detail?id=3334
 module.exports = DESCRIPTORS && fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(function () { /* empty */ }, 'prototype', {
     value: 42,
     writable: false
   }).prototype != 42;
 });
+
+
+/***/ }),
+
+/***/ "../node_modules/core-js/internals/weak-map-basic-detection.js":
+/*!*********************************************************************!*\
+  !*** ../node_modules/core-js/internals/weak-map-basic-detection.js ***!
+  \*********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var global = __webpack_require__(/*! ../internals/global */ "../node_modules/core-js/internals/global.js");
+var isCallable = __webpack_require__(/*! ../internals/is-callable */ "../node_modules/core-js/internals/is-callable.js");
+
+var WeakMap = global.WeakMap;
+
+module.exports = isCallable(WeakMap) && /native code/.test(String(WeakMap));
 
 
 /***/ }),
@@ -9569,7 +8614,7 @@ var global = __webpack_require__(/*! ../internals/global */ "../node_modules/cor
 var shared = __webpack_require__(/*! ../internals/shared */ "../node_modules/core-js/internals/shared.js");
 var hasOwn = __webpack_require__(/*! ../internals/has-own-property */ "../node_modules/core-js/internals/has-own-property.js");
 var uid = __webpack_require__(/*! ../internals/uid */ "../node_modules/core-js/internals/uid.js");
-var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/native-symbol */ "../node_modules/core-js/internals/native-symbol.js");
+var NATIVE_SYMBOL = __webpack_require__(/*! ../internals/symbol-constructor-detection */ "../node_modules/core-js/internals/symbol-constructor-detection.js");
 var USE_SYMBOL_AS_UID = __webpack_require__(/*! ../internals/use-symbol-as-uid */ "../node_modules/core-js/internals/use-symbol-as-uid.js");
 
 var WellKnownSymbolsStore = shared('wks');
@@ -9611,7 +8656,7 @@ var proxyAccessor = __webpack_require__(/*! ../internals/proxy-accessor */ "../n
 var inheritIfRequired = __webpack_require__(/*! ../internals/inherit-if-required */ "../node_modules/core-js/internals/inherit-if-required.js");
 var normalizeStringArgument = __webpack_require__(/*! ../internals/normalize-string-argument */ "../node_modules/core-js/internals/normalize-string-argument.js");
 var installErrorCause = __webpack_require__(/*! ../internals/install-error-cause */ "../node_modules/core-js/internals/install-error-cause.js");
-var clearErrorStack = __webpack_require__(/*! ../internals/clear-error-stack */ "../node_modules/core-js/internals/clear-error-stack.js");
+var clearErrorStack = __webpack_require__(/*! ../internals/error-stack-clear */ "../node_modules/core-js/internals/error-stack-clear.js");
 var ERROR_STACK_INSTALLABLE = __webpack_require__(/*! ../internals/error-stack-installable */ "../node_modules/core-js/internals/error-stack-installable.js");
 var DESCRIPTORS = __webpack_require__(/*! ../internals/descriptors */ "../node_modules/core-js/internals/descriptors.js");
 var IS_PURE = __webpack_require__(/*! ../internals/is-pure */ "../node_modules/core-js/internals/is-pure.js");
@@ -9758,7 +8803,6 @@ function _interopRequireDefault(obj) {
     "default": obj
   };
 }
-
 module.exports = _interopRequireDefault, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ })
@@ -9811,8 +8855,8 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "page-transitions-editor") return "" + chunkId + ".d1b925262ac181e8d57c.bundle.js";
-/******/ 			if (chunkId === "modules_query-control_assets_js_editor_template-query-control_js") return "61725c6b9bbb77be4d73.bundle.js";
+/******/ 			if (chunkId === "page-transitions-editor") return "" + chunkId + ".ed9e6f841eb61c1ca3b1.bundle.js";
+/******/ 			if (chunkId === "modules_query-control_assets_js_editor_template-query-control_js") return "2916a86e9d819c3b8e53.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};
@@ -9872,8 +8916,7 @@ module.exports = _interopRequireDefault, module.exports.__esModule = true, modul
 /******/ 				script.parentNode && script.parentNode.removeChild(script);
 /******/ 				doneFns && doneFns.forEach((fn) => (fn(event)));
 /******/ 				if(prev) return prev(event);
-/******/ 			}
-/******/ 			;
+/******/ 			};
 /******/ 			var timeout = setTimeout(onScriptComplete.bind(null, undefined, { type: 'timeout', target: script }), 120000);
 /******/ 			script.onerror = onScriptComplete.bind(null, script.onerror);
 /******/ 			script.onload = onScriptComplete.bind(null, script.onload);
@@ -10003,45 +9046,29 @@ var __webpack_exports__ = {};
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-
 var _editor = _interopRequireDefault(__webpack_require__(/*! ../../../../modules/custom-css/assets/js/editor/editor */ "../modules/custom-css/assets/js/editor/editor.js"));
-
 var _editor2 = _interopRequireDefault(__webpack_require__(/*! ../../../../modules/motion-fx/assets/js/editor/editor */ "../modules/motion-fx/assets/js/editor/editor.js"));
-
 var _module = _interopRequireDefault(__webpack_require__(/*! modules/popup/assets/js/editor/module */ "../modules/popup/assets/js/editor/module.js"));
-
 var _module2 = _interopRequireDefault(__webpack_require__(/*! modules/global-widget/assets/js/editor/module */ "../modules/global-widget/assets/js/editor/module.js"));
-
 var _module3 = _interopRequireDefault(__webpack_require__(/*! modules/theme-builder/assets/js/editor/module */ "../modules/theme-builder/assets/js/editor/module.js"));
-
 var _module4 = _interopRequireDefault(__webpack_require__(/*! modules/forms/assets/js/editor/module */ "../modules/forms/assets/js/editor/module.js"));
-
 var _module5 = _interopRequireDefault(__webpack_require__(/*! modules/screenshots/assets/js/editor/module */ "../modules/screenshots/assets/js/editor/module.js"));
-
 var _editor3 = _interopRequireDefault(__webpack_require__(/*! ../../../../core/app/modules/site-editor/assets/js/editor */ "../core/app/modules/site-editor/assets/js/editor.js"));
-
 var _module6 = _interopRequireDefault(__webpack_require__(/*! modules/video-playlist/assets/js/editor/module */ "../modules/video-playlist/assets/js/editor/module.js"));
-
 var _module7 = _interopRequireDefault(__webpack_require__(/*! modules/woocommerce/assets/js/editor/module */ "../modules/woocommerce/assets/js/editor/module.js"));
-
 var _module8 = _interopRequireDefault(__webpack_require__(/*! modules/scroll-snap/assets/js/editor/module */ "../modules/scroll-snap/assets/js/editor/module.js"));
-
 var _module9 = _interopRequireDefault(__webpack_require__(/*! modules/payments/assets/js/editor/module */ "../modules/payments/assets/js/editor/module.js"));
-
 var _module10 = _interopRequireDefault(__webpack_require__(/*! modules/loop-builder/assets/js/editor/module */ "../modules/loop-builder/assets/js/editor/module.js"));
-
 var ElementorPro = Marionette.Application.extend({
   config: {},
   modules: {},
-
   initModules() {
     var QueryControl = __webpack_require__(/*! modules/query-control/assets/js/editor */ "../modules/query-control/assets/js/editor.js"),
-        Library = __webpack_require__(/*! modules/library/assets/js/editor */ "../modules/library/assets/js/editor.js"),
-        FlipBox = __webpack_require__(/*! modules/flip-box/assets/js/editor/editor */ "../modules/flip-box/assets/js/editor/editor.js"),
-        ShareButtons = __webpack_require__(/*! modules/share-buttons/assets/js/editor/editor */ "../modules/share-buttons/assets/js/editor/editor.js"),
-        AssetsManager = __webpack_require__(/*! modules/assets-manager/assets/js/editor/editor */ "../modules/assets-manager/assets/js/editor/editor.js"),
-        ThemeElements = __webpack_require__(/*! modules/theme-elements/assets/js/editor/editor */ "../modules/theme-elements/assets/js/editor/editor.js");
-
+      Library = __webpack_require__(/*! modules/library/assets/js/editor */ "../modules/library/assets/js/editor.js"),
+      FlipBox = __webpack_require__(/*! modules/flip-box/assets/js/editor/editor */ "../modules/flip-box/assets/js/editor/editor.js"),
+      ShareButtons = __webpack_require__(/*! modules/share-buttons/assets/js/editor/editor */ "../modules/share-buttons/assets/js/editor/editor.js"),
+      AssetsManager = __webpack_require__(/*! modules/assets-manager/assets/js/editor/editor */ "../modules/assets-manager/assets/js/editor/editor.js"),
+      ThemeElements = __webpack_require__(/*! modules/theme-elements/assets/js/editor/editor */ "../modules/theme-elements/assets/js/editor/editor.js");
     this.modules = {
       queryControl: new QueryControl(),
       forms: new _module4.default(),
@@ -10063,8 +9090,9 @@ var ElementorPro = Marionette.Application.extend({
       popup: new _module.default(),
       videoPlaylistModule: new _module6.default(),
       ScrollSnapModule: new _module8.default()
-    }; // Import the Page Transitions editor module dynamically.
+    };
 
+    // Import the Page Transitions editor module dynamically.
     if (elementorCommon.config.experimentalFeatures['page-transitions']) {
       __webpack_require__.e(/*! import() | page-transitions-editor */ "page-transitions-editor").then(__webpack_require__.bind(__webpack_require__, /*! modules/page-transitions/assets/js/editor/module */ "../modules/page-transitions/assets/js/editor/module.js")).then(_ref => {
         let {
@@ -10074,80 +9102,70 @@ var ElementorPro = Marionette.Application.extend({
       });
     }
   },
-
   ajax: {
     prepareArgs(args) {
       args[0] = 'pro_' + args[0];
       return args;
     },
-
     send() {
       return elementorCommon.ajax.send.apply(elementorCommon.ajax, this.prepareArgs(arguments));
     },
-
     addRequest() {
       return elementorCommon.ajax.addRequest.apply(elementorCommon.ajax, this.prepareArgs(arguments));
     }
-
   },
-
   translate(stringKey, templateArgs) {
     return elementorCommon.translate(stringKey, null, templateArgs, this.config.i18n);
   },
-
   onStart() {
     this.config = elementorProEditorConfig;
     this.initModules();
     jQuery(window).on('elementor:init', () => this.onElementorInit()).on('elementor/connect/success/editor-pro-activate', this.onActivateSuccess);
   },
-
   onElementorInit() {
     elementor.on('preview:loaded', () => this.onElementorPreviewLoaded());
     elementorPro.libraryRemoveGetProButtons();
     elementorCommon.debug.addURLToWatch('elementor-pro/assets');
   },
-
   onElementorPreviewLoaded() {
     elementor.$preview[0].contentWindow.elementorPro = this;
   },
-
   libraryRemoveGetProButtons() {
     elementor.hooks.addFilter('elementor/editor/template-library/template/action-button', function (viewID, templateData) {
       var _elementor$config, _elementor$config$lib;
-
       if (templateData.accessLevel === undefined || ((_elementor$config = elementor.config) === null || _elementor$config === void 0 ? void 0 : (_elementor$config$lib = _elementor$config.library_connect) === null || _elementor$config$lib === void 0 ? void 0 : _elementor$config$lib.current_access_level) === undefined) {
         // BC support.
         return templateData.isPro && !elementorPro.config.isActive ? '#tmpl-elementor-pro-template-library-activate-license-button' : '#tmpl-elementor-template-library-insert-button';
-      } // When the template should be at least "pro" and the license is not active.
+      }
 
-
+      // When the template should be at least "pro" and the license is not active.
       if (templateData.accessLevel > 0 && !elementorPro.config.isActive) {
         return '#tmpl-elementor-pro-template-library-activate-license-button';
-      } // When the template access levels is greater than the current license access level it should
+      }
+
+      // When the template access levels is greater than the current license access level it should
       // return the "core" view template which is by default "go pro" or "go expert" button.
-
-
       if (templateData.accessLevel > elementor.config.library_connect.current_access_level) {
         return viewID;
-      } // When the current license can insert the template.
+      }
 
-
+      // When the current license can insert the template.
       return '#tmpl-elementor-template-library-insert-button';
     });
   },
-
   onActivateSuccess() {
     // Hide notice.
-    elementor.noticeBar.onCloseClick(); // Mark site connect for insert templates connect screen.
+    elementor.noticeBar.onCloseClick();
 
-    elementor.config.library_connect.is_connected = true; // Mark pro is active - for `this.libraryRemoveGetProButtons`.
+    // Mark site connect for insert templates connect screen.
+    elementor.config.library_connect.is_connected = true;
 
+    // Mark pro is active - for `this.libraryRemoveGetProButtons`.
     elementorPro.config.isActive = true;
     elementor.notifications.showToast({
       message: __('Connected Successfully', 'elementor')
     });
   }
-
 });
 window.elementorPro = new ElementorPro();
 elementorPro.start();
