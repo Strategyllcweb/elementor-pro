@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.10.3 - 29-01-2023 */
+/*! elementor-pro - v3.11.6 - 14-03-2023 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["posts"],{
 
@@ -103,20 +103,9 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     });
   },
   setColsCountSettings() {
-    var currentDeviceMode = elementorFrontend.getCurrentDeviceMode(),
-      settings = this.getElementSettings(),
+    const settings = this.getElementSettings(),
       skinPrefix = this.getSkinPrefix(),
-      colsCount;
-    switch (currentDeviceMode) {
-      case 'mobile':
-        colsCount = settings[skinPrefix + 'columns_mobile'];
-        break;
-      case 'tablet':
-        colsCount = settings[skinPrefix + 'columns_tablet'];
-        break;
-      default:
-        colsCount = settings[skinPrefix + 'columns'];
-    }
+      colsCount = elementorProFrontend.utils.controls.getResponsiveControlValue(settings, `${skinPrefix}columns`);
     this.setSettings('colsCount', colsCount);
   },
   isMasonryEnabled() {
@@ -126,10 +115,10 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     imagesLoaded(this.elements.$posts, this.runMasonry);
   },
   getVerticalSpaceBetween() {
-    /* The `verticalSpaceBetween` variable is setup in a way that supports older versions of the portfolio widget */
-    let verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'row_gap.size');
+    /* The `verticalSpaceBetween` variable is set up in a way that supports older versions of the portfolio widget */
+    let verticalSpaceBetween = elementorProFrontend.utils.controls.getResponsiveControlValue(this.getElementSettings(), `${this.getSkinPrefix()}row_gap`, 'size');
     if ('' === this.getSkinPrefix() && '' === verticalSpaceBetween) {
-      verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'item_gap.size');
+      verticalSpaceBetween = this.getElementSettings('item_gap.size');
     }
     return verticalSpaceBetween;
   },
@@ -180,4 +169,4 @@ exports["default"] = _default;
 /***/ })
 
 }]);
-//# sourceMappingURL=posts.d8831e8923f7c19f5094.bundle.js.map
+//# sourceMappingURL=posts.7af7c022fae48743b8f5.bundle.js.map

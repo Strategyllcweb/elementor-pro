@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.10.3 - 29-01-2023 */
+/*! elementor-pro - v3.11.6 - 14-03-2023 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["loop"],{
 
@@ -194,6 +194,7 @@ class Loop extends _posts.default {
     const defaultSettings = super.getDefaultSettings();
     defaultSettings.selectors.post = '.elementor-loop-container .elementor';
     defaultSettings.selectors.postsContainer = '.elementor-loop-container';
+    defaultSettings.classes.inPlaceTemplateEditable = 'elementor-in-place-template-editable';
     return defaultSettings;
   }
 
@@ -204,30 +205,55 @@ class Loop extends _posts.default {
    */
   fitImages() {}
   getVerticalSpaceBetween() {
-    return this.getElementSettings(this.getSkinPrefix() + 'row_gap.size');
+    return elementorProFrontend.utils.controls.getResponsiveControlValue(this.getElementSettings(), 'row_gap', 'size');
   }
 
   /**
    * This is a callback that runs when the "Edit Template" document handle is clicked in the Editor.
    */
   onInPlaceEditTemplate() {
-    const templateID = this.getElementSettings('template_id'),
-      elementsToRemove = ['style#loop-' + templateID, 'link#font-loop-' + templateID, 'style#loop-dynamic-' + templateID];
-    elementsToRemove.forEach(elementToRemove => {
+    this.$element.addClass(this.getDefaultSettings().classes.inPlaceTemplateEditable);
+    this.elementsToRemove = [];
+    this.handleSwiper();
+    const templateID = this.getElementSettings('template_id');
+    this.elementsToRemove = [...this.elementsToRemove, 'style#loop-' + templateID, 'link#font-loop-' + templateID, 'style#loop-dynamic-' + templateID];
+    this.elementsToRemove.forEach(elementToRemove => {
       this.$element.find(elementToRemove).remove();
     });
   }
+  handleSwiper() {
+    const swiper = this.elements.$postsContainer.data('swiper');
+    if (!swiper) {
+      return;
+    }
+    swiper.slideTo(0);
+    swiper.autoplay.pause();
+    swiper.allowTouchMove = false;
+    swiper.params.autoplay.delay = 1000000; // Add a long delay so that the Swiper does not move while editing the Template. Even though it was paused, it will start again on mouse leave.
+    swiper.update();
+    this.elementsToRemove = [...this.elementsToRemove, '.swiper-pagination', '.elementor-swiper-button', '.elementor-document-handle'];
+  }
   attachEditDocumentHandle() {
     // eslint-disable-next-line computed-property-spacing
-    const element = this.$element.find('[data-elementor-type="loop-item"]').first()[0],
-      id = this.getElementSettings('template_id');
-    if (element && id) {
-      (0, _documentHandle.default)({
-        element,
-        title: __('Template', 'elementor-pro'),
-        id
-      }, _documentHandle.EDIT_CONTEXT, () => this.onInPlaceEditTemplate(), '.elementor-element-' + this.getID() + ' .elementor-' + id);
+    const id = this.getElementSettings('template_id'),
+      elementData = elementor.getElementData(elementorFrontend.config.elements.data[this.getModelCID()]),
+      element = this.$element.find(elementData?.edit_handle_selector).first()[0];
+    if (!element || !id) {
+      return;
     }
+    if (this.isFirstEdit()) {
+      // TODO: refactor when CSS :has() is fully supported.
+      this.$element.find('.elementor-swiper-button').remove();
+      return;
+    }
+    (0, _documentHandle.default)({
+      element,
+      title: __('Template', 'elementor-pro'),
+      id
+    }, _documentHandle.EDIT_CONTEXT, () => this.onInPlaceEditTemplate(), '.elementor-element-' + this.getID() + ' .elementor-' + id);
+  }
+  isFirstEdit() {
+    return this.$element.has('.e-loop-first-edit').length;
   }
   handleCTA() {
     const emptyViewContainer = document.querySelector(`[data-id="${this.getID()}"] .e-loop-empty-view__wrapper`);
@@ -342,20 +368,9 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     });
   },
   setColsCountSettings() {
-    var currentDeviceMode = elementorFrontend.getCurrentDeviceMode(),
-      settings = this.getElementSettings(),
+    const settings = this.getElementSettings(),
       skinPrefix = this.getSkinPrefix(),
-      colsCount;
-    switch (currentDeviceMode) {
-      case 'mobile':
-        colsCount = settings[skinPrefix + 'columns_mobile'];
-        break;
-      case 'tablet':
-        colsCount = settings[skinPrefix + 'columns_tablet'];
-        break;
-      default:
-        colsCount = settings[skinPrefix + 'columns'];
-    }
+      colsCount = elementorProFrontend.utils.controls.getResponsiveControlValue(settings, `${skinPrefix}columns`);
     this.setSettings('colsCount', colsCount);
   },
   isMasonryEnabled() {
@@ -365,10 +380,10 @@ var _default = elementorModules.frontend.handlers.Base.extend({
     imagesLoaded(this.elements.$posts, this.runMasonry);
   },
   getVerticalSpaceBetween() {
-    /* The `verticalSpaceBetween` variable is setup in a way that supports older versions of the portfolio widget */
-    let verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'row_gap.size');
+    /* The `verticalSpaceBetween` variable is set up in a way that supports older versions of the portfolio widget */
+    let verticalSpaceBetween = elementorProFrontend.utils.controls.getResponsiveControlValue(this.getElementSettings(), `${this.getSkinPrefix()}row_gap`, 'size');
     if ('' === this.getSkinPrefix() && '' === verticalSpaceBetween) {
-      verticalSpaceBetween = this.getElementSettings(this.getSkinPrefix() + 'item_gap.size');
+      verticalSpaceBetween = this.getElementSettings('item_gap.size');
     }
     return verticalSpaceBetween;
   },
@@ -419,4 +434,4 @@ exports["default"] = _default;
 /***/ })
 
 }]);
-//# sourceMappingURL=loop.6f008e7377d85d6c3dce.bundle.js.map
+//# sourceMappingURL=loop.6c57b6a19d39a769d232.bundle.js.map

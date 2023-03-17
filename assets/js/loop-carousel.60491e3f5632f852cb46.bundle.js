@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.10.3 - 29-01-2023 */
+/*! elementor-pro - v3.11.6 - 14-03-2023 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["loop-carousel"],{
 
@@ -16,27 +16,68 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _imageCarousel = _interopRequireDefault(__webpack_require__(/*! elementor/assets/dev/js/frontend/handlers/image-carousel */ "../../elementor/assets/dev/js/frontend/handlers/image-carousel.js"));
+var _elementHandlers = _interopRequireDefault(__webpack_require__(/*! ./utils/element-handlers */ "../modules/loop-builder/assets/js/frontend/handlers/utils/element-handlers.js"));
 class LoopCarousel extends _imageCarousel.default {
   getDefaultSettings() {
-    return {
-      selectors: {
-        carousel: '.elementor-loop-container',
-        slideContent: '.swiper-slide'
-      }
-    };
+    const defaultSettings = super.getDefaultSettings();
+    defaultSettings.selectors.carousel = '.elementor-loop-container';
+    return defaultSettings;
   }
   getSwiperSettings() {
-    const swiperOptions = super.getSwiperSettings();
-    if ('yes' === this.getElementSettings('arrows')) {
+    const swiperOptions = super.getSwiperSettings(),
+      elementSettings = this.getElementSettings();
+    if ('yes' === elementSettings.arrows) {
       swiperOptions.navigation = {
         prevEl: '.elementor-swiper-button-prev',
         nextEl: '.elementor-swiper-button-next'
       };
     }
+    if (elementSettings.pagination) {
+      swiperOptions.pagination = {
+        el: '.swiper-pagination',
+        type: elementSettings.pagination,
+        clickable: true
+      };
+    }
+    swiperOptions.on = {
+      slideChange: () => {
+        this.handleElementHandlers();
+      }
+    };
     return swiperOptions;
+  }
+  async onInit() {
+    super.onInit(...arguments);
+    this.ranElementHandlers = false;
+  }
+  handleElementHandlers() {
+    if (this.ranElementHandlers || !this.swiper) {
+      return;
+    }
+    const newSlides = Array.from(this.swiper.slides).slice(this.swiper.activeIndex - 1, this.swiper.slides.length);
+    (0, _elementHandlers.default)(newSlides);
+    this.ranElementHandlers = true;
   }
 }
 exports["default"] = LoopCarousel;
+
+/***/ }),
+
+/***/ "../modules/loop-builder/assets/js/frontend/handlers/utils/element-handlers.js":
+/*!*************************************************************************************!*\
+  !*** ../modules/loop-builder/assets/js/frontend/handlers/utils/element-handlers.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = runElementHandlers;
+function runElementHandlers(elements) {
+  [...elements].flatMap(el => [...el.querySelectorAll('.elementor-element')]).forEach(el => elementorFrontend.elementsHandler.runReadyTrigger(el));
+}
 
 /***/ }),
 
@@ -93,6 +134,9 @@ class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
         slidesPerView: +elementSettings['slides_to_show_' + breakpointName] || defaultSlidesToShow,
         slidesPerGroup: +elementSettings['slides_to_scroll_' + breakpointName] || 1
       };
+      if (elementSettings.image_spacing_custom) {
+        swiperOptions.breakpoints[elementorBreakpoints[breakpointName].value].spaceBetween = this.getSpaceBetween(breakpointName);
+      }
       lastBreakpointSlidesToShowValue = +elementSettings['slides_to_show_' + breakpointName] || defaultSlidesToShow;
     });
     if ('yes' === elementSettings.autoplay) {
@@ -112,7 +156,7 @@ class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
       swiperOptions.slidesPerGroup = +elementSettings.slides_to_scroll || 1;
     }
     if (elementSettings.image_spacing_custom) {
-      swiperOptions.spaceBetween = elementSettings.image_spacing_custom.size;
+      swiperOptions.spaceBetween = this.getSpaceBetween();
     }
     const showArrows = 'arrows' === elementSettings.navigation || 'both' === elementSettings.navigation,
       showDots = 'dots' === elementSettings.navigation || 'both' === elementSettings.navigation;
@@ -159,9 +203,6 @@ class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
 
     // Handle special cases where the value to update is not the value that the Swiper library accepts.
     switch (propertyName) {
-      case 'image_spacing_custom':
-        params.spaceBetween = newSettingValue.size || 0;
-        break;
       case 'autoplay_speed':
         params.autoplay.delay = newSettingValue;
         break;
@@ -176,10 +217,15 @@ class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
       pause_on_hover: 'pauseOnHover',
       autoplay_speed: 'delay',
       speed: 'speed',
-      image_spacing_custom: 'spaceBetween'
+      arrows_position: 'arrows_position' // Not a Swiper setting.
     };
   }
+
   onElementChange(propertyName) {
+    if (0 === propertyName.indexOf('image_spacing_custom')) {
+      this.updateSpaceBetween(propertyName);
+      return;
+    }
     const changeableProperties = this.getChangeableProperties();
     if (changeableProperties[propertyName]) {
       // 'pause_on_hover' is implemented by the handler with event listeners, not the Swiper library.
@@ -196,10 +242,24 @@ class ImageCarousel extends elementorModules.frontend.handlers.SwiperBase {
       this.swiper.slideToLoop(this.getEditSettings('activeItemIndex') - 1);
     }
   }
+  getSpaceBetween() {
+    let device = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+    return elementorFrontend.utils.controls.getResponsiveControlValue(this.getElementSettings(), 'image_spacing_custom', 'size', device) || 0;
+  }
+  updateSpaceBetween(propertyName) {
+    const deviceMatch = propertyName.match('image_spacing_custom_(.*)'),
+      device = deviceMatch ? deviceMatch[1] : 'desktop',
+      newSpaceBetween = this.getSpaceBetween(device);
+    if ('desktop' !== device) {
+      this.swiper.params.breakpoints[elementorFrontend.config.responsive.activeBreakpoints[device].value].spaceBetween = newSpaceBetween;
+    }
+    this.swiper.params.spaceBetween = newSpaceBetween;
+    this.swiper.update();
+  }
 }
 exports["default"] = ImageCarousel;
 
 /***/ })
 
 }]);
-//# sourceMappingURL=loop-carousel.d290cf610a37d3908ebc.bundle.js.map
+//# sourceMappingURL=loop-carousel.60491e3f5632f852cb46.bundle.js.map

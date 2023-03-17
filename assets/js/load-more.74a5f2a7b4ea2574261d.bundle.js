@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.10.3 - 29-01-2023 */
+/*! elementor-pro - v3.11.6 - 14-03-2023 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["load-more"],{
 
@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _loadMore = _interopRequireDefault(__webpack_require__(/*! modules/posts/assets/js/frontend/handlers/load-more */ "../modules/posts/assets/js/frontend/handlers/load-more.js"));
+var _elementHandlers = _interopRequireDefault(__webpack_require__(/*! ./utils/element-handlers */ "../modules/loop-builder/assets/js/frontend/handlers/utils/element-handlers.js"));
 class LoopLoadMore extends _loadMore.default {
   getDefaultSettings() {
     const defaultSettings = super.getDefaultSettings();
@@ -31,10 +32,7 @@ class LoopLoadMore extends _loadMore.default {
       this.handleLazyloadBackgroundElements();
     }
     this.handleDynamicStyleElements(result);
-    this.runElementHandlers(postsElements);
-  }
-  runElementHandlers(postsElements) {
-    [...postsElements].flatMap(el => [...el.querySelectorAll('.elementor-element')]).forEach(el => elementorFrontend.elementsHandler.runReadyTrigger(el));
+    (0, _elementHandlers.default)(postsElements);
   }
 
   /**
@@ -63,6 +61,24 @@ class LoopLoadMore extends _loadMore.default {
   }
 }
 exports["default"] = LoopLoadMore;
+
+/***/ }),
+
+/***/ "../modules/loop-builder/assets/js/frontend/handlers/utils/element-handlers.js":
+/*!*************************************************************************************!*\
+  !*** ../modules/loop-builder/assets/js/frontend/handlers/utils/element-handlers.js ***!
+  \*************************************************************************************/
+/***/ ((__unused_webpack_module, exports) => {
+
+
+
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = runElementHandlers;
+function runElementHandlers(elements) {
+  [...elements].flatMap(el => [...el.querySelectorAll('.elementor-element')]).forEach(el => elementorFrontend.elementsHandler.runReadyTrigger(el));
+}
 
 /***/ }),
 
@@ -237,4 +253,4 @@ exports["default"] = LoadMore;
 /***/ })
 
 }]);
-//# sourceMappingURL=load-more.1a0f5b0671bff0735b55.bundle.js.map
+//# sourceMappingURL=load-more.74a5f2a7b4ea2574261d.bundle.js.map
