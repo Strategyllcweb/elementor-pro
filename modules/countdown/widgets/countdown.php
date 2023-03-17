@@ -648,7 +648,7 @@ class Countdown extends Base_Widget {
 				if ( empty( $settings['expire_redirect_url']['url'] ) ) {
 					continue;
 				}
-				$action_to_run['redirect_url'] = $settings['expire_redirect_url']['url'];
+				$action_to_run['redirect_url'] = esc_url( $settings['expire_redirect_url']['url'] );
 			}
 			$actions[] = $action_to_run;
 		}
@@ -664,10 +664,9 @@ class Countdown extends Base_Widget {
 		if ( 'evergreen' === $instance['countdown_type'] ) {
 			$this->add_render_attribute( 'div', 'data-evergreen-interval', $this->get_evergreen_interval( $instance ) );
 		} else {
-			// Normalize the date format to `Y-m-d H:i:s` for BC (the original code doesn't include `:s`
-			// while new tags return the proper format).
-			$due_date = gmdate( 'Y-m-d H:i:s', strtotime( $due_date ) );
-			$due_date = strtotime( $due_date );
+			$wp_timezone = new \DateTimeZone( wp_timezone_string() );
+			$due_date = new \DateTime( $due_date, $wp_timezone );
+			$due_date = $due_date->getTimestamp();
 		}
 
 		$actions = false;

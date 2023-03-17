@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.10.3 - 29-01-2023 */
+/*! elementor-pro - v3.11.6 - 14-03-2023 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["search-form"],{
 
@@ -52,13 +52,25 @@ var _default = elementorModules.frontend.handlers.Base.extend({
       $input = self.elements.$input,
       $wrapper = self.elements.$wrapper,
       $icon = self.elements.$icon,
+      $toggle = self.elements.$toggle,
       skin = this.getElementSettings('skin'),
       classes = this.getSettings('classes');
+    const toggleFullScreenSearch = () => {
+      $container.toggleClass(classes.isFullScreen).toggleClass(classes.lightbox);
+      $input.trigger('focus');
+    };
     if ('full_screen' === skin) {
-      // Activate full-screen mode on click
-      self.elements.$toggle.on('click', function () {
-        $container.toggleClass(classes.isFullScreen).toggleClass(classes.lightbox);
-        $input.trigger('focus');
+      // Activate full-screen mode on mouse click.
+      $toggle.on('click', function () {
+        toggleFullScreenSearch();
+      });
+
+      // Activate full-screen mode on Enter keyup.
+      $toggle.on('keyup', function (event) {
+        const ENTER_KEY = 13;
+        if (ENTER_KEY === event.keyCode) {
+          toggleFullScreenSearch();
+        }
       });
 
       // Deactivate full-screen mode on click or on esc.
@@ -71,7 +83,7 @@ var _default = elementorModules.frontend.handlers.Base.extend({
         $container.removeClass(classes.isFullScreen).removeClass(classes.lightbox);
       });
       elementorFrontend.elements.$document.on('keyup', function (event) {
-        var ESC_KEY = 27;
+        const ESC_KEY = 27;
         if (ESC_KEY === event.keyCode) {
           if ($container.hasClass(classes.isFullScreen)) {
             $container.trigger('click');
@@ -103,4 +115,4 @@ exports["default"] = _default;
 /***/ })
 
 }]);
-//# sourceMappingURL=search-form.5ec2bdb9f554d36dcfb4.bundle.js.map
+//# sourceMappingURL=search-form.745c314db888d6579f01.bundle.js.map
