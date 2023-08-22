@@ -85,7 +85,7 @@ class Lottie extends Base_Widget {
 			[
 				'label' => esc_html__( 'Upload JSON File', 'elementor-pro' ),
 				'type' => Controls_Manager::MEDIA,
-				'media_type' => 'application/json',
+				'media_types' => [ 'application/json' ],
 				'frontend_available' => true,
 				'condition' => [
 					'source' => 'media_file',
@@ -388,6 +388,7 @@ class Lottie extends Base_Widget {
 					'animation' => esc_html__( 'Animation', 'elementor-pro' ),
 					'column' => esc_html__( 'Column', 'elementor-pro' ),
 					'section' => esc_html__( 'Section', 'elementor-pro' ),
+					'container' => esc_html__( 'Container', 'elementor-pro' ),
 				],
 				'frontend_available' => true,
 			]

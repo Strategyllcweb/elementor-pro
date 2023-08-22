@@ -1,4 +1,4 @@
-/*! elementor-pro - v3.13.2 - 22-05-2023 */
+/*! elementor-pro - v3.15.0 - 09-08-2023 */
 "use strict";
 (self["webpackChunkelementor_pro"] = self["webpackChunkelementor_pro"] || []).push([["mega-menu-editor"],{
 

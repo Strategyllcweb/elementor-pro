@@ -5,6 +5,7 @@ use ElementorPro\Base\Base_Widget_Trait;
 use ElementorPro\Plugin;
 use Elementor\Controls_Manager;
 use Elementor\Core\Kits\Documents\Tabs\Global_Typography;
+use Elementor\Core\Kits\Documents\Tabs\Global_Colors;
 use Elementor\Modules\NestedElements\Base\Widget_Nested_Base;
 use Elementor\Modules\NestedElements\Controls\Control_Nested_Repeater;
 use Elementor\Icons_Manager;
@@ -39,11 +40,33 @@ class Mega_Menu extends Widget_Nested_Base {
 	}
 
 	public function get_categories() {
-		return [ 'theme-elements' ];
+		return [ 'pro-elements', 'theme-elements' ];
 	}
 
 	public function get_keywords() {
 		return [ 'Mega Menu', 'Nested Elements' ];
+	}
+
+	/**
+	 * @return array[]
+	 */
+	private function get_content_horizontal_controls(): array {
+		$horizontal_controls = [
+			'left' => [
+				'title' => esc_html__( 'Left', 'elementor-pro' ),
+				'icon' => 'eicon-h-align-left',
+			],
+			'center' => [
+				'title' => esc_html__( 'Center', 'elementor-pro' ),
+				'icon' => 'eicon-h-align-center',
+			],
+			'right' => [
+				'title' => esc_html__( 'Right', 'elementor-pro' ),
+				'icon' => 'eicon-h-align-right',
+			],
+		];
+
+		return is_rtl() ? array_reverse( $horizontal_controls ) : $horizontal_controls;
 	}
 
 	protected function get_default_children_elements() {
@@ -125,6 +148,8 @@ class Mega_Menu extends Widget_Nested_Base {
 		$end = is_rtl() ? 'left' : 'right';
 		$tooltip_start = is_rtl() ? esc_html__( 'Right', 'elementor-pro' ) : esc_html__( 'Left', 'elementor-pro' );
 		$tooltip_end = is_rtl() ? esc_html__( 'Left', 'elementor-pro' ) : esc_html__( 'Right', 'elementor-pro' );
+		$start_logical = is_rtl() ? 'end' : 'start';
+		$end_logical = is_rtl() ? 'start' : 'end';
 
 		$this->start_controls_section(
 			'section_layout',
@@ -263,20 +288,7 @@ class Mega_Menu extends Widget_Nested_Base {
 			[
 				'label' => esc_html__( 'Content Horizontal Position', 'elementor-pro' ),
 				'type' => Controls_Manager::CHOOSE,
-				'options' => [
-					'left' => [
-						'title' => esc_html__( 'Left', 'elementor-pro' ),
-						'icon' => 'eicon-h-align-left',
-					],
-					'center' => [
-						'title' => esc_html__( 'Center', 'elementor-pro' ),
-						'icon' => 'eicon-h-align-center',
-					],
-					'right' => [
-						'title' => esc_html__( 'Right', 'elementor-pro' ),
-						'icon' => 'eicon-h-align-right',
-					],
-				],
+				'options' => $this->get_content_horizontal_controls(),
 				'default' => 'center',
 				'condition' => [
 					'content_width' => 'fit_to_content',
@@ -307,19 +319,19 @@ class Mega_Menu extends Widget_Nested_Base {
 			'options' => [
 				'start' => [
 					'title' => esc_html__( 'Start', 'elementor-pro' ),
-					'icon' => 'eicon-flex eicon-align-start-h',
+					'icon' => "eicon-align-$start_logical-h",
 				],
 				'center' => [
 					'title' => esc_html__( 'Center', 'elementor-pro' ),
-					'icon' => 'eicon-h-align-center',
+					'icon' => 'eicon-align-center-h',
 				],
 				'end' => [
 					'title' => esc_html__( 'End', 'elementor-pro' ),
-					'icon' => 'eicon-flex eicon-align-end-h',
+					'icon' => "eicon-align-$end_logical-h",
 				],
 				'stretch' => [
 					'title' => esc_html__( 'Stretch', 'elementor-pro' ),
-					'icon' => 'eicon-h-align-stretch',
+					'icon' => 'eicon-align-stretch-h',
 				],
 			],
 			'selectors_dictionary' => [
@@ -342,15 +354,15 @@ class Mega_Menu extends Widget_Nested_Base {
 			'options' => [
 				'start' => [
 					'title' => esc_html__( 'Start', 'elementor-pro' ),
-					'icon' => 'eicon-flex eicon-align-start-h',
+					'icon' => "eicon-align-$start_logical-h",
 				],
 				'center' => [
 					'title' => esc_html__( 'Center', 'elementor-pro' ),
-					'icon' => 'eicon-h-align-center',
+					'icon' => 'eicon-align-center-h',
 				],
 				'end' => [
 					'title' => esc_html__( 'End', 'elementor-pro' ),
-					'icon' => 'eicon-flex eicon-align-end-h',
+					'icon' => "eicon-align-$end_logical-h",
 				],
 			],
 			'selectors_dictionary' => [
@@ -533,7 +545,7 @@ class Mega_Menu extends Widget_Nested_Base {
 				'options' => [
 					'flex-start' => [
 						'title' => esc_html__( 'Start', 'elementor-pro' ),
-						'icon' => 'eicon-flex eicon-align-start-h',
+						'icon' => "eicon-align-$start_logical-h",
 					],
 					'center' => [
 						'title' => esc_html__( 'Center', 'elementor-pro' ),
@@ -541,7 +553,7 @@ class Mega_Menu extends Widget_Nested_Base {
 					],
 					'flex-end' => [
 						'title' => esc_html__( 'End', 'elementor-pro' ),
-						'icon' => 'eicon-flex eicon-align-end-h',
+						'icon' => "eicon-align-$end_logical-h",
 					],
 				],
 				'selectors' => [
@@ -776,6 +788,12 @@ class Mega_Menu extends Widget_Nested_Base {
 						'{{WRAPPER}}' => '--n-menu-item-title-font-size: {{SIZE}}{{UNIT}}',
 					],
 				],
+				'line_height' => [
+					'selectors' => [
+						'{{SELECTOR}}' => '--e-global-typography-{{external._id.VALUE}}-line-height: {{SIZE}}{{UNIT}}',
+						'{{SELECTOR}}' => '--n-menu-item-title-line-height: {{SIZE}}',
+					],
+				],
 			],
 		] );
 
@@ -848,6 +866,104 @@ class Mega_Menu extends Widget_Nested_Base {
 			[
 				'name' => 'menu_item_title_box_shadow',
 				'selector' => "{$menu_mobile_and_desktop_css_selector} > .e-n-menu-item-title:not( .e-current ):not( :hover )",
+			]
+		);
+
+		$divider_condition = [
+			'menu_divider' => 'yes',
+			'item_layout' => 'horizontal',
+		];
+
+		$this->add_control(
+			'menu_divider',
+			[
+				'label' => esc_html__( 'Divider', 'elementor-pro' ),
+				'type' => Controls_Manager::SWITCHER,
+				'label_off' => esc_html__( 'Off', 'elementor-pro' ),
+				'label_on' => esc_html__( 'On', 'elementor-pro' ),
+				'condition' => [
+					'item_layout' => 'horizontal',
+				],
+				'selectors' => [
+					'{{WRAPPER}}' => '--n-menu-divider-content: "";',
+				],
+				'separator' => 'before',
+			]
+		);
+
+		$this->add_control(
+			'menu_divider_style',
+			[
+				'label' => esc_html__( 'Style', 'elementor-pro' ),
+				'type' => Controls_Manager::SELECT,
+				'options' => [
+					'solid' => esc_html__( 'Solid', 'elementor-pro' ),
+					'double' => esc_html__( 'Double', 'elementor-pro' ),
+					'dotted' => esc_html__( 'Dotted', 'elementor-pro' ),
+					'dashed' => esc_html__( 'Dashed', 'elementor-pro' ),
+				],
+				'default' => 'solid',
+				'condition' => $divider_condition,
+				'selectors' => [
+					'{{WRAPPER}}' => '--n-menu-divider-style: {{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'menu_divider_width',
+			[
+				'label' => esc_html__( 'Width', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vw', 'custom' ],
+				'range' => [
+					'px' => [
+						'min' => 1,
+						'max' => 20,
+					],
+				],
+				'condition' => $divider_condition,
+				'selectors' => [
+					'{{WRAPPER}}' => '--n-menu-divider-width: {{SIZE}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'menu_divider_height',
+			[
+				'label' => esc_html__( 'Height', 'elementor-pro' ),
+				'type' => Controls_Manager::SLIDER,
+				'size_units' => [ 'px', '%', 'em', 'rem', 'vh', 'custom' ],
+				'range' => [
+					'px' => [
+						'min' => 1,
+						'max' => 100,
+					],
+					'%' => [
+						'min' => 1,
+						'max' => 100,
+					],
+				],
+				'condition' => $divider_condition,
+				'selectors' => [
+					'{{WRAPPER}}' => '--n-menu-divider-height: {{SIZE}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->add_control(
+			'menu_divider_color',
+			[
+				'label' => esc_html__( 'Color', 'elementor-pro' ),
+				'type' => Controls_Manager::COLOR,
+				'global' => [
+					'default' => Global_Colors::COLOR_TEXT,
+				],
+				'condition' => $divider_condition,
+				'selectors' => [
+					'{{WRAPPER}}' => '--n-menu-divider-color: {{VALUE}}',
+				],
 			]
 		);
 
@@ -1083,10 +1199,10 @@ class Mega_Menu extends Widget_Nested_Base {
 				],
 			],
 			'selectors_dictionary' => [
-				'top' => '--n-menu-title-direction: column; --n-menu-icon-order: initial; --n-menu-item-title-justify-content: center; --n-menu-title-align-items-toggle: initial;',
-				'end' => '--n-menu-title-direction: row; --n-menu-icon-order: 1; --n-menu-item-title-justify-content: initial; --n-menu-title-align-items-toggle: center;',
-				'bottom' => '--n-menu-title-direction: column; --n-menu-icon-order: 1; --n-menu-item-title-justify-content: center; --n-menu-title-align-items-toggle: initial;',
-				'start' => '--n-menu-title-direction: row; --n-menu-icon-order: initial; --n-menu-item-title-justify-content: initial; --n-menu-title-align-items-toggle: center;',
+				'top' => '--n-menu-title-direction: column; --n-menu-icon-order: initial; --n-menu-item-icon-align-items: flex-end; --n-menu-item-title-justify-content: center; --n-menu-title-align-items-toggle: initial;',
+				'end' => '--n-menu-title-direction: row; --n-menu-icon-order: 1; --n-menu-item-icon-align-items: initial; --n-menu-item-title-justify-content: initial; --n-menu-title-align-items-toggle: center;',
+				'bottom' => '--n-menu-title-direction: column; --n-menu-icon-order: 1; --n-menu-item-icon-align-items: flex-start; --n-menu-item-title-justify-content: center; --n-menu-title-align-items-toggle: initial;',
+				'start' => '--n-menu-title-direction: row; --n-menu-icon-order: initial; --n-menu-item-icon-align-items: initial; --n-menu-item-title-justify-content: initial; --n-menu-title-align-items-toggle: center;',
 			],
 			'selectors' => [
 				'{{WRAPPER}}' => '{{VALUE}}',
@@ -1939,7 +2055,6 @@ class Mega_Menu extends Widget_Nested_Base {
 						echo $item['item_title']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						?>
 					</span>
-				<?php echo $this->get_title_container_closing_tag( $item['item_link']['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 				<?php if ( 'yes' === $item_dropdown_content ) { ?>
 					<span class="e-n-menu-item-icon">
@@ -1947,6 +2062,8 @@ class Mega_Menu extends Widget_Nested_Base {
 						<span class="e-n-menu-item-icon-closed"><?php echo $icon_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
 					</span>
 				<?php } ?>
+				<?php echo $this->get_title_container_closing_tag( $item['item_link']['url'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+
 			</div>
 		<?php
 		if ( $args['isMobile'] ) {
