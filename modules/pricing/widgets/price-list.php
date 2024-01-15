@@ -515,7 +515,11 @@ class Price_List extends Base_Widget {
 			$image_src = $image_src[0];
 		}
 
-		return sprintf( '<img src="%s" alt="%s" loading="lazy" />', $image_src, $item['title'] );
+		return sprintf(
+			'<img src="%s" alt="%s" loading="lazy" />',
+			esc_url( $image_src ),
+			esc_attr( wp_kses_post( $item['title'] ) )
+		);
 	}
 
 	private function render_item_header( $item ) {
@@ -625,7 +629,7 @@ class Price_List extends Base_Widget {
 						item_open_wrap = '<li class="elementor-price-list-item">',
 						item_close_wrap = '</li>';
 					if ( item.link.url ) {
-						item_open_wrap = '<li><a href="' + item.link.url + '" class="elementor-price-list-item">';
+						item_open_wrap = '<li><a href="' + _.escape( item.link.url ) + '" class="elementor-price-list-item">';
 						item_close_wrap = '</a></li>';
 					}
 
