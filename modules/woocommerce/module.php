@@ -17,8 +17,10 @@ use Elementor\Settings;
 use Elementor\Core\Common\Modules\Ajax\Module as Ajax;
 use ElementorPro\Modules\Woocommerce\Classes\Products_Renderer;
 use ElementorPro\Modules\Woocommerce\Widgets\Products as Products_Widget;
+use ElementorPro\Modules\Woocommerce\Data\Controller as WoocommerceDataController;
 use Elementor\Icons_Manager;
 use ElementorPro\Modules\LoopBuilder\Module as LoopBuilderModule;
+use ElementorPro\License\API;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -30,6 +32,12 @@ class Module extends Module_Base {
 	const TEMPLATE_MINI_CART = 'cart/mini-cart.php';
 	const OPTION_NAME_USE_MINI_CART = 'use_mini_cart_template';
 	const MENU_CART_FRAGMENTS_ACTION = 'elementor-menu-cart-fragments';
+	const MENU_CART_LICENSE_FEATURE_NAME = 'woocommerce-menu-cart';
+	const SINGLE_PRODUCT_TEMPLATE_LICENSE_FEATURE_NAME = 'product-single';
+	const ARCHIVE_PRODUCT_TEMPLATE_LICENSE_FEATURE_NAME = 'product-archive';
+	const SITE_SETTINGS_PAGES_LICENSE_FEATURE_NAME = 'settings-woocommerce-pages';
+	const SITE_SETTINGS_NOTICES_LICENSE_FEATURE_NAME = 'settings-woocommerce-notices';
+	const DYNAMIC_TAGS_LICENSE_FEATURE_NAME = 'dynamic-tags-wc';
 	const LOOP_PRODUCT_SKIN_ID = 'product';
 	const WC_PERSISTENT_SITE_SETTINGS = [
 		'woocommerce_cart_page_id',
@@ -38,6 +46,37 @@ class Module extends Module_Base {
 		'woocommerce_terms_page_id',
 		'woocommerce_purchase_summary_page_id',
 		'woocommerce_shop_page_id',
+	];
+	const WIDGET_NAME_CLASS_NAME_MAP = [
+		'woocommerce-products' => 'Products',
+		'wc-products' => 'Products_Deprecated',
+		'woocommerce-product-add-to-cart' => 'Product_Add_To_Cart',
+		'wc-elements' => 'Elements',
+		'wc-categories' => 'Categories',
+		'woocommerce-product-price' => 'Product_Price',
+		'woocommerce-product-title' => 'Product_Title',
+		'woocommerce-product-images' => 'Product_Images',
+		'woocommerce-product-upsell' => 'Product_Upsell',
+		'woocommerce-product-short-description' => 'Product_Short_Description',
+		'woocommerce-product-meta' => 'Product_Meta',
+		'woocommerce-product-stock' => 'Product_Stock',
+		'woocommerce-product-rating' => 'Product_Rating',
+		'woocommerce-product-data-tabs' => 'Product_Data_Tabs',
+		'woocommerce-product-related' => 'Product_Related',
+		'woocommerce-breadcrumb' => 'Breadcrumb',
+		'wc-add-to-cart' => 'Add_To_Cart',
+		'wc-archive-products' => 'Archive_Products',
+		'woocommerce-archive-products' => 'Archive_Products_Deprecated',
+		'woocommerce-product-additional-information' => 'Product_Additional_Information',
+		'woocommerce-menu-cart' => 'Menu_Cart',
+		'woocommerce-product-content' => 'Product_Content',
+		'woocommerce-archive-description' => 'Archive_Description',
+		'woocommerce-checkout-page' => 'Checkout',
+		'woocommerce-cart' => 'Cart',
+		'woocommerce-my-account' => 'My_Account',
+		'woocommerce-purchase-summary' => 'Purchase_Summary',
+		'woocommerce-notices' => 'Notices',
+		'wc-single-elements' => 'Single_Elements',
 	];
 
 	protected $docs_types = [];
@@ -88,40 +127,7 @@ class Module extends Module_Base {
 	}
 
 	public function get_widgets() {
-		return [
-			'Archive_Products',
-			'Archive_Products_Deprecated',
-			'Archive_Description',
-			'Products',
-			'Products_Deprecated',
-
-			'Breadcrumb',
-			'Add_To_Cart',
-			'Elements',
-			'Single_Elements',
-			'Categories',
-			'Menu_Cart',
-
-			'Product_Title',
-			'Product_Images',
-			'Product_Price',
-			'Product_Add_To_Cart',
-			'Product_Rating',
-			'Product_Stock',
-			'Product_Meta',
-			'Product_Short_Description',
-			'Product_Content',
-			'Product_Data_Tabs',
-			'Product_Additional_Information',
-			'Product_Related',
-			'Product_Upsell',
-
-			'Purchase_Summary',
-			'Checkout',
-			'Cart',
-			'My_Account',
-			'Notices',
-		];
+		return API::filter_active_features( static::WIDGET_NAME_CLASS_NAME_MAP );
 	}
 
 	const RECOMMENDED_POSTS_WIDGET_NAMES = [
@@ -160,6 +166,10 @@ class Module extends Module_Base {
 	}
 
 	public function register_tags() {
+		if ( ! API::is_licence_has_feature( static::DYNAMIC_TAGS_LICENSE_FEATURE_NAME, API::BC_VALIDATION_CALLBACK ) ) {
+			return;
+		}
+
 		$tags = [
 			'Product_Gallery',
 			'Product_Image',
@@ -207,11 +217,17 @@ class Module extends Module_Base {
 	 * @param Documents_Manager $documents_manager
 	 */
 	public function register_documents( $documents_manager ) {
-		$this->docs_types = [
-			'product-post' => Product_Post::get_class_full_name(),
-			'product' => Product::get_class_full_name(),
-			'product-archive' => Product_Archive::get_class_full_name(),
-		];
+		if ( API::is_licence_has_feature( static::SINGLE_PRODUCT_TEMPLATE_LICENSE_FEATURE_NAME, API::BC_VALIDATION_CALLBACK ) ) {
+			$this->docs_types = [
+				'product-post' => Product_Post::get_class_full_name(),
+			];
+
+			$this->docs_types['product'] = Product::get_class_full_name();
+		}
+
+		if ( API::is_licence_has_feature( static::ARCHIVE_PRODUCT_TEMPLATE_LICENSE_FEATURE_NAME, API::BC_VALIDATION_CALLBACK ) ) {
+			$this->docs_types['product-archive'] = Product_Archive::get_class_full_name();
+		}
 
 		foreach ( $this->docs_types as $type => $class_name ) {
 			$documents_manager->register_document_type( $type, $class_name );
@@ -529,6 +545,10 @@ class Module extends Module_Base {
 	}
 
 	public function register_admin_fields( Settings $settings ) {
+		if ( ! API::is_licence_has_feature( static::MENU_CART_LICENSE_FEATURE_NAME, API::BC_VALIDATION_CALLBACK ) ) {
+			return;
+		}
+
 		$settings->add_section( Settings::TAB_INTEGRATIONS, 'woocommerce', [
 			'callback' => function() {
 				echo '<hr><h2>' . esc_html__( 'WooCommerce', 'elementor-pro' ) . '</h2>';
@@ -930,7 +950,7 @@ class Module extends Module_Base {
 
 	public function e_notices_body_classes( $classes ) {
 		if ( $this->should_load_wc_notices_styles() ) {
-			foreach ( $this->woocommerce_notices_elements as $notice_element ) {
+			foreach ( $this->get_styled_notice_elements() as $notice_element ) {
 				$classes[] = 'e-' . str_replace( '_', '-', $notice_element ) . '-notice';
 			}
 		}
@@ -938,15 +958,40 @@ class Module extends Module_Base {
 		return $classes;
 	}
 
-	public function e_notices_css( $classes ) {
-		if ( $this->should_load_wc_notices_styles() ) {
-			wp_enqueue_style(
-				'e-woocommerce-notices',
-				ELEMENTOR_PRO_URL . 'assets/css/woocommerce-notices.min.css',
-				[],
-				ELEMENTOR_PRO_VERSION
-			);
+	public function get_styled_notice_elements() {
+		if ( empty( $this->woocommerce_notices_elements ) ) {
+			$kit = Plugin::elementor()->kits_manager->get_active_kit_for_frontend();
+			$this->woocommerce_notices_elements = $kit->get_settings_for_display( 'woocommerce_notices_elements' );
 		}
+
+		return ! empty( $this->woocommerce_notices_elements ) ? $this->woocommerce_notices_elements : [];
+	}
+
+	public function custom_gutenberg_woocommerce_notice() {
+		$min_suffix = Utils::is_script_debug() ? '' : '.min';
+
+		wp_enqueue_script(
+			'elementor-gutenberg-woocommerce-notice',
+			ELEMENTOR_PRO_URL . '/assets/js/gutenberg-woocommerce-notice' . $min_suffix . '.js',
+			[ 'wp-blocks' ],
+			ELEMENTOR_PRO_VERSION,
+			false
+		);
+
+		wp_set_script_translations( 'elementor-gutenberg-woocommerce-notice', 'elementor-pro' );
+	}
+
+	public function e_notices_css() {
+		if ( ! $this->should_load_wc_notices_styles() ) {
+			return false;
+		}
+
+		wp_enqueue_style(
+			'e-woocommerce-notices',
+			ELEMENTOR_PRO_URL . 'assets/css/woocommerce-notices.min.css',
+			[],
+			ELEMENTOR_PRO_VERSION
+		);
 	}
 
 	public function get_order_received_endpoint_url( $url, $endpoint, $value ) {
@@ -1148,6 +1193,10 @@ class Module extends Module_Base {
 	 * @return boolean
 	 */
 	private function should_load_wc_notices_styles() {
+		if ( ! API::is_licence_has_feature( static::SITE_SETTINGS_NOTICES_LICENSE_FEATURE_NAME, API::BC_VALIDATION_CALLBACK ) ) {
+			return false;
+		}
+
 		$woocommerce_active = in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) );
 		$is_editor = ProUtils::_unstable_get_super_global_value( $_GET, 'elementor-preview' );
 
@@ -1156,12 +1205,9 @@ class Module extends Module_Base {
 			return true;
 		}
 
-		$kit = Plugin::elementor()->kits_manager->get_active_kit_for_frontend();
-		$this->woocommerce_notices_elements = is_array( $kit->get_settings_for_display( 'woocommerce_notices_elements' ) ) ? $kit->get_settings_for_display( 'woocommerce_notices_elements' ) : [];
-
 		// Front end checks.
 		if (
-			0 < count( $this->woocommerce_notices_elements ) // At least one notice has been activated.
+			0 < count( $this->get_styled_notice_elements() ) // At least one notice has been activated.
 			&& $woocommerce_active // WooCommerce is active.
 			&& ( ! is_admin() || $is_editor ) // We are not in WP Admin.
 		) {
@@ -1218,7 +1264,7 @@ class Module extends Module_Base {
 
 		$products_html = ob_get_clean();
 
-		remove_filter( $title_hook, function(){}, 10 );
+		remove_filter( $title_hook, function() {}, 10 );
 
 		if ( $products_html ) {
 			$products_html = str_replace( '<ul class="products', '<ul class="products elementor-grid', $products_html );
@@ -1305,6 +1351,8 @@ class Module extends Module_Base {
 
 	public function __construct() {
 		parent::__construct();
+
+		new WoocommerceDataController();
 
 		add_action( 'elementor/kit/register_tabs', [ $this, 'init_site_settings' ], 1, 40 );
 		$this->add_update_kit_settings_hooks();
@@ -1417,6 +1465,7 @@ class Module extends Module_Base {
 		// WooCommerce Notice Site Settings
 		add_filter( 'body_class', [ $this, 'e_notices_body_classes' ] );
 		add_filter( 'wp_enqueue_scripts', [ $this, 'e_notices_css' ] );
+		add_action( 'enqueue_block_editor_assets', [ $this, 'custom_gutenberg_woocommerce_notice' ] );
 
 		add_filter( 'elementor/query/query_args', function( $query_args, $widget ) {
 			return $this->loop_query( $query_args, $widget );
@@ -1558,8 +1607,8 @@ class Module extends Module_Base {
 
 	private function populate_persistent_settings( array $config ) {
 		$config['persistent_keys'] = array_key_exists( 'persistent_keys', $config ) ?
-				array_merge( $config['persistent_keys'], self::WC_PERSISTENT_SITE_SETTINGS ) :
-				self::WC_PERSISTENT_SITE_SETTINGS;
+			array_merge( $config['persistent_keys'], self::WC_PERSISTENT_SITE_SETTINGS ) :
+			self::WC_PERSISTENT_SITE_SETTINGS;
 
 		return $config;
 	}

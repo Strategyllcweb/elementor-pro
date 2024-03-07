@@ -99,7 +99,10 @@ class Site_Logo extends Widget_Image {
 		$this->update_control(
 			'caption_source',
 			[
-				'options' => $this->get_caption_source_options(),
+				'options' => [
+					'none' => esc_html__( 'None', 'elementor-pro' ),
+					'attachment' => esc_html__( 'Attachment Caption', 'elementor-pro' ),
+				],
 			]
 		);
 
@@ -138,10 +141,6 @@ class Site_Logo extends Widget_Image {
 			return;
 		}
 
-		if ( ! Plugin::elementor()->experiments->is_feature_active( 'e_dom_optimization' ) ) {
-			$this->add_render_attribute( 'wrapper', 'class', 'elementor-image' );
-		}
-
 		$has_caption = $this->has_caption( $settings );
 
 		$link = $this->get_link_url( $settings );
@@ -157,9 +156,6 @@ class Site_Logo extends Widget_Image {
 				$this->add_lightbox_data_attributes( 'link', $settings['image']['id'], $settings['open_lightbox'] );
 			}
 		} ?>
-		<?php if ( ! Plugin::elementor()->experiments->is_feature_active( 'e_dom_optimization' ) ) { ?>
-			<div <?php $this->print_render_attribute_string( 'wrapper' ); ?>>
-		<?php } ?>
 		<?php if ( $has_caption ) : ?>
 		<figure class="wp-caption">
 	<?php endif; ?>
@@ -178,22 +174,11 @@ class Site_Logo extends Widget_Image {
 		<?php if ( $has_caption ) : ?>
 		</figure>
 	<?php endif; ?>
-		<?php if ( ! Plugin::elementor()->experiments->is_feature_active( 'e_dom_optimization' ) ) { ?>
-			</div>
-		<?php } ?>
 		<?php
 	}
 
 	protected function get_html_wrapper_class() {
 		return parent::get_html_wrapper_class() . ' elementor-widget-' . parent::get_name();
-	}
-
-	private function get_caption_source_options() {
-		$caption_source_options = $this->get_controls( 'caption_source' )['options'];
-
-		unset( $caption_source_options['custom'] );
-
-		return $caption_source_options;
 	}
 
 	protected function get_link_url( $settings ) {
@@ -220,15 +205,11 @@ class Site_Logo extends Widget_Image {
 	// TODO: Remove this method when removing the render() method.
 	private function get_caption( $settings ) {
 		$caption = '';
-		if ( ! empty( $settings['caption_source'] ) ) {
-			switch ( $settings['caption_source'] ) {
-				case 'attachment':
-					$caption = wp_get_attachment_caption( $settings['image']['id'] );
-					break;
-				case 'custom':
-					$caption = ! Utils::is_empty( $settings['caption'] ) ? $settings['caption'] : '';
-			}
+
+		if ( ! empty( $settings['caption_source'] ) && 'attachment' === $settings['caption_source'] ) {
+			$caption = wp_get_attachment_caption( $settings['image']['id'] );
 		}
+
 		return $caption;
 	}
 

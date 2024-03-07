@@ -3,6 +3,7 @@ namespace ElementorPro\Modules\ThemeBuilder\Classes;
 
 use Elementor\Core\Common\Modules\Ajax\Module as Ajax;
 use Elementor\Core\Utils\Exceptions;
+use Elementor\Plugin;
 use Elementor\TemplateLibrary\Source_Local;
 use ElementorPro\Core\Utils;
 use ElementorPro\Modules\ThemeBuilder\Documents\Theme_Document;
@@ -141,11 +142,18 @@ class Conditions_Manager {
 				}
 
 				if ( false !== array_search( $condition, $conditions, true ) ) {
-					$edit_url = $theme_builder_module->get_document( $template_id )->get_edit_url();
+					$template_title = esc_html( get_the_title( $template_id ) );
+					$document = $theme_builder_module->get_document( $template_id );
+
+					if ( ! $document instanceof Theme_Document ) {
+						Plugin::$instance->logger->get_logger()->error( "Error fetching document in conditions manager. Template: $template_title" );
+					}
+
+					$edit_url = isset( $document ) ? $document->get_edit_url() : '';
 
 					$conflicted[] = [
 						'template_id' => $template_id,
-						'template_title' => esc_html( get_the_title( $template_id ) ),
+						'template_title' => $template_title,
 						'edit_url' => $edit_url,
 					];
 				}
@@ -297,9 +305,12 @@ class Conditions_Manager {
 
 		$document = $theme_builder_module->get_document( $post_id );
 
+		if ( ! $document ) {
+			return false;
+		}
+
 		if ( empty( $conditions_to_save ) ) {
-			// TODO: $document->delete_meta.
-			$is_saved = delete_post_meta( $post_id, '_elementor_conditions' );
+			$is_saved = $document->delete_meta( '_elementor_conditions' );
 		} else {
 			$is_saved = $document->update_meta( '_elementor_conditions', $conditions_to_save );
 		}

@@ -52,6 +52,9 @@ class Price_List extends Base_Widget {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 			]
 		);
 
@@ -333,6 +336,12 @@ class Price_List extends Base_Widget {
 					'px' => [
 						'max' => 10,
 					],
+					'em' => [
+						'max' => 1,
+					],
+					'rem' => [
+						'max' => 1,
+					],
 				],
 				'condition' => [
 					'separator_style!' => 'none',
@@ -372,6 +381,12 @@ class Price_List extends Base_Widget {
 				'range' => [
 					'px' => [
 						'max' => 40,
+					],
+					'em' => [
+						'max' => 4,
+					],
+					'rem' => [
+						'max' => 4,
 					],
 				],
 				'condition' => [
@@ -424,6 +439,12 @@ class Price_List extends Base_Widget {
 					'px' => [
 						'max' => 50,
 					],
+					'em' => [
+						'max' => 5,
+					],
+					'rem' => [
+						'max' => 5,
+					],
 				],
 				'selectors' => [
 					'body.rtl {{WRAPPER}} .elementor-price-list-image' => 'padding-left: calc({{SIZE}}{{UNIT}}/2);',
@@ -460,7 +481,9 @@ class Price_List extends Base_Widget {
 					],
 					'em' => [
 						'max' => 5,
-						'step' => 0.1,
+					],
+					'rem' => [
+						'max' => 5,
 					],
 				],
 				'selectors' => [
@@ -515,7 +538,11 @@ class Price_List extends Base_Widget {
 			$image_src = $image_src[0];
 		}
 
-		return sprintf( '<img src="%s" alt="%s" loading="lazy" />', $image_src, $item['title'] );
+		return sprintf(
+			'<img src="%s" alt="%s" loading="lazy" />',
+			esc_url( $image_src ),
+			esc_attr( wp_kses_post( $item['title'] ) )
+		);
 	}
 
 	private function render_item_header( $item ) {
@@ -625,7 +652,7 @@ class Price_List extends Base_Widget {
 						item_open_wrap = '<li class="elementor-price-list-item">',
 						item_close_wrap = '</li>';
 					if ( item.link.url ) {
-						item_open_wrap = '<li><a href="' + item.link.url + '" class="elementor-price-list-item">';
+						item_open_wrap = '<li><a href="' + _.escape( item.link.url ) + '" class="elementor-price-list-item">';
 						item_close_wrap = '</a></li>';
 					}
 

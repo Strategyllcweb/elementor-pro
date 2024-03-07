@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 trait Base_Carousel_Trait {
+	public $num_of_carousel_items;
+
 	public function add_carousel_layout_controls( $params ) {
 		$slides_on_display = range( 1, $params['slides_on_display'] );
 		$slides_on_display = array_combine( $slides_on_display, $slides_on_display );
@@ -616,10 +618,6 @@ trait Base_Carousel_Trait {
 						'min' => 0.1,
 						'max' => 10,
 					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-					],
 					'rem' => [
 						'min' => 0.1,
 						'max' => 10,
@@ -654,22 +652,13 @@ trait Base_Carousel_Trait {
 					'em' => [
 						'min' => 0,
 						'max' => 5,
-						'step' => 0.1,
 					],
 					'rem' => [
 						'min' => 0,
 						'max' => 5,
-						'step' => 0.1,
 					],
 					'px' => [
-						'min' => 0,
 						'max' => 50,
-						'step' => 1,
-					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
-						'step' => 1,
 					],
 				],
 				'separator' => 'before',
@@ -776,6 +765,14 @@ trait Base_Carousel_Trait {
 						'min' => 5,
 						'max' => 200,
 					],
+					'em' => [
+						'min' => 0.5,
+						'max' => 20,
+					],
+					'rem' => [
+						'min' => 0.5,
+						'max' => 20,
+					],
 				],
 				'selectors' => [
 					'{{WRAPPER}}' => '--' . $params['css_prefix'] . 'swiper-pagination-size: {{SIZE}}{{UNIT}}',
@@ -865,6 +862,12 @@ trait Base_Carousel_Trait {
 				'range' => [
 					'px' => [
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'conditions' => [
@@ -969,6 +972,12 @@ trait Base_Carousel_Trait {
 					'px' => [
 						'max' => 100,
 					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
+					],
 				],
 				'conditions' => [
 					'relation' => 'and',
@@ -1010,8 +1019,13 @@ trait Base_Carousel_Trait {
 				'size_units' => [ 'px', 'em', 'rem', 'vh', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 200,
+					],
+					'em' => [
+						'max' => 20,
+					],
+					'rem' => [
+						'max' => 20,
 					],
 				],
 				'selectors' => [
@@ -1076,19 +1090,20 @@ trait Base_Carousel_Trait {
 		$this->end_controls_section();
 	}
 
-	public function render_carousel_footer( $settings ) { ?>
-		<?php if ( 'yes' === $settings['arrows'] ) { ?>
+	public function render_carousel_footer( $settings ) {
+		$should_render_pagination_and_arrows = $this->should_render_pagination_and_arrows( $settings );
+		if ( 'yes' === $settings['arrows'] && $should_render_pagination_and_arrows ) : ?>
 			<div class="elementor-swiper-button elementor-swiper-button-prev" role="button" tabindex="0">
 				<?php $this->render_swiper_button( 'previous' ); ?>
 			</div>
 			<div class="elementor-swiper-button elementor-swiper-button-next" role="button" tabindex="0">
 				<?php $this->render_swiper_button( 'next' ); ?>
 			</div>
-		<?php }
+		<?php endif;
 
-		if ( $settings['pagination'] ) { ?>
+		if ( $settings['pagination'] && $should_render_pagination_and_arrows ) : ?>
 			<div class="swiper-pagination"></div>
-		<?php }
+		<?php endif;
 	}
 
 	private function render_swiper_button( $type ) {
@@ -1376,4 +1391,16 @@ trait Base_Carousel_Trait {
 
 		return is_rtl() ? array_reverse( $navigation_controls ) : $navigation_controls;
 	}
+
+	/**
+	 * @param array $settings
+	 * @return boolean
+	 */
+	private function should_render_pagination_and_arrows( array $settings ) {
+		// Check for override of control that specifies the number of items to show in the carousel. Nested Carousel overrides this.
+		$num_of_carousel_items = $this->num_of_carousel_items ?? $settings['posts_per_page'];
+
+		return ( isset( $num_of_carousel_items ) && 1 < $num_of_carousel_items || '' == $num_of_carousel_items );
+	}
+
 }

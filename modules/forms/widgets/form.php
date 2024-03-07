@@ -409,6 +409,9 @@ class Form extends Form_Base {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'conditions' => [
 					'terms' => [
 						[
@@ -443,6 +446,9 @@ class Form extends Form_Base {
 				'required' => true,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 			]
 		);
@@ -664,6 +670,9 @@ class Form extends Form_Base {
 				'dynamic' => [
 					'active' => true,
 				],
+				'ai' => [
+					'active' => false,
+				],
 				'frontend_available' => true,
 				'render_type' => 'none',
 				'default' => esc_html__( 'Next', 'elementor-pro' ),
@@ -678,6 +687,9 @@ class Form extends Form_Base {
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 				'frontend_available' => true,
 				'render_type' => 'none',
@@ -703,6 +715,9 @@ class Form extends Form_Base {
 				'placeholder' => esc_html__( 'Send', 'elementor-pro' ),
 				'dynamic' => [
 					'active' => true,
+				],
+				'ai' => [
+					'active' => false,
 				],
 			]
 		);
@@ -741,7 +756,13 @@ class Form extends Form_Base {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'max' => 50,
+						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'condition' => [
@@ -1062,8 +1083,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 60,
+					],
+					'em' => [
+						'max' => 6,
+					],
+					'rem' => [
+						'max' => 6,
 					],
 				],
 				'selectors' => [
@@ -1084,8 +1110,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 60,
+					],
+					'em' => [
+						'max' => 6,
+					],
+					'rem' => [
+						'max' => 6,
 					],
 				],
 				'selectors' => [
@@ -1116,8 +1147,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 60,
+					],
+					'em' => [
+						'max' => 6,
+					],
+					'rem' => [
+						'max' => 6,
 					],
 				],
 				'selectors' => [
@@ -1191,8 +1227,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 60,
+					],
+					'em' => [
+						'max' => 6,
+					],
+					'rem' => [
+						'max' => 6,
 					],
 				],
 				'selectors' => [
@@ -1700,8 +1741,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -1721,8 +1767,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'conditions' => [
@@ -1754,8 +1805,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -1904,8 +1960,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'condition' => [
@@ -1928,12 +1989,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
 					],
-					'%' => [
-						'min' => 0,
-						'max' => 100,
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'condition' => [
@@ -1990,8 +2052,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'condition' => [
@@ -2014,8 +2081,13 @@ class Form extends Form_Base {
 				],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'condition' => [
@@ -2345,6 +2417,9 @@ class Form extends Form_Base {
 						var item = settings.form_fields[ i ];
 						item = elementor.hooks.applyFilters( 'elementor_pro/forms/content_template/item', item, i, settings );
 
+						item.field_type  = _.escape( item.field_type );
+						item.field_value = _.escape( item.field_value );
+
 						var options = item.field_options ? item.field_options.split( '\n' ) : [],
 							itemClasses = _.escape( item.css_classes ),
 							labelVisibility = '',
@@ -2481,6 +2556,7 @@ class Form extends Form_Base {
 								inputField = '<input size="1" type="' + item.field_type + '" value="' + item.field_value + '" class="elementor-field elementor-size-' + settings.input_size + ' ' + itemClasses + '" name="form_field_' + i + '" id="form_field_' + i + '" ' + required + ' ' + placeholder + ' >';
 								break;
 							default:
+								item.placeholder = _.escape( item.placeholder );
 								inputField = elementor.hooks.applyFilters( 'elementor_pro/forms/content_template/field/' + item.field_type, '', item, i, settings );
 						}
 
