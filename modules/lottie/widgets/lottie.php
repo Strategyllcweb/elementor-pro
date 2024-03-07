@@ -429,7 +429,7 @@ class Lottie extends Base_Widget {
 				'frontend_available' => true,
 				'render_type' => 'none',
 				'default' => [
-					'size' => '0',
+					'size' => 0,
 					'unit' => '%',
 				],
 				'size_units' => [ '%' ],
@@ -444,7 +444,7 @@ class Lottie extends Base_Widget {
 				'frontend_available' => true,
 				'render_type' => 'none',
 				'default' => [
-					'size' => '100',
+					'size' => 100,
 					'unit' => '%',
 				],
 				'size_units' => [ '%' ],
@@ -539,6 +539,12 @@ class Lottie extends Base_Widget {
 						'min' => 1,
 						'max' => 1000,
 					],
+					'em' => [
+						'max' => 100,
+					],
+					'rem' => [
+						'max' => 100,
+					],
 					'vw' => [
 						'min' => 1,
 						'max' => 100,
@@ -573,6 +579,12 @@ class Lottie extends Base_Widget {
 					'px' => [
 						'min' => 1,
 						'max' => 1000,
+					],
+					'em' => [
+						'max' => 100,
+					],
+					'rem' => [
+						'max' => 100,
 					],
 					'vw' => [
 						'min' => 1,
@@ -665,10 +677,11 @@ class Lottie extends Base_Widget {
 			$this->add_control(
 				'background_hover_transition',
 				[
-					'label' => esc_html__( 'Transition Duration', 'elementor-pro' ),
+					'label' => esc_html__( 'Transition Duration', 'elementor-pro' ) . ' (s)',
 					'type' => Controls_Manager::SLIDER,
 					'range' => [
 						'px' => [
+							'min' => 0,
 							'max' => 3,
 							'step' => 0.1,
 						],
@@ -759,8 +772,13 @@ class Lottie extends Base_Widget {
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [
 					'px' => [
-						'min' => 0,
 						'max' => 100,
+					],
+					'em' => [
+						'max' => 10,
+					],
+					'rem' => [
+						'max' => 10,
 					],
 				],
 				'selectors' => [
@@ -854,7 +872,7 @@ class Lottie extends Base_Widget {
 		var widget_container = '<div class="e-lottie__container"><div class="e-lottie__animation"></div>' + widget_caption + '</div>';
 
 		if ( settings.custom_link.url && 'custom' === settings.link_to ) {
-			widget_container = '<a class="e-lottie__container__link" href="' + settings.custom_link.url + '">' + widget_container + '</a>';
+			widget_container = '<a class="e-lottie__container__link" href="' + _.escape( settings.custom_link.url ) + '">' + widget_container + '</a>';
 		}
 
 		print( widget_container );
